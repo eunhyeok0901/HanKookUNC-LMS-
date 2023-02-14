@@ -1,0 +1,9 @@
+package org.hdcd.service.manager.mail;
+
+import org.apache.commons.mail.EmailException;
+
+public interface MailService {
+
+	String sendMail(String[] mem_email) throws EmailException;
+
+}

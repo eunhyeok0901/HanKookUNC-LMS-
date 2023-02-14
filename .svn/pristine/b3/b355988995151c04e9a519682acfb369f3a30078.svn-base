@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hdcd.mapper.SLectrueMapper">
+
+
+	<!-- 강좌 전체 리스트 -->
+	<select id="selectAll" resultType="LecOpenListVO">
+		select * from lec_open_list where lol_state = 1
+	</select>
+	
+	<!-- 강좌 개설 하나 뽑기 -->
+	<select id="selectLecOpen" resultType="LecOpenListVO" parameterType="String">
+		select * from lec_open_list where lol_code = #{lol_code}
+	</select>
+	
+	<!-- 교수한명 뽑기 -->
+	<select id="selectPmem" resultType="ProfessorVO" parameterType="String">
+		select * from professor where pmem_no = #{pMemNo}
+	</select>
+
+	<!-- 맴버 한명 뽑기 -->	
+	<select id="selectMem" parameterType="String" resultType="MemberVO">
+		select * from member where mem_no = #{pMemNo}
+	</select>
+	
+	<!-- 강의 하나 뽑기 -->
+	<select id="selectDep" parameterType="String" resultType="DepartmentVO">
+		select * from department where dep_code = #{depCode}
+	</select>
+
+	<!-- 강의계획서 -->
+	<select id="selectLecP" parameterType="String" resultType="LecturePlanVO">
+		select * from lecture_plan where lol_code = #{lolCode}
+	</select>	
+	
+	<!-- 강의 목록 -->
+	<select id="selectLecAll" resultType="LectureVO">
+		select * from lecture where lec_state = 1
+	</select>
+	
+	<!-- 강의 하나만 -->
+	<select id="selectLec" parameterType="String" resultType="LectureVO">
+		select * from lecture where lec_code = #{lecCode}
+	</select>
+	
+	
+	<!-- 수강 바구니 추가 -->
+	<insert id="inserApply" parameterType="LecApplyVO" useGeneratedKeys="true">
+		<selectKey order="BEFORE" keyProperty="la_code" resultType="String">
+			select 'LA'||LPAD(TO_CHAR(SEQ_LA_CODE.nextval),4,0) from dual
+		</selectKey>
+		insert into lec_apply values( #{la_code}, #{smem_no}, #{lec_code}, #{la_state})
+	</insert>
+	
+	<!-- 내 수강바구니 전체 출력 -->
+	<select id="selectLecApplyAll" parameterType="String" resultType="LecApplyVO">
+		select * from lec_apply where smem_no = #{smem_no}
+	</select>
+	
+	<!-- 수강바구니 삭제 -->
+	<delete id="deleteLecApply" parameterType="String">
+		delete from lec_apply where la_code = #{laCode}
+	</delete>
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- 수강바구니 하나 출력 -->
+	<select id="selectLecApplyOne" parameterType="LecApplyVO" resultType="LecApplyVO">
+		select * from lec_apply 
+		<where>
+			<if test="lec_code != null">
+				lec_code = #{lec_code}
+			</if>
+			<if test="la_code != null">
+				and la_code = #{la_code}
+			</if>
+		</where>
+		and smem_no = #{smem_no}
+		and la_state = #{la_state}
+	</select>
+	
+	
+	
+	<!-- 수강이력 인서트 -->
+	<insert id="insertHis" parameterType="LecHistoryVO" useGeneratedKeys="true">
+	    <selectKey resultType="String" keyProperty="lhCode" order="BEFORE">
+        	SELECT 'LH'||LPAD(TO_CHAR(SEQ_LH_CODE.nextval),4,0) from dual
+    	</selectKey> 	
+		insert into lec_history
+						(lh_code, 
+						lh_semester, 
+						lh_year, 
+						lh_lecname, 
+						lh_professor, 
+						lh_credit,
+						lh_grade,
+						lh_retake_lec,
+						lol_code,
+						lh_acquire,
+						la_code)
+		values
+						(#{lhCode}, 
+						#{lh_semester}, 
+						#{lh_year}, 
+						#{lh_lecname}, 
+						#{lh_professor}, 
+						0, 
+						null, 
+						null, 
+						#{lol_code}, 
+						null, 
+						#{laCode})
+	</insert>
+	
+	
+	<update id="updateLecApply" parameterType="LecApplyVO">
+		update lec_apply set la_state = 1 where la_code = #{la_code}
+	</update>
+	
+
+	<!-- 내 성적 리스트 조회 -->
+	<select id="getMyGradeList" parameterType="string" resultType="LecGradeVO">
+		select * from lec_grade where smem_no = #{smem_no}
+	</select>
+
+	
+
+
+</mapper>

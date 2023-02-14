@@ -1,0 +1,29 @@
+package org.hdcd.service.student.counsel;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.hdcd.mapper.CounselMapper;
+import org.hdcd.vo.CounselApplyVO;
+import org.hdcd.vo.CounselVO;
+import org.springframework.stereotype.Service;
+
+@Service
+public class CounselServiceImpl implements CounselService{
+	
+	@Inject
+	CounselMapper mapper;
+	
+	@Override
+	public List<CounselApplyVO> counselApplyList(String userId) {
+		return mapper.counselApplyList(userId);
+	}
+
+	@Override
+	public List<CounselVO> getCounselList() {
+		return mapper.getCounselList();
+	}
+
+
+}

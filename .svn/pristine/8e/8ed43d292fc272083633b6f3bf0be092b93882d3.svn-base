@@ -1,0 +1,1233 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%
+		String userId = (String)request.getSession().getAttribute("userId");
+		int userIdLength = userId.length(); 
+%>
+<link href="${pageContext.request.contextPath }/resources/css/main.css" rel="stylesheet">
+	<div class="container-fluid">
+	<!-- ■■■■■■■■■■■■■■■■■■■■■메인 이미지 시작■■■■■■■■■■■■■■■■■■-->
+	<br/><br/><br/>
+		<div class="row portlet-container">
+
+		<div class="col-lg-4 col-sm-6">
+			<div class="card">
+				<div class="card-body">
+					<div class="text-center">
+						<img src="/resources/images/춘배2.jpg" class="rounded-circle" alt="" width="70" height="70">
+						<h5 class="mt-3 mb-1">김한국(학번)</h5>
+						<p class="m-0">공과대학 컴퓨터공학과</p>
+						<a href="/mypage/List">
+							<button type="button" class="btn mb-1" style="background-color: #004130; color:white;">마이페이지</button>
+						</a>
+						<button class="btn mb-1 btn-dark openPortletModalBtn" data-toggle="modal" data-target="#exampleModalpopover">포틀릿 설정</button>
+						<!-- [모달] 포틀릿 설정 시작-->
+
+						<div class="bootstrap-modal">
+							<div class="modal fade" id="exampleModalpopover">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">포틀릿 설정</h5>
+											<button type="button" class="close" data-dismiss="modal">
+												<span>&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<h5>나만의 설정으로 포틀릿을 조작해보세요</h5>
+											<p>왼쪽의 체크박스에서 보고 싶은 메뉴를 선택하고, 오른쪽에서 마우스 끌기로 메뉴 위치를 지정하세요.</p>
+											<div class="potletModalContainer">
+												<div class="potletModalCheck">
+													<label> <input type="checkbox" class="portletCheck"
+														id="portletCheck0">0번 메뉴
+													</label><br /> <label> <input type="checkbox"
+														class="portletCheck" id="portletCheck1">1번 메뉴
+													</label><br /> <label> <input type="checkbox"
+														class="portletCheck" id="portletCheck2">2번 메뉴
+													</label><br /> <label> <input type="checkbox"
+														class="portletCheck" id="portletCheck3">3번 메뉴
+													</label><br /> <label> <input type="checkbox"
+														class="portletCheck" id="portletCheck4">4번 메뉴
+													</label><br /> <label> <input type="checkbox"
+														class="portletCheck" id="portletCheck5">5번 메뉴
+													</label><br /> <label> <input type="checkbox"
+														class="portletCheck" id="portletCheck6">6번 메뉴
+													</label><br /> <label> <input type="checkbox"
+														class="portletCheck" id="portletCheck7">7번 메뉴
+													</label><br /> <label> <input type="checkbox"
+														class="portletCheck" id="portletCheck8">8번 메뉴
+													</label><br /> <label> <input type="checkbox"
+														class="portletCheck" id="portletCheck9">9번 메뉴
+													</label><br /> <label> <input type="checkbox"
+														class="portletCheck" id="portletCheck10">10번 메뉴
+													</label><br /> <label> <input type="checkbox"
+														class="portletCheck" id="portletCheck11">11번 메뉴
+													</label>
+												</div>
+												<div class="potletModalLayout"></div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary"
+												data-dismiss="modal">닫기</button>
+											<button type="button" class="btn btn-success">설정 정보
+												저장하기</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- [모달] 포틀릿 설정 종료-->
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-6 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-clipboard-user fa-2x text-success"></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">학적 상태</p>
+								<h4 class="m-1">재학</h4>
+							</div>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-star fa-2x text-success"></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">이수학점</p>
+								<h4 class="m-1">130/138</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-4 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-sharp fa-solid fa-hand-holding-hand fa-2x text-success"></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">봉사시간</p>
+								<h4 class="m-1">15/72</h4>
+							</div>
+						</div>
+					</div>
+					<div class="col-4 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-book fa-2x text-success"></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">도서 대출 반납일</p>
+								<h4 class="m-1">22/02/25</h4>
+							</div>
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-sharp fa-solid fa-stamp fa-2x text-success"></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">자격증 승인이력</p>
+								<h4 class="m-1">3</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-4 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-sharp fa-solid fa-building-columns fa-2x text-success"></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">열람실 이력</p>
+								<h4 class="m-1">1-52</h4>
+							</div>
+						</div>
+					</div>
+					<div class="col-4 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-sharp fa-solid fa-comment fa-2x text-success"></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">커뮤니티 내 글</p>
+								<h4 class="m-1">3</h4>
+							</div>
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-chalkboard-user fa-2x text-success"></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">상담 이력</p>
+								<h4 class="m-1">23/01/25</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+
+
+		<div class="col-lg-8">
+			<div class="card" style="height: 44%;">
+				<div class="card-body">
+					<h4 class="card-title"><i class="fa-solid fa-seedling text-success"></i>&nbsp;학사일정</h4>
+				</div>
+			</div>
+			<div class="card" style="height: 44%;">
+				<div class="card-body">
+					<h4 class="card-title"><i class="fa-solid fa-seedling text-success"></i>&nbsp;공지사항</h4>
+
+					<div class="default-tab">
+						<ul class="nav nav-tabs mb-3" role="tablist">
+							<li class="nav-item"><a class="nav-link" data-toggle="tab"
+								href="#home">&nbsp;&nbsp;&nbsp;&nbsp;전체&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+							<li class="nav-item"><a class="nav-link" data-toggle="tab"
+								href="#profile">&nbsp;&nbsp;&nbsp;&nbsp;일반&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+							<li class="nav-item"><a class="nav-link" data-toggle="tab"
+								href="#contact">&nbsp;&nbsp;&nbsp;&nbsp;채용&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+							<li class="nav-item"><a class="nav-link active show"
+								data-toggle="tab" href="#message">&nbsp;&nbsp;&nbsp;&nbsp;입찰&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+						</ul>
+						<div class="tab-content">
+							<div class="tab-pane fade" id="home" role="tabpanel">
+								<div class="p-t-15">
+									<h4>전체 공지입니다.</h4>
+									<p>Far far away, behind the word mountains, far from the
+										countries Vokalia and Consonantia, there live the blind texts.
+										Separated they live in Bookmarksgrove.</p>
+									<p>Far far away, behind the word mountains, far from the
+										countries Vokalia and Consonantia, there live the blind texts.
+										Separated they live in Bookmarksgrove.</p>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="profile">
+								<div class="p-t-15">
+									<h4>일반 공지입니다.</h4>
+									<p>Raw denim you probably haven't heard of them jean shorts
+										Austin. Nesciunt tofu stumptown aliqua, retro synth master
+										cleanse. Mustache cliche tempor.</p>
+									<p>Raw denim you probably haven't heard of them jean shorts
+										Austin. Nesciunt tofu stumptown aliqua, retro synth master
+										cleanse. Mustache cliche tempor.</p>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="contact">
+								<div class="p-t-15">
+									<h4>채용 공지입니다.</h4>
+									<p>Far far away, behind the word mountains, far from the
+										countries Vokalia and Consonantia, there live the blind texts.
+										Separated they live in Bookmarksgrove.</p>
+									<p>Far far away, behind the word mountains, far from the
+										countries Vokalia and Consonantia, there live the blind texts.
+										Separated they live in Bookmarksgrove.</p>
+								</div>
+							</div>
+							<div class="tab-pane fade active show" id="message">
+								<div class="p-t-15">
+									<h4>입찰 공지입니다.</h4>
+									<p>Raw denim you probably haven't heard of them jean shorts
+										Austin. Nesciunt tofu stumptown aliqua, retro synth master
+										cleanse. Mustache cliche tempor.</p>
+									<p>Raw denim you probably haven't heard of them jean shorts
+										Austin. Nesciunt tofu stumptown aliqua, retro synth master
+										cleanse. Mustache cliche tempor.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+
+
+
+
+
+
+
+
+
+				</div>
+			</div>
+		</div>
+
+		<!-- ■■■■■■■■■■■■■■■■■■■■■포틀릿 배열 시작■■■■■■■■■■■■■■■■■■-->		
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true" contenteditable="false">
+				<div class="card">
+					<div class="card-body">
+						<div style="display: flex; justify-content: space-between;">
+							<div>
+								<a href='#'><i class="fa-solid fa-school text-success"></i></a>
+								<h4 class="card-title mb-5" style="display: inline-block;">0. 나의 시간표</h4>
+							</div>
+							<div>
+								<a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+							</div>
+						</div>
+						<div> ------------내용--------------</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true" contenteditable="false">
+				<div class="card">
+					<div class="card-body">
+						<div style="display: flex; justify-content: space-between;">
+							<div>
+								<a href='#'><i class="fa-solid fa-school text-success"></i></a>
+								<h4 class="card-title mb-5" style="display: inline-block;">1. 개인일정</h4>
+							</div>
+							<div>
+								<a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+							</div>
+						</div>
+						<div id="myCal">
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true">
+				<div class="card">
+					<div class="card-body">
+						<div style="display: flex; justify-content: space-between;">
+							<div>
+								<a href='#'>
+									<i class="fa-solid fa-note-sticky"></i>
+								</a>
+								<h4 class="card-title mb-5" style="display: inline-block;">2. 공지사항</h4>
+							</div>
+							<div>
+								<a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+							</div>
+						</div>
+						<div style="text-align: center;">
+							<div style="height:300px; overflow: scroll;">
+								<table style="margin-left: auto; margin-right: auto;" border="1" id="noticeList">
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true">
+            <div class="card">
+               <div class="card-body">
+                  <div style="display: flex; justify-content: space-between;">
+                     <div>
+                        <a href='#'>
+                           <i class="fa-solid fa-bowl-food"></i>
+                        </a>
+                        <h4 class="card-title mb-5" style="display: inline-block;">3. 오늘의 식단</h4>
+                     </div>
+                     <div>
+                        <a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+                     </div>
+                  </div>
+                  <div style="height: 330px; background-color: #FDF5D2;">
+                     <div class="bootstrap-carousel">
+                                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                                    <div id="divCarousel"  class="carousel-inner">
+                                        <div class="carousel-item" style="height: 300px;">
+                                           
+<!--                                           식단표 ajax  -->
+                                        
+                                        </div>
+                                    </div>
+                                    <a class="carousel-control-prev" href="#carouselExampleControls" data-slide="prev">
+                                       <span class="carousel-control-prev-icon"></span> 
+                                       <span class="sr-only">Previous</span> 
+                                    </a>
+                                    <a class="carousel-control-next" href="#carouselExampleControls" data-slide="next">
+                                       <span class="carousel-control-next-icon"></span> 
+                                       <span class="sr-only">Next</span>
+                                    </a>
+                                </div>
+                            </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true">
+				<div class="card">
+					<div class="card-body">
+						<div style="display: flex; justify-content: space-between;">
+							<div>
+								<a href='#'>
+									<i class="fa-solid fa-calendar"></i>
+								</a>
+								<h4 class="card-title mb-5" style="display: inline-block;">4. 그룹 스케줄링</h4>
+							</div>
+							<div>
+								<a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+								
+							</div>
+						</div>
+						<div> ------------내용--------------</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true">
+				<div class="card">
+					<div class="card-body">
+						<div style="display: flex; justify-content: space-between;">
+							<div>
+								<a href='#'>
+									<i class="fa-sharp fa-solid fa-comments"></i>
+								</a>
+								<h4 class="card-title mb-5" style="display: inline-block;">5. 커뮤니티</h4>
+							</div>
+							<div>
+								<a href='/community' class="ti-plus"></a>&nbsp;&nbsp;
+							</div>
+						</div>
+						<div id="communityList">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true">
+				<div class="card">
+					<div class="card-body">
+						<div style="display: flex; justify-content: space-between;">
+							<div>
+								<a href='#'>
+									<i class="fa-solid fa-flower-daffodil"></i>
+								</a>
+								<h4 class="card-title mb-5" style="display: inline-block;">6. 나의 역량</h4>
+							</div>
+							<div>
+								<a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+								
+							</div>
+						</div>
+						<div> ------------내용--------------</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true">
+				<div class="card">
+					<div class="card-body">
+						<div style="display: flex; justify-content: space-between;">
+							<div>
+								<a href='#'>
+									<i class="fa-solid fa-books"></i>
+								</a>
+								<h4 class="card-title mb-5" style="display: inline-block;">7. 나의 도서관</h4>
+							</div>
+							<div>
+								<a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+							</div>
+						</div>
+						<div style="text-align: center;">
+							<div style="display: inline-block; border: 1px solid black;" id="rentBook"></div>
+							<div style="display: inline-block; border: 1px solid black;" id="overDate"></div> 
+							<div style="height:300px; overflow: scroll;">
+								<table style="margin-left: auto; margin-right: auto;" border="1" id="bookListTable">
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true">
+            <div class="card">
+               <div class="card-body">
+                  <div style="display: flex; justify-content: space-between;">
+                     <div>
+                        <a href='#' class="ti-calendar"></a>
+                        <h4 class="card-title mb-5" style="display: inline-block;">8. 나의 열람실</h4>
+                     </div>
+                     <div>
+                        <a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+                        
+                     </div>
+                  </div>
+                  <div><a href="/seat/seatReserve">열람실 퀵메뉴로 빼는 걸로 합시다 </a> </div>
+               </div>
+            </div>
+          </div>   
+			   <div class="col-md-6 col-lg-4 portlet-item" draggable="true" contenteditable="false">
+            <div class="card">
+               <div class="card-body">
+                  <div style="display: flex; justify-content: space-between;">
+                     <div>
+                        <a href='#' class="ti-calendar"></a>
+                        <h4 class="card-title mb-5" style="display: inline-block;">9. 오늘의 날씨</h4>
+                     </div>
+                     <div>
+                        <a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+                        
+                     </div>
+                  </div>
+                  <div style="color:white; background-color: #27DBB7; height: 50px; font-size: 1.5em;">
+                     <a class="ti-calendar"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span>Weather Information</span> <span>대전</span>
+                  </div>
+                  <div style=" padding: 10px; background-image:url('../resources/images/back2.JPG'); height: 350px;">
+                     <div id="weather1" style="padding-top:30px; float: left; width: 220px; text-align: center;">
+                        날씨아이콘
+                     </div>
+                     <div id="weather2" style=" float: right; padding:10px; width: 190px; height:100px; text-align: center;">
+                        <div id="weather2_1"  style=" color:white; padding-top:20px; font-size: 4.0em;">
+                        </div>
+                        <div id="weather2_2"  style=" color:white; font-size: 1.5em;">
+                        </div>
+                     </div>
+                     <div id="weather3" style="text-align:center; height: 50px; margin-top: 200px; padding: 15px; color: white;">
+                        <div id="weather3_1" style="float: left; width:190px;margin: 5px;">
+                           <span>강수량</span><br>
+                        </div>
+                        <div id="weather3_2" style="float: left; width:190px;margin: 5px;">
+                           <span>강수확률</span><br>
+                        </div>
+                        <div id="weather3_3" style="float: left; width:190px;margin: 5px;">
+                           <span>풍속</span><br>
+                        </div>
+                        <div id="weather3_4" style="float: left; width:190px;margin: 5px;">
+                           <span>파고</span><br>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <p>데이터 출처 : 기상청, 공공 데이터 포털</p>
+            </div>
+         </div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true" contenteditable="false">
+				<div class="card">
+					<div class="card-body">
+						<div style="display: flex; justify-content: space-between;">
+							<div>
+								<a href='#' class="ti-calendar"></a>
+								<h4 class="card-title mb-5" style="display: inline-block;">10. 나만의 통계</h4>
+							</div>
+							<div>
+								<a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+								
+							</div>
+						</div>
+						<div> ------------내용--------------</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true" contenteditable="false">
+				<div class="card">
+					<div class="card-body" style="align-content: center;">
+						<div style="display: flex; justify-content: space-between;">
+							<div>
+								<a href='#' class="ti-calendar"></a>
+								<h4 class="card-title mb-5" style="display: inline-block;">11. 나만의 상담</h4>
+							</div>
+							<div>
+								<a href='#' class="ti-plus"></a>
+								
+							</div>
+						</div>
+						<div style="text-align: center;">
+							<div>최근 상담기록</div>
+							<div style="overflow: scroll; height: 300px;">
+								<table border="1" id="mainPageCounselapplyList" style="margin-left: auto; margin-right: auto; width: 400px;"></table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- <script src="${pageContext.request.contextPath }/resources/js/main.js"></script>-->
+<script>
+
+// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 팝업시작
+	function closeSurvey(){
+		closepopSur.close();
+	}
+
+	function survRegister(q1, q2, q3){
+		var header = $("meta[name='_csrf_header']").attr('content');
+		var token = $("meta[name='_csrf']").attr('content');
+		
+		let surv_answer1 = q1;
+		let surv_answer2 = q2;
+		let surv_answer3 = q3;
+		
+		console.log(" surv_answer1 : ", surv_answer1);
+		console.log(" surv_answer2 : ", surv_answer2);
+		console.log(" surv_answer3 : ", surv_answer3);
+		
+		$.ajax({
+			type : "post",
+			url : "/common/popupSurveySubmit",
+			data : {"surv_answer1" : surv_answer1, "surv_answer2" : surv_answer2, "surv_answer3" : surv_answer3},
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				if(res == "OK"){
+					console.log("설문조사 완료");
+				}
+			},
+			dataType : "text"
+		})	
+	}
+	
+	function pop_sur_change(num){
+		var header = $("meta[name='_csrf_header']").attr('content');
+		var token = $("meta[name='_csrf']").attr('content');
+		
+		let popNum = num;
+		
+		$.ajax({
+			type : "post",
+			url : "/common/popupSurveyChange",
+			data : {"popNum" : popNum},
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				if(res != "NG"){
+// 					alert("다시보지 않기 활성화");
+				}
+			},
+			dataType : "text"
+		})		
+	}
+	
+	// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 팝업 종료
+	// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 나의 포틀릿 시작
+	function myPortlet(){		
+		  // 포틀릿 테이블에서 다음과 같은 순서의 데이터베이스를 가져왔다고 가정한다.
+		  let databaseData = "0,1,2,3,4,5,6,7,8,9,10,11";
+		  
+		  let myportlets = databaseData.split(",");
+		  
+		  // 12개의 체크박스 class을 읽어온다.
+		  let myportletCheckbox = document.querySelectorAll(".portletCheck");
+
+		  // 포틀릿 레이아웃 클래스를 읽어온다.
+		  let container = document.querySelector(".potletModalLayout");
+
+		  // 데이터베이스에 존재하는 번호인 경우 checkbox-checked상태로 만들어준다.
+		  for(let i = 0; i < myportlets.length; i++){
+		    let myportlet = myportlets[i];
+		    myportletCheckbox[myportlet].setAttribute("checked", "checked");
+		    switch(myportlet){
+		      case "0":
+		        container.innerHTML += "<div class='item item0' draggable='true'>0번 메뉴</div>";
+		        break;
+		      case "1":
+		        container.innerHTML += "<div class='item item1' draggable='true'>1번 메뉴</div>";
+		        break;
+		      case "2":
+		        container.innerHTML += "<div class='item item2' draggable='true'>2번 메뉴</div>";
+		        break;
+		      case "3":
+		        container.innerHTML += "<div class='item item3' draggable='true'>3번 메뉴</div>";
+		        break;
+		      case "4":
+		        container.innerHTML += "<div class='item item4' draggable='true'>4번 메뉴</div>";
+		        break;
+		      case "5":
+		        container.innerHTML += "<div class='item item5' draggable='true'>5번 메뉴</div>";
+		        break;
+		      case "6":
+		        container.innerHTML += "<div class='item item6' draggable='true'>6번 메뉴</div>";
+		        break;
+		      case "7":
+		        container.innerHTML += "<div class='item item7' draggable='true'>7번 메뉴</div>";
+		        break;
+		      case "8":
+		        container.innerHTML += "<div class='item item8' draggable='true'>8번 메뉴</div>";
+		        break;
+		      case "9":
+		        container.innerHTML += "<div class='item item9' draggable='true'>9번 메뉴</div>";
+		        break;
+		      case "10":
+		        container.innerHTML += "<div class='item item10' draggable='true'>10번 메뉴</div>";
+		        break;
+		      case "11":
+		        container.innerHTML += "<div class='item item11' draggable='true'>11번 메뉴</div>";
+		        break;      
+		    }
+		  } 
+
+		  myportletCheckbox.forEach(function(myportletCheck){
+		    myportletCheck.addEventListener("click", function(e){
+		      const target = e.target;
+		      console.log(target.checked);
+		      if(target.checked){          
+		        switch(target.id){
+		          case "portletCheck0":
+		            container.innerHTML += "<div class='item item0' draggable='true'>0번 메뉴</div>";
+		            break;
+		          case "portletCheck1":
+		            container.innerHTML += "<div class='item item1' draggable='true'>1번 메뉴</div>";
+		            break;
+		          case "portletCheck2":
+		            container.innerHTML += "<div class='item item2' draggable='true'>2번 메뉴</div>";
+		            break;
+		          case "portletCheck3":
+		            container.innerHTML += "<div class='item item3' draggable='true'>3번 메뉴</div>";
+		            break;
+		          case "portletCheck4":
+		            container.innerHTML += "<div class='item item4' draggable='true'>4번 메뉴</div>";
+		            break;
+		          case "portletCheck5":
+		            container.innerHTML += "<div class='item item5' draggable='true'>5번 메뉴</div>";
+		            break;
+		          case "portletCheck6":
+		            container.innerHTML += "<div class='item item6' draggable='true'>6번 메뉴</div>";
+		            break;
+		          case "portletCheck7":
+		            container.innerHTML += "<div class='item item7' draggable='true'>7번 메뉴</div>";
+		            break;
+		          case "portletCheck8":
+		            container.innerHTML += "<div class='item item8' draggable='true'>8번 메뉴</div>";
+		            break;
+		          case "portletCheck9":
+		            container.innerHTML += "<div class='item item9' draggable='true'>9번 메뉴</div>";
+		            break;
+		          case "portletCheck10":
+		            container.innerHTML += "<div class='item item10' draggable='true'>10번 메뉴</div>";
+		            break;
+		          case "portletCheck11":
+		            container.innerHTML += "<div class='item item11' draggable='true'>11번 메뉴</div>";
+		            break;
+		        }
+		      }else{
+		        switch(target.id){
+		          case "portletCheck0":
+		            document.querySelector(".item0").remove();
+		            break;
+		          case "portletCheck1":
+		            document.querySelector(".item1").remove();
+		            break;
+		          case "portletCheck2":
+		            document.querySelector(".item2").remove();
+		            break;
+		          case "portletCheck3":
+		            document.querySelector(".item3").remove();
+		            break;
+		          case "portletCheck4":
+		            document.querySelector(".item4").remove();
+		            break;
+		          case "portletCheck5":
+		            document.querySelector(".item5").remove();
+		            break;
+		          case "portletCheck6":
+		            document.querySelector(".item6").remove();
+		            break;
+		          case "portletCheck7":
+		            document.querySelector(".item7").remove();
+		            break;
+		          case "portletCheck8":
+		            document.querySelector(".item8").remove();
+		            break;
+		          case "portletCheck9":
+		            document.querySelector(".item9").remove();
+		            break;
+		          case "portletCheck10":
+		            document.querySelector(".item10").remove();
+		            break;
+		          case "portletCheck11":
+		            document.querySelector(".item11").remove();
+		            break;
+		        }          
+		      }
+		    })
+		  })
+
+
+		  //------------------------------------------------------
+		  
+		  let picked = null;
+		  let pickedIndex = null;
+
+		  // 드래그 dragstart, dragover, drop
+		  container.addEventListener("dragstart", (e)=>{
+		    // console.log(e.target);
+		    const obj = e.target;
+		    picked = obj;
+		    pickedIndex = ([...obj.parentNode.children].indexOf(obj));
+		    // console.log(pickedIndex);
+		  });
+
+		  container.addEventListener("dragover", (e)=>{
+		    e.preventDefault();
+		  });
+
+		  container.addEventListener("drop", (e)=>{
+		    const obj = e.target;
+		    const index = ([...obj.parentNode.children].indexOf(obj));
+		    index > pickedIndex ? obj.after(picked): obj.before(picked);
+		  });
+	}
+	// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 나의 포틀릿 종료
+	window.onload = function(){
+		myPortlet();
+		getWeather();
+		mainMyCommunity();
+		getFoodList();
+		
+		
+		var header = $("meta[name='_csrf_header']").attr('content');
+		var token = $("meta[name='_csrf']").attr('content');
+		
+		// 캘린더
+		drawCalendar();
+		
+		// 팝업 광고, 팝업설문조사 띄우기 
+		window.closepopSur;
+		
+		$.ajax({
+			type : "post",
+			url : "/common/popupSurveyState",
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				console.log(res);
+				
+				if(res.popup_reject != 1){
+					window.open("/common/popUp","","scrollbars=no,menubar=no,top=300px,left=400,width=500,height=600");			
+				}
+				if(res.surv_reject != 1){
+					closepopSur = window.open("/common/popSur","","scrollbars=no,menubar=no,top=300px,left=1000,width=520,height=500");			
+				}
+				
+			},
+			dataType : "json"
+		})
+		
+		// 도서 목록 & 내가 빌린 도서 목록  
+		$.ajax({
+			type : "post",
+			url : "/mainPageBook/getBookRental ",
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				console.log("도서 대출 현황 : ",res);
+				$("#rentBook").html("대출 도서 : " + res.RENT0);
+				$("#overDate").html("연체 도서 : " + res.RENT1);
+			},
+			dataType : "json"
+		})
+		
+		// 도서목록 가져오기
+		const bookListTable = $("#bookListTable");
+		$.ajax({
+			type : "post",
+			url : "/mainPageBook/getBookList",
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				console.log("도서  리스트 : ",res);
+				
+				let eHtml = `<tr>
+								<td>제목</td>
+								<td>저자</td>
+								<td>카테고리</td>
+							</tr>`;
+				
+				for(let i=0;i<res.length;i++){
+					eHtml += `<tr>
+								<td>\${res[i].book_name}</td>
+								<td>\${res[i].book_writer}</td>
+								<td>\${res[i].book_category}</td>
+							</tr>`;							
+				}
+				
+				$(bookListTable).html(eHtml);
+				
+			},
+			dataType : "json"
+		})
+		
+		// 최근 상담 내역 가져오기
+		const mainPageCounselapplyListObj = $("#mainPageCounselapplyList");
+		
+		$.ajax({
+			type : "post",
+			url : "/mainPageCounsel/mainPageCounselapplyList",
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				let userId = <%=userIdLength%>;
+				console.log("세션값이다  : " + userId);
+				console.log("상담신청내역 리스트 : ",res);
+				
+				let eHtml = ``;
+				
+				if(userId == 8){
+					eHtml += `<tr>
+								<td>교수이름</td>
+								<td>신청일</td>
+								<td>상태</td>
+							  </tr>`;	
+				}else{
+					eHtml += `<tr>
+								<td>학생이름</td>
+								<td>신청일</td>
+								<td>상태</td>
+							  </tr>`;
+				}
+				
+				for(let i=0;i<res.length;i++){
+					eHtml += `<tr>
+								<td>\${res[i].mem_name}</td>
+								<td>\${res[i].cnsla_date}</td>
+							  `;
+							  if(${res[i].cnsla_state == 0}){
+								  eHtml += `<td>대기</td>`;  
+							  }else if(${res[i].cnsla_state == 1}){
+								  eHtml += `<td>승인</td>`;
+							  }else if(${res[i].cnsla_state == 2}){
+								  eHtml += `<td>반려</td>`;
+							  }else{
+								  eHtml += `<td>완료</td>`;
+							  }
+					eHtml += `</tr>`;							
+				}
+				
+				$(mainPageCounselapplyListObj).html(eHtml);
+				
+			},
+			dataType : "json"
+		})
+		
+	  // 공지사항 가져오기 
+	  const noticeList = $("#noticeList");
+   	  $.ajax({
+			type : "get",
+			url : "/notice/noticeAllList ",
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				console.log("공지사항 ",res);
+				let noticeListDrawHTML = ``;
+				noticeListDrawHTML += `<tr>
+											<td>제목</td>
+											<td>작성일</td>
+									   </tr>`;
+			
+									for(let i=0; i<res.length;i++){
+				noticeListDrawHTML +=	`<tr>
+											<td>\${res[i].notice_title}</td>
+											<td>\${res[i].notice_date}</td>
+										</tr>`;
+									}
+									
+				$(noticeList).html(noticeListDrawHTML);
+										  
+			},
+			
+			dataType : "json"
+		})	
+	}
+	
+	
+    //------------------------------------------------------------------------------------식단표--------------------
+          
+	function getFoodList(){
+	    $.ajax({
+	        url : "/mainPageFood/getFoodList",
+	        type : "GET",
+	        success : function(res){
+	           console.log("식단표 result : ",res);
+	           
+	           var str = '';
+	           var divCarousel = $("#divCarousel");
+	           
+	           for(var i = 0; i < res.length; i++){
+	              str += '<div id="car'+i+'" class="carousel-item" style="height: 350px;">'
+	              str +=      `<div id="title1" style="border: 1px solid red; font-size:2.0em; text-align: center;"> 
+	                               \${res[i].food_date}
+	                             </div>
+	                             <div style="border: 1px solid red; font-size:1.5em; text-align: center;">
+	                                \${res[i].dayofweek}
+	                             </div>
+	                             <div id="content1" style="border: 1px solid red;">
+	                                <div style="padding: 12px;">
+	                                   <div class="input-group">
+	                                         <div class="input-group-prepend"><span class="input-group-text">조식</span>
+	                                         </div>
+	                                         <textarea class="form-control">\${res[i].breakfast}</textarea>
+	                                     </div>
+	                                     <br>
+	                                   <div class="input-group">
+	                                         <div class="input-group-prepend"><span class="input-group-text">중식</span>
+	                                         </div>
+	                                         <textarea class="form-control">\${res[i].lunch}</textarea>
+	                                     </div>
+	                                     <br>
+	                                   <div class="input-group">
+	                                         <div class="input-group-prepend"><span class="input-group-text">석식</span>
+	                                         </div>
+	                                         <textarea class="form-control">\${res[i].dinner}</textarea>
+	                                     </div>
+	                                     <br>
+	                                </div>
+	                             </div>
+	                          </div>`;
+	           }
+	           
+	           divCarousel.html(str);
+	           $("#car2").attr("class","carousel-item active");
+	           
+	        }
+	     })
+    }
+	
+	
+	
+    //------------------------------------------------------------------------------------커뮤니티--------------------
+    // 커뮤니티 게시글 목록 가져오기
+	const communityList = document.querySelector("#communityList");
+    
+	//아작스 통신을 위한 csrf 인증 토큰
+	let header = '${_csrf.headerName}';
+	let token = '${_csrf.token}';
+    
+    function mainMyCommunity(){
+    	let xhr = new XMLHttpRequest();
+    	xhr.open("get", "/mainPageCommunity", true);
+    	xhr.setRequestHeader(header, token);
+    	xhr.onreadystatechange = function(){
+    		if(xhr.readyState == 4 && xhr.status == 200){
+    			console.log("커뮤니티 잘 왔어요");
+    			console.log(xhr.responseText);
+    			let data = JSON.parse(xhr.responseText);
+    			console.log(data);
+		    	
+    			let myPost = data.myPost;
+    			let myLike = data.myLike;
+
+    			let str = "";    			
+   				str += "<h5>내가 작성한 글</h5>";
+				str += '<table class="table table-bordered">';
+				str += '<thead>';
+				str += '<tr>';
+				str += '<td>카테고리</td><td>느낌</td><td>제목</td>';
+				str += '</tr>';
+				str += '</thead>';
+				str += '<tbody>';
+				
+    			if(myPost.length == 0){
+    				str += "<tr><td colspan='5'>내가 작성한 게시글이 없습니다.</td></tr>";
+    			}else{
+	    			for(let i = 0; i < myPost.length; i++){
+	    				str += '<tr>';
+	    				str += '<td><span class="badge badge-dark">'+ myPost[i].cmnt_category +'</span></td>';
+	    				str += '<td><span class="badge badge-light">'+ myPost[i].cmnt_feeling +'</span></td>';
+	    				str += '<td><a href="/community/detail/'+ myPost[i].cmnt_no +'">'+ myPost[i].cmnt_title +'</a></td>';
+						str += '<tr>';
+	    			}	
+    			}
+				str +='</tbody>';
+				str +='</table>';
+    			
+				str += "<br/>";
+			
+   				str += "<h5>내가 좋아요한 글</h5>";
+				str += '<table class="table table-bordered">';
+				str += '<thead>';
+				str += '<tr>';
+				str += '<td>카테고리</td><td>느낌</td><td>제목</td>';
+				str += '</tr>';
+				str += '</thead>';
+				str += '<tbody>';
+				
+    			if(myLike.length == 0){
+    				str += "<tr><td colspan='5'>내가 좋아요한 게시글이 없습니다.</td></tr>";
+    			}else{
+	    			for(let i = 0; i < myLike.length; i++){
+	    				str += '<tr>';
+	    				str += '<td><span class="badge badge-dark">'+ myLike[i].cmnt_category +'</span></td>';
+	    				str += '<td><span class="badge badge-light">'+ myLike[i].cmnt_feeling +'</span></td>';
+	    				str += '<td><a href="/community/detail/'+ myLike[i].cmnt_no +'">'+ myLike[i].cmnt_title +'</a></td>';
+						str += '<tr>';
+	    			}	
+    			}
+				str +='</tbody>';
+				str +='</table>';
+
+				communityList.innerHTML = str;
+		    	
+    		}
+    	}
+    	xhr.send();
+ 
+    }	
+    
+    
+    
+    //-------------------------------------------------------------------------------------------날씨-------------------
+    function getWeather(){
+ 	      //날씨 api 로드하는 부분입니다!
+ 	      var weather1 = $("#weather1");
+ 	      var weather2 = $("#weather2");
+ 	      var weather2_1 = $("#weather2_1");
+ 	      var weather2_2 = $("#weather2_2");
+ 	      var weather3 = $("#weather3");
+ 	      var weather3_1 = $("#weather3_1");
+ 	      var weather3_2 = $("#weather3_2");
+ 	      var weather3_3 = $("#weather3_3");
+ 	      var weather3_4 = $("#weather3_4");
+ 	      var weather3_5 = $("#weather3_5");
+// 	       var weather3_6 = $("#weather3_6");
+ 	      
+ 	      
+ 	      $.ajax({
+ 	         url : "/api/weather",
+ 	         type : "get",
+ 	         contentType : "application/json",
+ 	         dataType: "json",
+ 	         success : function(data, status, xhr){
+ 	            let dataHeader = data.result.response.header.resultCode;
+ 	            
+ 	            if(dataHeader == "00"){
+ 	               console.log("success");
+ 	               console.log(data);
+ 	               //기온
+ 	               var temp = data.result.response.body.items.item[0].fcstValue;
+ 	               //하늘상태
+ 	               var skyState = data.result.response.body.items.item[4].fcstValue;
+ 	               //강수확률
+ 	               var percentRain = data.result.response.body.items.item[7].fcstValue;
+ 	               //풍속
+ 	               var windSpeed = data.result.response.body.items.item[4].fcstValue;
+ 	               //강수형태
+ 	               var rainForm = data.result.response.body.items.item[6].fcstValue;
+ 	               //강수량
+ 	               var rainAmount = data.result.response.body.items.item[9].fcstValue;
+ 	               //파고
+ 	               var wave = data.result.response.body.items.item[8].fcstValue;
+ 	               
+ 	               var str = "";
+ 	               
+ 	               if(skyState <= 5){
+ 	                  //맑음
+ 	                  str += '<img alt="" src="../resources/images/sunny.png" width="65%">';
+ 	                  weather2_2.html("맑음");
+ 	               }else if(skyState >= 6 && skyState <= 8){
+ 	                  //구름많음
+ 	                  if(rainForm == 3){
+ 	                     //눈
+ 	                     str += '<img alt="" src="../resources/images/snow.png">';
+ 	                     weather2_2.html("구름많고 눈");
+ 	                  }else if(rainForm == 0){
+ 	                     //흐림
+ 	                     str += '<img alt="" src="../resources/images/littleSun.png">';
+ 	                     weather2_2.html("구름많음");
+ 	                  }else{
+ 	                     str += '<img alt="" src="../resources/images/rain.png">';
+ 	                     weather2_2.html("구름많고 비");
+ 	                  }
+ 	                  
+ 	               }else{
+ 	                  //흐림
+ 	                  if(rainForm == 3){
+ 	                     //눈
+ 	                     str += '<img alt="" src="../resources/images/snow.png">';
+ 	                     weather2_2.html("흐리고 눈");
+ 	                  }else if(rainForm == 0){
+ 	                     //흐림
+ 	                     str += '<img alt="" src="../resources/images/cloud.png">';
+ 	                     weather2_2.html("흐림");
+ 	                  }else{
+ 	                     str += '<img alt="" src="../resources/images/rain.png">';
+ 	                     weather2_2.html("흐리고 비");
+ 	                  }
+ 	               }
+ 	               
+ 	               weather1.html(str); 
+ 	               weather2_1.html(temp+" ℃");                  
+ 	               weather3_1.append(rainAmount + " mm")                  
+ 	               weather3_2.append(percentRain + " %")                  
+ 	               weather3_3.append(windSpeed + " m/s")                  
+ 	               weather3_4.append(wave + " m")                  
+ 	                           
+ 	            }else{     
+ 	               console.log("fail");
+ 	               console.log(data);
+ 	            }
+ 	         },
+ 	         error : function(e, status, xhr, data){
+ 	               console.log("error~~~~~~~~~~~~");
+ 	               console.log(data);
+ 	         }
+ 	      })  
+ 	  }
+
+  
+    
+    function drawCalendar(){
+    	
+    	let jsonObject = {
+    			CLDR_CATEGORY : "${userId}"
+    	}
+
+		$.ajax({
+			  url: "/calendar/showList",
+			  type: "POST",
+			  data:JSON.stringify(jsonObject),
+			  dataType: "JSON",
+			  contentType:"application/json;charset=utf-8",
+			  beforeSend : function(xhr){
+		        xhr.setRequestHeader(header, token);
+		      },
+			  success : function(data){
+				  console.log(data)
+				  // 오늘기준
+				  let date = new Date();
+				  console.log(date.getDate())
+				  console.log(date.getDate()-3)
+				  let startDay = new Date(date.setDate(date.getDate()-date.getDay()));
+				  let endDay = new Date(date.setDate(date.getDate()+(6-date.getDay())));
+					
+				  console.log(startDay, endDay)
+				  
+				  text="<span class='custom-font-dark align-center'>"+ moment(startDay).format("MM.DD") + "~" + moment(endDay).format("MM.DD")+"</span>";
+				  text+="<hr>";
+				  data.forEach((value,i)=>{
+					  text+= moment(new Date(value.start)).format("MM.DD")+"  "+ value.title+"<br>";
+				  })
+				  
+				  myCal.innerHTML = text;
+				  // 내일기준
+				  // date.getDay() = 4
+				  // startDay = 
+				  
+				  
+			  },
+			  error : function(request,status,error){
+				alert("code = "+ request.status + " message = " + request.responseText + " error = " + error); // 실패 시 처리
+				console.log("code = "+ request.status + " message = " + request.responseText + " error = " + error);
+			  }
+		});
+ 	
+    	
+     };     
+    
+    
+    
+    
+</script>

@@ -1,0 +1,11 @@
+package org.hdcd.service.common.pop_up;
+
+import java.util.List;
+
+import org.hdcd.vo.PopupVO;
+
+public interface PopUpService {
+
+	List<PopupVO> popUpOn();
+
+}

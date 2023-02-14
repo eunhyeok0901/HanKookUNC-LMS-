@@ -1,0 +1,23 @@
+package org.hdcd.service.manager.chart;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.hdcd.mapper.ChartMapper;
+import org.hdcd.vo.DepartmentVO;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ChartServiceImpl implements ChartService{
+	
+	@Inject
+	ChartMapper chartMapper;
+	
+	@Override
+	public List<DepartmentVO> getDepartmentInfo() {
+		// TODO Auto-generated method stub
+		return chartMapper.getDepartmentInfo();
+	}
+
+}

@@ -1,0 +1,560 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>  
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+.form-control{
+	width:250px;
+}
+</style>
+<body>
+<h4 class="card-title">
+		<i class="fa-solid fa-graduation-cap"></i>&nbsp;&nbsp; 전체 학생 조회
+</h4>
+<div class="row">
+	<div class="col-lg-7" >
+		<div class="card" style="height: 800px; overflow: scroll; overflow-x:hidden;">
+			<div class="card-body">
+				<select id="dep" onchange="getAllStudentList()">
+					<option selected="selected" value="">학과</option>
+					<option value = "전자공학과">전자공학과</option>
+					<option value = "컴퓨터공학과">컴퓨터공학과</option>
+					<option value = "실용음악과">실용음악과</option>
+					<option value = "0">기타</option>
+				</select>&nbsp;&nbsp;
+				<select id="record" onchange="getAllStudentList()">
+					<option selected="selected" value="">학적상태</option>
+					<option value = "재학">재학</option>
+					<option value = "휴학">휴학</option>
+					<option value = "졸업">졸업</option>
+					<option value = "자퇴">자퇴</option>
+				</select>
+				<input type="text" id="name" oninput="getAllStudentList()"  style="margin-left: 480px;" placeholder="이름 검색"><br><br>
+				<button type="button" class="btn btn-dark" onclick="btnSendEmail()">이메일 발송</button>
+				 <div class="table-responsive">
+				     <table class="table header-border table-hover verticle-middle" id="EH_MtableTest">
+				         <thead>
+				             <tr>
+				                 <th><input type="checkbox" onclick="checkAll(this)"></th>
+				                 <th>No.</th>
+				                 <th>학번</th>
+				                 <th>성명</th>
+				                 <th>성별</th>
+				                 <th>학과명</th>
+				                 <th>입학년도</th>
+				                 <th>학적상태</th>
+				                 <th></th>
+				             </tr>
+				         </thead>
+				         <tbody id="ajaxMprofessorList">
+				         
+<!-- 				           ajax part -->
+
+				         </tbody>
+				     </table>
+				 </div>
+			</div>
+		</div>
+	</div>
+   <div class="col" id="divForEmail">
+        <div class="card"  id="studentDetail" style="height: 800px; overflow:scroll; overflow-x:hidden;"><br><br>
+        	<h4 class="card-title">&nbsp;&nbsp;&nbsp;&nbsp;상세정보</h4>
+            <div class="card-body">
+               <div class="basic-form" style="padding-left: 6%;">
+                   <form id="updateForm">
+                       <div class="form-row">
+                           <div class="form-group col-md-6">
+                               <label>학번</label>
+                               <input type="text" id="smemNo" class="form-control input-default" disabled="disabled">
+                               <input type="hidden" id="volo_code">
+                           </div>
+                           <div class="form-group col-md-6">
+                               <label>성명</label>
+                               <input type="text" id="stuName" class="form-control input-default" disabled="disabled">
+                           </div>
+                       </div>
+                       <div class="form-row">
+                           <div class="form-group col-md-6">
+                               <label>학과</label>
+                               <input type="text" id="stuDep" class="form-control input-default" disabled="disabled">
+                           </div>
+                           <div class="form-group col-md-6">
+                               <label>학년</label>
+                               <input type="text" id="stuGrade" class="form-control input-default" disabled="disabled">
+                           </div>
+                       </div>
+                       <div class="form-row">
+                           <div class="form-group col-md-6">
+                               <label>성별</label>
+                               <input type="text" id="memSex" class="form-control input-default" disabled="disabled">
+                           </div>
+                           <div class="form-group col-md-6">
+                               <label>연락처</label>
+                               <input type="text" id="memTel" class="form-control input-default" disabled="disabled">
+                           </div>
+                       </div>
+                       <div class="form-row">
+                           <div class="form-group col-md-6">
+                               <label>입학년도</label>
+                               <input type="text" id="stuJoin" class="form-control input-default" disabled="disabled">
+                           </div>
+                           <div class="form-group col-md-6">
+                               <label>학적상태</label>
+                               <input type="text" id="stuRecord" class="form-control input-default" disabled="disabled">
+                           </div>
+                       </div>
+                       <br><br><br>
+                       <div class="form-row">
+                           <div class="form-group col-md-6">
+                               <label>이메일</label>
+                               <input type="text" id="memEmail" class="form-control input-default" disabled="disabled">
+                           </div>
+                       </div>
+                       <button type="button" class="btn btn-dark" onclick="btnSendEach(this)" >이메일 전송</button>&nbsp;&nbsp;&nbsp;&nbsp;
+<!--                        <div class="form-group"> -->
+<!--                            <label style="color: red;">이메일</label> -->
+<!--                            <input type="text" id="memEmail" class="form-control input-default" > -->
+<!--                        </div> -->
+                    </form>
+                   	<div style="float: right;">
+                       <button type="button" class="btn btn-dark" onclick="btnReset()">초기화</button>
+                   	</div>	
+               </div>
+            </div>
+        </div>
+     </div>
+   
+</div>	
+</body>
+
+<script type="text/javascript">
+window.onload = function(){
+	var table = $("#EH_MtableTest");
+	getAllStudentList();
+
+}
+
+//신청자 및 등록자 리스트 불러오는 메소드
+function getAllStudentList(){
+	
+	var dep = $("#dep").val();
+	var record = $("#record").val();
+	var name = $("#name").val();
+	
+	
+	var ajaxMprofessorList = $("#ajaxMprofessorList");
+	var sendData = {
+			"stu_dep" : dep,
+			"stu_record" : record,
+			"mem_name" : name
+	}
+	
+	console.log("값 체크1 : ",dep);
+	console.log("값 체크2 : ",record);
+	console.log("값 체크3 : ",name);
+	
+	$.ajax({
+		method : "GET",
+		url : "/Mstudent/getAllStudentList",
+		data : sendData,
+		dataType : "json",
+		success : function(resList){
+			console.log(resList);	
+			
+			ajaxMprofessorList.html(getList(resList));
+		}
+		
+	})
+	
+}
+
+const getList = resList => {
+	let str = "";
+	
+	if(resList.length == 0) {
+		str += "<tr><td colspan='6'>학생 리스트가 존재하지 않습니다</td></tr>";
+		console.log("체크해봅시다1")
+		
+	}else{
+		console.log("체크해봅시다2")
+		
+		for(var i = 0; i < resList.length; i++){
+				str += "<tr>";
+				str += `<td><input id="checkBoxForEmail" type="checkbox" value="\${resList[i].MEM_EMAIL}"></td>`;
+				str += `<td>\${i+1}</td>`;
+				str += `<td>\${resList[i].SMEM_NO}</td>`;
+				str += `<td>\${resList[i].MEM_NAME}</td>`;
+				str += `<td>\${resList[i].MEM_SEX}</td>`;
+				str += `<td>\${resList[i].STU_DEP}</td>`;
+				str += `<td>\${resList[i].STU_JOINYEAR}</td>`;
+				str += `<td>\${resList[i].STU_RECORD}</td>`;
+				str += `<td><span id="\${resList[i].SMEM_NO}" name="spanBtn" class="label label-dark" style="cursor: pointer;" onclick="btnStudentDetail('\${resList[i].SMEM_NO}')" >보기</span></td>`;
+				str += "</tr>";
+		}
+	}
+	return str;
+}
+
+
+
+
+function btnStudentDetail(smem_no){
+	
+	console.log("값 확인 : ",smem_no);
+	
+	var smemNo = $("#smemNo");
+	var mem_name = $("#stuName");
+	var stu_dep = $("#stuDep");
+	var stu_grade = $("#stuGrade");
+	var mem_sex = $("#memSex");
+	var mem_tel = $("#memTel");
+	var stu_join = $("#stuJoin");
+	var stu_record = $("#stuRecord");
+	var mem_email = $("#memEmail");
+	
+	
+	$.ajax({
+		url : "/Mstudent/getStudentDetail",
+		method : "GET",
+		data : {"smem_no" : smem_no},
+		success : function(res){
+// 			console.log(res);
+			
+			smemNo.val(res.SMEM_NO);
+			mem_name.val(res.MEM_NAME);
+			stu_dep.val(res.STU_DEP);
+			stu_grade.val(res.STU_SCHYEAR);
+			mem_sex.val(res.MEM_SEX);
+			mem_tel.val(res.MEM_TEL);
+			stu_join.val(res.STU_JOINYEAR);
+			stu_record.val(res.STU_RECORD);
+			mem_email.val(res.MEM_EMAIL);
+		
+			
+		}
+	})
+	
+	
+	
+}
+
+function btnSendEmail(){
+	var studentDetail = document.getElementById("studentDetail");
+	var divForEmail = document.getElementById("divForEmail");
+// 	var checkBoxForEmail = document.querySelectorAll("#checkBoxForEmail");
+// 	checkBoxForEmail
+	
+	var checked = document.querySelectorAll("input[type='checkbox']:checked");
+	var sort = [];
+	
+// 	console.log(checked)
+	
+	
+	
+	
+	
+// 	console.log("값 확인입니다!! ",checkBoxForEmail);
+	
+	var str = `<div class="col">
+			        <div class="card"  id="emailForStudent" style="height: 800px; overflow:scroll; overflow-x:hidden;"><br><br>
+			        	<h4 class="card-title">&nbsp;&nbsp;&nbsp;&nbsp;이메일 전송</h4>
+			            <div class="card-body">
+			           		<div class="basic-form">
+			                    <form id="emailForm">
+			                        <div class="form-group row">
+			                            <label class="col-sm-2 col-form-label">받는 사람</label>
+			                            <div class="col-sm-10">
+			                                <input type="text" id="receiver" name="receiver" style="width: 100%;" class="form-control" value="">
+			                            </div>
+			                        </div>
+			                        <div class="form-group row">
+			                            <label class="col-sm-2 col-form-label">제목</label>
+			                            <div class="col-sm-10">
+			                                <input type="text" id="title" name="title" style="width: 100%;" class="form-control">
+			                            </div>
+			                        </div>
+			                        <div class="form-group row">
+			                            <label class="col-sm-2 col-form-label">파일첨부</label>
+			                            <div class="input-group mb-3" style="width: 79%; margin-left: 14px;">
+			                                <div class="input-group-prepend"><span class="input-group-text">Upload</span>
+			                                </div>
+			                                <div class="custom-file">
+			                                    <input type="file" id="emailFile" name="emailFile" class="custom-file-input">
+			                                    <label class="custom-file-label">Choose file</label>
+			                                </div>
+			                            </div>
+			                        </div>
+			                        <div class="form-group">
+			                            <label>내용</label>
+			                            <textarea style="float: right; width: 82%;" class="form-control h-150px" rows="10"  id="content" name="content"></textarea>
+			                            <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+			                        </div>
+			                        <input type="checkbox" class="form-check-input" value=""> 
+			                    </form>
+			                </div>
+			                <div style="float: right;">
+				                <button type="button" class="btn mb-1 btn-primary" onclick="btnEmailSend()">보내기</button>
+				                <button type="button" class="btn mb-1 btn-primary" onclick="btnEmailReset()">초기화</button>
+				                <button type="button" class="btn mb-1 btn-primary" onclick="btnBack()">돌아가기</button>
+			               	</div>	
+			            </div>
+			        </div>
+			     </div>`;
+	
+	studentDetail.remove();
+	divForEmail.innerHTML = str;
+	
+	var receiver = document.getElementById("receiver");	
+	
+	for(var i=0; i<checked.length; i++){
+		sort.push(checked[i].value);
+		receiver.value += sort[i] + ",";
+	}
+	console.log(sort);
+	
+}
+function btnBack(){
+	
+	var emailForStudent = document.getElementById("emailForStudent");
+	emailForStudent.remove();
+	
+	var str = `<div class="col" id="divForEmail">
+		        <div class="card"  id="studentDetail" style="height: 800px; overflow:scroll; overflow-x:hidden;"><br><br>
+		        	<h4 class="card-title">&nbsp;&nbsp;&nbsp;&nbsp;상세정보</h4>
+		            <div class="card-body">
+		               <div class="basic-form" style="padding-left: 6%;">
+		                   <form id="updateForm">
+		                       <div class="form-row">
+		                           <div class="form-group col-md-6">
+		                               <label>학번</label>
+		                               <input type="text" id="smemNo" class="form-control input-default" disabled="disabled">
+		                               <input type="hidden" id="volo_code">
+		                           </div>
+		                           <div class="form-group col-md-6">
+		                               <label>성명</label>
+		                               <input type="text" id="stuName" class="form-control input-default" disabled="disabled">
+		                           </div>
+		                       </div>
+		                       <div class="form-row">
+		                           <div class="form-group col-md-6">
+		                               <label>학과</label>
+		                               <input type="text" id="stuDep" class="form-control input-default" disabled="disabled">
+		                           </div>
+		                           <div class="form-group col-md-6">
+		                               <label>학년</label>
+		                               <input type="text" id="stuGrade" class="form-control input-default" disabled="disabled">
+		                           </div>
+		                       </div>
+		                       <div class="form-row">
+		                           <div class="form-group col-md-6">
+		                               <label>성별</label>
+		                               <input type="text" id="memSex" class="form-control input-default" disabled="disabled">
+		                           </div>
+		                           <div class="form-group col-md-6">
+		                               <label>연락처</label>
+		                               <input type="text" id="memTel" class="form-control input-default" disabled="disabled">
+		                           </div>
+		                       </div>
+		                       <div class="form-row">
+		                           <div class="form-group col-md-6">
+		                               <label>입학년도</label>
+		                               <input type="text" id="stuJoin" class="form-control input-default" disabled="disabled">
+		                           </div>
+		                           <div class="form-group col-md-6">
+		                               <label>학적상태</label>
+		                               <input type="text" id="stuRecord" class="form-control input-default" disabled="disabled">
+		                           </div>
+		                       </div>
+		                       <br><br><br>
+		                       <div class="form-row">
+		                           <div class="form-group col-md-6">
+		                               <label>이메일</label>
+		                               <input type="text" id="memEmail" class="form-control input-default" disabled="disabled">
+		                           </div>
+		                       </div>
+		                       <button type="button" class="btn btn-dark" onclick="btnSendEach(this)" >이메일 전송</button>&nbsp;&nbsp;&nbsp;&nbsp;
+		<!--                        <div class="form-group"> -->
+		<!--                            <label style="color: red;">이메일</label> -->
+		<!--                            <input type="text" id="memEmail" class="form-control input-default" > -->
+		<!--                        </div> -->
+		                    </form>
+		                   	<div style="float: right;">
+		                       <button type="button" class="btn btn-dark" onclick="btnReset()">초기화</button>
+		                   	</div>	
+		               </div>
+		            </div>
+		        </div>
+		     </div>`;
+		     
+	divForEmail.innerHTML = str;
+}
+
+
+
+
+function checkAll(selectAll)  {
+	  const checkboxes  = document.querySelectorAll('input[type="checkbox"]');
+	  
+	  checkboxes.forEach((checkbox) => {
+	    checkbox.checked = selectAll.checked
+	  })
+}
+
+
+function btnReset(){
+	var form = document.querySelector("#updateForm")
+	form.reset();
+}
+
+function btnEmailReset(){
+	var emailForm = document.querySelector("#emailForm")
+	
+	emailForm.reset(); 
+}
+
+
+function btnSendEach(){
+	var studentDetail = document.getElementById("studentDetail");
+	var divForEmail = document.getElementById("divForEmail");
+	var memEmail = document.getElementById("memEmail").value;
+	
+	
+	console.log(memEmail)
+	
+	var str = `<div class="col">
+			        <div class="card"  id="emailForStudent" style="height: 800px; overflow:scroll; overflow-x:hidden;"><br><br>
+			        	<h4 class="card-title">&nbsp;&nbsp;&nbsp;&nbsp;이메일 전송</h4>
+			            <div class="card-body">
+			           		<div class="basic-form">
+			                    <form id="emailForm">
+			                        <div class="form-group row">
+			                            <label class="col-sm-2 col-form-label">받는 사람</label>
+			                            <div class="col-sm-10">
+			                                <input type="text" id="receiver" name="receiver" style="width: 100%;" class="form-control" >
+			                            </div>
+			                        </div>
+			                        <div class="form-group row">
+			                            <label class="col-sm-2 col-form-label">제목</label>
+			                            <div class="col-sm-10">
+			                                <input type="text" id="title" name="title" style="width: 100%;" class="form-control">
+			                            </div>
+			                        </div>
+			                        <div class="form-group row">
+			                            <label class="col-sm-2 col-form-label">파일첨부</label>
+			                            <div class="input-group mb-3" style="width: 79%; margin-left: 14px;">
+			                                <div class="input-group-prepend"><span class="input-group-text">Upload</span>
+			                                </div>
+			                                <div class="custom-file">
+			                                    <input type="file" id="emailFile" name="emailFile" class="custom-file-input">
+			                                    <label class="custom-file-label">Choose file</label>
+			                                </div>
+			                            </div>
+			                        </div>
+			                        <div class="form-group">
+			                            <label>내용</label>
+			                            <textarea style="float: right; width: 82%;" class="form-control h-150px" rows="10"  id="content" name="content"></textarea>
+			                            <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+			                        </div>
+			                        <input type="checkbox" class="form-check-input" value=""> 
+			                    </form>
+			                </div>
+			                <div style="float: right;">
+				                <button type="button" class="btn mb-1 btn-primary" onclick="btnEmailSend()">보내기</button>
+				                <button type="button" class="btn mb-1 btn-primary" onclick="btnEmailReset()">초기화</button>
+				                <button type="button" class="btn mb-1 btn-primary" onclick="btnBack()">돌아가기</button>
+			               	</div>	
+			            </div>
+			        </div>
+			     </div>`;
+			     
+			     
+	
+    
+	studentDetail.remove();
+	divForEmail.innerHTML = str;
+
+	var receiver = document.getElementById("receiver");
+	
+    console.log(receiver);
+	receiver.value = memEmail;
+}
+
+
+
+function btnEmailSend(){
+	var emailFile = document.querySelector("#emailFile");
+	var emailForm = document.getElementById("emailForm");
+	
+	let file = emailFile.files[0];
+	
+	console.log(file);
+	
+	let formData = new FormData(emailForm);
+	formData.append("emailFiles",file);
+	
+	console.log(formData);
+	
+	var token = $("meta[name='_csrf']").attr('content');
+	
+	$.ajax({
+		type : "POST",
+		url : "/mail/send",
+		data : formData,
+		contentType : false,
+		processData : false,
+		headers : {
+			"X-CSRF-TOKEN" : token
+		},
+		success : function(res){
+			alert(res);
+		}
+	})
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</html>

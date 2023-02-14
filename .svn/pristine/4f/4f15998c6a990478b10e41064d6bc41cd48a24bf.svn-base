@@ -1,0 +1,417 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<link href="${pageContext.request.contextPath }/resources/bootstrap/css/style.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>	
+<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/common/common.min.js"></script>
+
+<script>
+   // 시큐리티용 토큰
+   let header = '${_csrf.headerName}';
+    let token =  '${_csrf.token}';
+</script>
+
+
+<c:set value="insert" var="forName"></c:set>
+<c:if test="${formName eq 'update' }">
+	<c:set value="update" var="forName"></c:set>
+</c:if>
+
+
+
+<style>
+
+.inputSize {
+   width: 100%;
+   height: 100%;
+   margin: 0;
+   padding: 0;
+}
+
+.lecOpenApplyHeader {
+	display: flex;
+	justify-content: space-between;
+}
+
+.lecOpenHeaderMenu {
+	display: flex;
+	justify-content: space-between;
+	text-align: center;
+}
+
+#basicRegister {
+	background-color: black;
+	color: white;
+}
+</style>
+<div class="container-fluid">
+
+
+<div class="row justify-content-center">
+	<div class="col-lg-11">
+		<div class="card">
+			<div class="card-body">
+				<div class="lecOpenApplyHeader">
+					<h4 class="card-title">${forName }</h4>
+					<div>
+						<c:choose>
+					         <c:when test = "${formName eq 'insert' }">
+					          	<button type="button" class="btn mb-1 btn-flat btn-light">임시저장/불러오기</button>
+								<button type="button" class="btn mb-1 btn-flat btn-outline-dark" id="lecOpenApply"> 개설신청</button>
+					         </c:when>
+					         <c:otherwise>
+					            <button type="button" class="btn mb-1 btn-flat btn-outline-dark" id="lecOpenModify"> 수정</button>
+					         </c:otherwise>
+				      	</c:choose>
+					</div>
+				</div>
+				<br>
+
+
+				<div class="default-tab">
+					<ul class="nav nav-tabs mb-3" role="tablist">
+						<li class="nav-item"><a class="nav-link active show"
+							data-toggle="tab" href="#home">기본사항 작성</a></li>
+						<li class="nav-item"><a class="nav-link" data-toggle="tab"
+							href="#profile">강의계획서 작성</a></li>
+					</ul>
+
+					<div class="tab-content">
+						<div class="tab-pane fade active show" id="home" role="tabpanel">
+							<div class="p-t-15">
+								<div class="row align-items-center">
+
+									<form method="post" id="basicRegiForm">
+										<div class="basic-form">
+											<div class="form-row">
+												<div class="form-group col-md-6">
+													<label>강의명</label> <input type="text" class="form-control"
+														id="lol_name" name="lol_name" placeholder="강의명입력"
+														value="웹프로그래밍 언어">
+												</div>
+												<div class="form-group col-md-2">
+													<label>년도</label> <input type="text" class="form-control"
+														id="lol_year" name="lol_year" value="2023">
+												</div>
+												<div class="form-group col-md-2">
+													<label>학기</label> <select id="lol_semester"
+														name="lol_semester" class="form-control">
+														<option selected="selected">1</option>
+														<option>2</option>
+													</select>
+												</div>
+												<div class="form-group col-md-2">
+													<label>정원</label> <input type="text" class="form-control"
+														id="lol_limit" name="lol_limit" placeholder="정원입력"
+														value="30">
+												</div>
+											</div>
+											<div class="form-row">
+												<div class="form-group col-md-2">
+													<label>학점</label> <select class="form-control"
+														id="lol_credit" name="lol_credit">
+														<option>1</option>
+														<option selected="selected">2</option>
+														<option>3</option>
+													</select>
+												</div>
+												<div class="form-group col-md-3">
+													<label>학년</label> <select class="form-control"
+														name="lol_schyear" id="lol_schyear">
+														<option>1</option>
+														<option>2</option>
+														<option>3</option>
+														<option>4</option>
+													</select>
+												</div>
+												<div class="form-group col-md-2">
+													<label>전공과목/교양과목</label> <select class="form-control"
+														name="major_cultural" id="major_cultural">
+														<option>전공</option>
+														<option>교양</option>
+													</select>
+												</div>
+												<div class="form-group col-md-2">
+													<label>필수과목/선택과목</label> <select class="form-control"
+														name="choice_require" id="choice_require">
+														<option selected="selected">필수</option>
+														<option>선택</option>
+													</select>
+												</div>
+												<div class="form-group col-md-3">
+													<label>수업일수</label> <input type="text" class="form-control"
+														name="lol_daycount" value="30" id="lol_daycount">
+												</div>
+											</div>
+											<div class="form-row">
+												<div class="form-group col-md-2">
+													<label>요일1</label> <select class="form-control"
+														name="lol_day1" id="lol_day1">
+														<option>월</option>
+														<option>화</option>
+														<option>수</option>
+														<option>목</option>
+														<option>금</option>
+													</select>
+												</div>
+												<div class="form-group col-md-2">
+													<label>수업 시작 시간</label> <select class="form-control"
+														name="lol_startime1" id="lol_startime1">
+														<option>09:00</option>
+														<option>10:00</option>
+														<option>11:00</option>
+														<option>12:00</option>
+														<option>13:00</option>
+														<option>14:00</option>
+														<option>15:00</option>
+														<option>16:00</option>
+														<option>17:00</option>
+														<option>18:00</option>
+														<option>19:00</option>
+														<option>20:00</option>
+														<option>21:00</option>
+													</select>
+												</div>
+												<div class="form-group col-md-2">
+													<label>수업 종료 시간</label> <select class="form-control"
+														name="lol_endtime1" id="lol_endtime1">
+														<option>09:50</option>
+														<option>10:50</option>
+														<option>11:50</option>
+														<option>12:50</option>
+														<option>13:50</option>
+														<option>14:50</option>
+														<option>15:50</option>
+														<option>16:50</option>
+														<option>17:50</option>
+														<option>18:50</option>
+														<option>19:50</option>
+														<option>20:50</option>
+														<option>21:50</option>
+													</select>
+												</div>
+												<div class="form-group col-md-2">
+													<label>요일2</label> <select class="form-control"
+														name="lol_day2" id="lol_day2">
+														<option value="">해당없음</option>
+														<option>월</option>
+														<option>화</option>
+														<option>수</option>
+														<option>목</option>
+														<option>금</option>
+													</select>
+												</div>
+												<div class="form-group col-md-2">
+													<label>수업 시작 시간</label> <select class="form-control"
+														name="lol_startime2" id="lol_startime2">
+														<option value="">해당없음</option>
+														<option>09:00</option>
+														<option>10:00</option>
+														<option>11:00</option>
+														<option>12:00</option>
+														<option>13:00</option>
+														<option>14:00</option>
+														<option>15:00</option>
+														<option>16:00</option>
+														<option>17:00</option>
+														<option>18:00</option>
+														<option>19:00</option>
+														<option>20:00</option>
+														<option>21:00</option>
+													</select>
+												</div>
+												<div class="form-group col-md-2">
+													<label>수업 종료 시간</label> <select class="form-control"
+														name="lol_endtime2" id="lol_endtime2">
+														<option value="">해당없음</option>
+														<option>09:50</option>
+														<option>10:50</option>
+														<option>11:50</option>
+														<option>12:50</option>
+														<option>13:50</option>
+														<option>14:50</option>
+														<option>15:50</option>
+														<option>16:50</option>
+														<option>17:50</option>
+														<option>18:50</option>
+														<option>19:50</option>
+														<option>20:50</option>
+														<option>21:50</option>
+													</select>
+												</div>
+											</div>
+										</div>
+
+									</form>
+
+								</div>
+							</div>
+						</div>
+
+
+
+						<div class="tab-pane fade" id="profile">
+							<div class="p-t-15">
+								<div class="row align-items-center">
+
+									<form method="post" class="hide" id="lecPlanRegiForm">
+										<div class="basic-form">
+											<div class="form-row">
+												<div class="form-group col-md-12">
+													<label>강의 개요</label> <input type="text" id="lp_content"
+														name="lp_content" value="웹 프로그래밍을 배우는 강의다.">
+												</div>
+												<div class="form-group col-md-12">
+													<label>교재 및 참고문헌</label><input type="text" id="lp_book"
+														name="lp_book" value="자바의 정석">
+												</div>
+												<div class="form-group col-md-4">
+													<label>출석반영비율</label> <input type="text" id="lp_attend_ref"
+														name="lp_attend_ref" value="30" style="width: 80px;">%
+												</div>
+												<div class="form-group col-md-4">
+													<label>시험반영비율</label> <input type="text" id="lp_test_ref"
+														name="lp_test_ref" value="50" style="width: 80px;">%
+												</div>
+												<div class="form-group col-md-4">
+													<label>과제반영비율</label> <input type="text" id="lp_task_ref"
+														name="lp_task_ref" value="20" style="width: 80px;">%
+												</div>
+												<div class="form-group col-md-12">
+													<label>비고</label> <input type="text" id="lp_note"
+														name="lp_note">
+												</div>
+
+												<h5>주차별 강의 계획</h5>
+												<div class="form-group col-md-12">
+													<label>1주차</label> <input type="text" id="lp_week1"
+														name="lp_week1" value="1주차 강의">
+												</div>
+												<div class="form-group col-md-12">
+													<label>2주차</label> <input type="text" id="lp_week2"
+														name="lp_week2" value="2주차 강의">
+												</div>
+												<div class="form-group col-md-12">
+													<label>3주차</label> <input type="text" id="lp_week3"
+														name="lp_week3" value="3주차 강의">
+												</div>
+												<div class="form-group col-md-12">
+													<label>4주차</label> <input type="text" id="lp_week4"
+														name="lp_week4" value="4주차 강의">
+												</div>
+												<div class="form-group col-md-12">
+													<label>5주차</label> <input type="text" id="lp_week5"
+														name="lp_week5" value="5주차 강의">
+												</div>
+												<div class="form-group col-md-12">
+													<label>6주차</label> <input type="text" id="lp_week6"
+														name="lp_week6" value="6주차 강의">
+												</div>
+												<div class="form-group col-md-12">
+													<label>7주차</label> <input type="text" id="lp_week7"
+														name="lp_week7" value="7주차 강의">
+												</div>
+												<div class="form-group col-md-12">
+													<label>8주차</label> <input type="text" id="lp_week8"
+														name="lp_week8" value="8주차 강의">
+												</div>
+												<div class="form-group col-md-12">
+													<label>9주차</label> <input type="text" id="lp_week9"
+														name="lp_week9" value="9주차 강의">
+												</div>
+												<div class="form-group col-md-12">
+													<label>10주차</label> <input type="text" id="lp_week10"
+														name="lp_week10" value="10주차 강의">
+												</div>
+												<div class="form-group col-md-12">
+													<label>11주차</label> <input type="text" id="lp_week11"
+														name="lp_week11" value="11주차 강의">
+												</div>
+												<div class="form-group col-md-12">
+													<label>12주차</label> <input type="text" id="lp_week12"
+														name="lp_week12" value="12주차 강의">
+												</div>
+												<div class="form-group col-md-12">
+													<label>13주차</label> <input type="text" id="lp_week13"
+														name="lp_week13" value="13주차 강의">
+												</div>
+												<div class="form-group col-md-12">
+													<label>14주차</label> <input type="text" id="lp_week14"
+														name="lp_week14" value="14주차 강의">
+												</div>
+												<div class="form-group col-md-12">
+													<label>15주차</label> <input type="text" id="lp_week15"
+														name="lp_week15" value="15주차 강의">
+												</div>
+
+											</div>
+
+
+										</div>
+									</form>
+
+								</div>
+							</div>
+						</div>
+						
+						
+						
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<script type="text/javascript">
+window.onload = function() {
+
+		var lecOpenApply = $('#lecOpenApply');
+
+		lecOpenApply.on("click", function() {
+			
+			var data = $('form').serialize();
+
+			console.log("클릭이 먹히나? ",data)
+
+			$.ajax({
+				type : "POST",
+				url : "/lol/insertLectureOpen",
+				data : data,
+				dataType : "text",
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader(header, token);
+				},
+				success : function(result) {
+					console.log('민지insert : ', result);
+					opener.getList();
+					window.close();
+
+				},
+				error : function(request, status, error) {
+					console.log('실패 : ', status, " , ", error)
+				}
+
+			}) // ajax 끝
+
+			// 		$.ajax({
+			// 			type : "POST",
+			// 			url : "/lol/insertLectureOpen",
+			// 			data : JSON.stringify(lecOpenList),
+			// 			contentType : "application/json",
+			// 			dataType : "text",
+			// 	        beforeSend : function(xhr){
+			// 	            xhr.setRequestHeader(header, token);
+			// 	        },
+			// 			success : function(result){
+			// 				console.log('민지insert : ', result)
+			// 			},
+			// 			error : function(request,status,error){
+			// 				console.log('실패 : ', status, " , ",error)
+			// 			}
+
+			// 		})  // ajax 끝
+		})
+
+	}
+</script>

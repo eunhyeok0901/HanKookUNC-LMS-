@@ -1,0 +1,197 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<style>
+
+.custom-div-radius{
+	border-radius : 10px;
+}
+
+.bg-gray{
+	background-color : #f3f3f3;
+	color:black;
+}
+
+.custom-font-dark {
+   color : #0a3875;
+   font-weight : bold;
+}
+
+.table-spacing {
+	border-collapse: separate;
+	border-spacing: 0 10px;
+}
+
+
+</style>
+<body>
+	<div class="container-fluid ">
+		<div class="container-sm mb-5" style="height:850px;">
+			<h4 class="custom-font-dark col-4"><i class="fa-solid fa-circle-down fa-lg"></i>검색</h4>
+			<div class="col-sm-12 bg-white mb-5 p-5 custom-div-radius">
+				<div class="row">
+					<div class="col-2">
+						<label for="year"><i class="fa-sharp fa-solid fa-circle-down mr-2"></i><span class="custom-font-dark">년도</span></label><br>
+						<select class="custom-select mr-sm-2 col" id="year">
+                            <option selected="selected">년도</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                        </select>
+					</div>
+					<div class="col-2">
+						<label for="semester"><i class="fa-sharp fa-solid fa-circle-down mr-2"></i><span class="custom-font-dark">학기</span></label><br>
+						<select class="custom-select mr-sm-2 col" id="semester">
+                            <option selected="selected">학기</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+					</div>
+					<div class="col-1 tmp-center ">
+						<input type="button" class="btn mb-1 btn-outline-light custom-font-bold" value="조회" id="selectGrade">
+					</div>
+					<div class="col-5">
+						<label class="custom-font-dark" for="allGrade">전체</label><br>
+						<input type="checkBox" id="allGrade" value="all" checked="checked" class="input-default">
+					</div>
+				</div>
+			</div>
+			
+			<h4 class="custom-font-dark col-4"><i class="fa-solid fa-circle-down fa-lg"></i>전체성적조회</h4>
+			<div class="col-sm-12 bg-white p-5 custom-div-radius">
+				<div class="row ">
+					<div class="col-12 text-right">
+						<span class="custom-font-dark mr-4 custom-font-size-20" id="totalLength">전체[]건</span>
+					</div>
+					<div class="col-12 height-500 custom-overflow-auto">
+						<table class="custom-table table-sticky text-center" >
+							<thead>
+								<tr class="text-white height-40">
+									<th style="width:60px;">년도</th>
+									<th style="width:80px;">학기</th>
+									<th style="width:120px;">학기종류</th>
+									<th>과목</th>
+									<th style="width:120px;">이수구분</th>
+									<th style="width:60px;">학점</th>
+									<th style="width:60px;">등급</th>
+									<th style="width:60px;">평점</th>
+									<th style="width:80px;">취득여부</th>
+									<th style="width:80px;">학점포기</th>
+									<th style="width:80px;">재수강</th>
+								</tr>
+							</thead>
+							<tbody id="myLecGrade">
+
+							</tbody>
+						</table>			
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+var myLecGrade;
+let selectGrade;
+let year;
+let semester;
+var header; 
+var token; 
+window.onload = function(){
+	header = $("meta[name='_csrf_header']").attr('content');
+	token = $("meta[name='_csrf']").attr('content');
+
+	myLecGrade = document.querySelector("#myLecGrade");
+	selectGrade = document.querySelector("#selectGrade");
+	
+	let jsonObject = {};
+	
+	showMyGradeList(jsonObject);
+	
+	selectGrade.addEventListener("click", function(){
+		year = document.querySelector("#year").value;
+		semester = document.querySelector("#semester").value;
+		
+		let jsonObject = {
+				lg_year : year,
+				lg_semester : semester
+		}
+		
+		showMyGradeList(jsonObject);
+	})
+
+}
+
+function showMyGradeList(value) {
+	console.log(value)
+	console.log("dsadwqkjhenwkqrhqwekjrlhewjk")
+	
+	
+	$.ajax({
+		url:"/student/myGradeList",
+		type:"post",
+		data : JSON.stringify(value),
+		contentType : "application/json; charset=utf-8",
+		beforeSend : function(xhr){
+	         xhr.setRequestHeader(header, token);
+	    },
+		success:function(res){
+			console.log(res)
+			
+			document.querySelector("#totalLength").innerText = "전체["+res.length+"]건";
+			
+			text = '';
+			res.forEach((data,i)=>{
+// 				console.log((data.lg_year == 2022 && data.lg_semester == 2))
+				console.log(data.lg_semester != 2 && data.lg_year != 2022)
+				if(data.lg_year == 2022 && data.lg_semester == 2){
+					return;
+				}else{
+					text += '<tr class="bg-white custom-font-dark">';
+					text += '<td>'+data.lg_year+'</td>';
+					text += '<td>'+data.lg_semester+'</td>';
+					text += '<td>정규</td>';
+					text += '<td>'+data.lg_name+'</td>';
+					text += '<td>'+data.lg_area+'</td>';
+					text += '<td>'+data.lg_acq_credit+'</td>';
+					text += '<td>'+data.lg_grade+'</td>';
+					text += '<td>'+data.lg_rating+'</td>';
+					text += '<td>취득</td>';
+					if(data.lg_giveup == 0){
+						text += '<td>X</td>';
+					}else{
+						text += '<td>O</td>';
+					}
+					text += '<td>X</td>'; 						// 재수강여부
+					text += '</tr>';
+				}
+				
+			})
+			
+			myLecGrade.innerHTML = text;
+			
+		},
+		error:function(xhr){
+			console.log(xhr.status)
+			text = "";
+			text += '<tr>';
+			text += '<td colspan="11" class="text-center"> 데이터가 없습니다.~~</td>';
+			text += '</tr>';
+			myLecGrade.innerHTML = text;
+		}
+		
+	})
+	
+	
+}
+
+
+</script>
+
+
+</html>

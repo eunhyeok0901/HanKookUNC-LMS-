@@ -1,0 +1,25 @@
+package org.hdcd.mapper;
+
+import java.util.List;
+
+import org.hdcd.vo.ScholarApplyVO;
+import org.hdcd.vo.ScholarFileVO;
+import org.hdcd.vo.ScholarListVO;
+
+public interface ScholarMapper {
+	// 학생
+	List<ScholarListVO> getScholarList();
+
+	List<ScholarApplyVO> getScholarApplyList(String userId);
+
+	int insertScholarApply(ScholarApplyVO scholarApplyVO);
+
+	int insertScholarApplyFile(ScholarFileVO scholarFileVO);
+
+	
+	// 관리자
+	List<ScholarListVO> getScholarTotalList();
+
+
+
+}

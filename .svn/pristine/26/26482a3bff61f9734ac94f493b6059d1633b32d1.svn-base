@@ -1,0 +1,267 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div class="container-fluid">
+		<!-- End Row -->
+		<div class="row">
+			<div class="col-12 m-b-30">
+				<h2 class="d-inline">대학</h2>
+				<p class="text-muted">학과별게시판</p>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="card">
+							<br>
+							<h3 class="card-title">&nbsp;&nbsp;&nbsp;&nbsp;인문대학</h3>
+							<div class="row">
+								<div class="col-7">
+									<img class="img-fluid"
+										src="${pageContext.request.contextPath }/resources/images/춘배.png"
+										alt="ㅋㅋ"
+										style="width: 100%; height: 200px; display: inline-block;"
+										draggable="false">
+								</div>
+								<div class="col-4">
+									<p class="card-text" style="text-align: justify;">
+										<br> 문학, 사학, 철학을 통한 삶의 의미와 가치를 탐구하고, 눈 앞의 이익으로 환원되지 않는
+										인간다움을 이해하고 표현하는 인문 능력을 함양함으로써, 창의적인 인재와 학문의 기초를 탐구하는 인문인을 육성하고
+										있습니다.
+									</p>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=DEP8">국어교육과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=DEP13">국어국문학과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=DEP9">영어교육과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="#">불어불문학과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="#">독어독문학과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=DEP10">수학교육과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="#">미학과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="#">철학과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="#">고고미술학과</a>
+									</div><br><br>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 사과대 시작 -->
+					<div class="col-md-6">
+						<div class="card">
+							<br>
+							<h3 class="card-title">&nbsp;&nbsp;&nbsp;&nbsp;사회과학대학</h3>
+							<div class="row">
+								<div class="col-7">
+									<img class="img-fluid"
+										src="${pageContext.request.contextPath }/resources/images/춘배.png"
+										alt="ㅋㅋ"
+										style="width: 100%; height: 200px; display: inline-block;"
+										draggable="false">
+								</div>
+								<div class="col-4">
+									<p class="card-text" style="text-align: justify;">
+										<br> 현대사회의 제 현상을 탐구하는 다양한 전공에 대한 수준 높은 교육을 제공하고 전문적인 연구를 수행하고 있으며, 
+										이를 통해 사회를 분석하는 통찰력과 문제 해결 능력을 갖춘 인재를 양성하고 사회발전에 기여하고 있습니다.
+									</p>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=DEP17">경영학과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=DEP12">공법학과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=DEP11">사법학과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=DEP16">경제학과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=DEP15">심리학과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=DEP18">호텔경영학과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=DEP19">사회학과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=20">인류학과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=DEP21">정치외교학과</a>
+									</div><br><br>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 자연과학대학 -->
+					<div class="col-md-6">
+						<div class="card">
+							<br>
+							<h3 class="card-title">&nbsp;&nbsp;&nbsp;&nbsp;음악대학</h3>
+							<div class="row">
+								<div class="col-7">
+									<img class="img-fluid"
+										src="${pageContext.request.contextPath }/resources/images/춘배.png"
+										alt="ㅋㅋ"
+										style="width: 100%; height: 200px; display: inline-block;"
+										draggable="false">
+								</div>
+								<div class="col-4">
+									<p class="card-text" style="text-align: justify;">
+										<br> 1945년 경성음악학교를 모태로 설립되어 오늘날에 이르기까지 최고의 음악적 재능을 지닌 수많은 연주가, 
+										음악학자, 작곡가를 배출하였으며, 이를 토대로 한국 음악계의 방향을 선도할 뿐만 아니라 세계 음악계에서도 두각을 나타내고 있습니다.
+									</p>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=DEP2">성악과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="#">작곡과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="#">국악과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=EAS1">실용음악학부</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="#">피아노과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="#">현악과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=DEP3">무용과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=DEP1">연극영화과</a>
+									</div><br><br>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 사과대끝 -->
+					<div class="col-md-6">
+						<div class="card">
+							<br>
+							<h3 class="card-title">&nbsp;&nbsp;&nbsp;&nbsp;공과대학</h3>
+							<div class="row">
+								<div class="col-7">
+									<img class="img-fluid"
+										src="${pageContext.request.contextPath }/resources/images/춘배.png"
+										alt="ㅋㅋ"
+										style="width: 100%; height: 200px; display: inline-block;"
+										draggable="false">
+								</div>
+								<div class="col-4">
+									<p class="card-text" style="text-align: justify;">
+										<br> 4차 산업혁명을 선도하는 공학기술 분야의 인재육성과 미래 엔지니어 양성을 교육목표로, 
+										국내 최고 기업과 연구소, 나아가 구글, 보잉사 등 글로벌 기업과 SNU 공학컨설팅 센터와 협력하여 산학연 연구를 주도, 
+										성장할 수 있도록 인력을 양성하고 있습니다.
+									</p>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i>
+										<a href ="/board/commain?dep_code=DEP4">컴퓨터공학부</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="#">건설환경공학부</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="#">기계공학부</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=DEP7">건축공학과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="#">항공우주공학과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="#">IT정보제어공학부</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="#">전기공학과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="/board/commain?dep_code=DEP5">전자공학과</a>
+									</div><br><br>
+									<div class="col-md-4">
+										<i class="fa-solid fa-arrow-right"></i><a
+											href="#">화학공학과</a>
+									</div><br><br>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

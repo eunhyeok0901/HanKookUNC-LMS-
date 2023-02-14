@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hdcd.mapper.CommunityMapper">
+	
+	<!-- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■학생■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ -->
+	<!-- ▶[학생] 커뮤니티 글 작성 -->
+	<insert id="registerCmntPost" parameterType="CommunityVO">
+		<selectKey keyProperty="cmnt_no" resultType="string" order="BEFORE">
+			select seq_cmnt_no.nextval from dual
+		</selectKey>
+			insert into	
+				community(cmnt_no, smem_no, cmnt_title, cmnt_content, cmnt_date, cmnt_count, cmnt_like, cmnt_anony, cmnt_report)
+			values
+				('cmnt'||#{cmnt_no}, #{smem_no}, #{cmnt_title}, #{cmnt_content}, sysdate, 0, 0, #{cmnt_anony}, #{cmnt_report})
+	</insert>
+	
+	<!-- [학생] 커뮤니티 글 작성 성공 후 첨부파일 추가 -->
+	<insert id="registerCmntPostFile" parameterType="CommunityFileVO">
+		insert into community_file(cmntf_code, cmnt_no, file_name, file_originnm, file_size, file_path, file_type)
+		values ('cmntf'||seq_cmntf_code.nextval, #{cmnt_no}, #{file_name}, #{file_originnm}, #{file_size}, #{file_path}, #{file_type})
+	</insert>
+	
+	<!-- [학생] 커뮤니티 글 전체 리스트 -->
+	<select id="getCmntTotalList" resultType="CommunityVO">
+		select cmnt_no, smem_no, cmnt_title, cmnt_content, cmnt_date, cmnt_count, cmnt_like, cmnt_anony, cmnt_report
+		from community
+		order by cmnt_date desc
+	</select>
+	<!-- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■관리자■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ -->
+	
+</mapper>
+

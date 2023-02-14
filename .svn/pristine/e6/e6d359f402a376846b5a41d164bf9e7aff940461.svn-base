@@ -1,0 +1,24 @@
+package org.hdcd.service.manager.volunteer;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.hdcd.mapper.VolunteerMapper;
+import org.hdcd.vo.VolunteerOutVO;
+import org.springframework.stereotype.Service;
+
+@Service
+public class MVolunteerManageServiceImpl implements MVolunteerManageService{
+	
+	@Inject
+	private VolunteerMapper mapper;
+	
+	@Override
+	public List<VolunteerOutVO> selectRegisterList() {
+		// TODO Auto-generated method stub
+		return mapper.selectAllRegisterList();
+	}
+
+	
+}

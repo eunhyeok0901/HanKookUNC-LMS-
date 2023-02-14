@@ -1,0 +1,13 @@
+package org.hdcd.service.student.volunteer;
+
+import java.util.List;
+
+import org.hdcd.vo.VolunteerListVO;
+
+public interface SVolunteerInService {
+
+	public List<VolunteerListVO> volunteerVideoList() throws Exception;
+
+	public int countMyInTime(String id) throws Exception;
+
+}

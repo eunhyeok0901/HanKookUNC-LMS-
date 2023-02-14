@@ -1,0 +1,90 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<style type="text/css">
+#myInfo:link, #myInfo:visited, #myInfo:active, #myInfo:hover{
+	color : white;
+}
+
+</style>
+
+
+<div class="row">
+	<!-- 상단 메뉴 시작 -->
+	<div class="col-lg-6 col-sm-6">
+		<div class="card">
+			<div class="social-graph-wrapper widget-linkedin" style="background-color: rgb(174,196,164);">
+				<span class="s-icon" style="display: inline-block;"> <i
+					class="fa-solid fa-comments"> Talk that Talk</i>
+				</span>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<div class="pt-3 pb-3 pl-0 pr-0 text-center">
+						<h4 class="m-1">
+							<i class="fa-solid fa-user-check"></i>
+						</h4>
+						<p class="m-0">
+							<font style="vertical-align: inherit;"><font
+								style="vertical-align: inherit;"><a href="/community">커뮤니티 게시판 보기</a></font></font>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-6 col-sm-6">
+		<div class="card">
+			<div class="social-graph-wrapper widget-linkedin" style="background-color: rgb(174,196,164);">
+				<a href="/community/my" id="myInfo">
+					<span class="s-icon">
+						<i class="fa-solid fa-circle-info">MY INFO</i>&nbsp;&nbsp;
+					</span>
+				</a>
+			</div>
+			<div class="row">
+				<div class="col-4 border-right">
+					<div class="pt-3 pb-3 pl-0 pr-0 text-center">
+						<h4 class="m-1" style="color: rgb(29,161,242);">
+							<i class="fa-solid fa-clipboard" style="color: rgb(174,196,164);"></i>
+						</h4>
+						<p class="m-0">
+							<a href="/community/my">							
+								<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">내가 쓴 글 보기</font></font>
+							</a>
+						</p>
+					</div>
+				</div>
+				<div class="col-4 border-right">
+					<div class="pt-3 pb-3 pl-0 pr-0 text-center">
+						<h4 class="m-1" style="color: rgb(29,161,242);">
+							<i class="fa-solid fa-comment-dots" style="color: rgb(174,196,164);"></i>
+						</h4>
+						<p class="m-0">
+							<a href="/community/my">
+								<font style="vertical-align: inherit;"><font
+									style="vertical-align: inherit;">내가 쓴 댓글 보기</font></font>
+							</a>
+						</p>
+					</div>
+				</div>
+				<div class="col-4">
+					<div class="pt-3 pb-3 pl-0 pr-0 text-center">
+						<h4 class="m-1" style="color: rgb(29,161,242);">
+							<i class="fa-regular fa-heart color-danger" style="color: rgb(174,196,164);"></i>
+						</h4>
+						<p class="m-0">
+							<a href="/community/my">
+								<font style="vertical-align: inherit;"><font
+									style="vertical-align: inherit;">좋아요한 게시글 보기</font></font>
+							</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 상단 메뉴 종료 -->
+</div>
+
+<script type="text/javascript">
+
+</script>

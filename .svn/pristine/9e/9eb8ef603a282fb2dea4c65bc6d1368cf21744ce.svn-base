@@ -1,0 +1,23 @@
+package org.hdcd.service.common.pop_up;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.hdcd.mapper.PopUpMapper;
+import org.hdcd.vo.PopupVO;
+import org.springframework.stereotype.Service;
+
+@Service
+public class PopUpServiceImpl implements PopUpService{
+	
+	@Inject
+	PopUpMapper popUpMapper;
+	
+	@Override
+	public List<PopupVO> popUpOn() {
+		
+		return popUpMapper.popUpOn();
+	}
+
+}

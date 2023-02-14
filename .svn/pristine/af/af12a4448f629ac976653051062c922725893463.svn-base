@@ -1,0 +1,24 @@
+package org.hdcd.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.hdcd.vo.NoticeFileVO;
+import org.hdcd.vo.NoticeVO;
+import org.hdcd.vo.VolunteerFileVO;
+
+@Mapper
+public interface NoticeMapper {
+	List<NoticeVO> selectAllList()throws Exception;
+	
+	// 관리자용 인서트 메소드
+	int insertNotice(NoticeVO noticeVo)throws Exception;
+	int insertFiles(NoticeFileVO noticefileVo);
+	
+	// 삭제
+	public void deleteNotice(String noticeNo)throws Exception;
+	public void deleteFile(String noticeNo)throws Exception;
+	
+	// 수정
+	public String modeifyNotice(String noticeNo)throws Exception;
+}

@@ -1,0 +1,29 @@
+package org.hdcd.controller.common.seat;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import org.hdcd.service.common.seat.ISeatService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/seat")
+public class SeatReserve {
+	
+	@Inject
+	private ISeatService service;
+
+	@GetMapping("/seatReserve")
+	public String seatReservePage(HttpServletRequest req,Model model) throws Exception	{
+		
+		String smem_no = (String) req.getSession().getAttribute("userId");
+		
+		String memName = service.getName(smem_no);
+		model.addAttribute("smem_no",smem_no);
+		
+		return "common/seat/seatReserve";
+	}
+}

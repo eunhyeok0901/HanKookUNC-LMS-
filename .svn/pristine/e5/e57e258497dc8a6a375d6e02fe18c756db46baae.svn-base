@@ -1,0 +1,24 @@
+package org.hdcd.service.student.enrollFee;
+
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import org.hdcd.mapper.EnrollFeeMapper;
+import org.hdcd.vo.EnrollFeeVO;
+import org.springframework.stereotype.Service;
+
+@Service
+public class EnrollFeeServiceImpl implements IEnrollFeeService{
+
+	@Inject
+	EnrollFeeMapper mapper;
+	
+	@Override
+	public List<EnrollFeeVO> getEnrollFeeList(HttpServletRequest request) {
+		String smem_no = (String) request.getSession().getAttribute("userId");
+		return mapper.getEnrollFeeList(smem_no);
+	}
+
+}

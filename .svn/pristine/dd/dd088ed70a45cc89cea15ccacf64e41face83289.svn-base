@@ -1,0 +1,44 @@
+package org.hdcd.service.professor;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import org.hdcd.mapper.POpenLecAttendMapper;
+import org.hdcd.vo.StudentVO;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ProMyLectAttendServiceImpl implements IProMyLecAttendService{
+
+	@Inject
+	private POpenLecAttendMapper mapper;
+	
+	@Override
+	public List<Map<String, Object>> selectMyOpenLecList(String userId) throws Exception {
+		return mapper.selectMyOpenLecList(userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectMyLecNameNCode(String userId) throws Exception {
+		return mapper.selectMyLecNameNCode(userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectLecStudentList(String lec_code) throws Exception {
+		return mapper.selectLecStudentList(lec_code);
+	}
+
+	@Override
+	public Map<String, Object> selectLecStudentInfo(StudentVO studentVO) throws Exception {
+		return mapper.selectLecStudentInfo(studentVO);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectLecWeekList(String lolCode) throws Exception {
+		return mapper.selectLecWeekList(lolCode);
+	}
+
+	
+}

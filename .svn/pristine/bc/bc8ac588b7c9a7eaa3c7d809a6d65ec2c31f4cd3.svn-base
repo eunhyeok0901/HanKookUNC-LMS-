@@ -1,0 +1,11 @@
+package org.hdcd.service.common.mainPageInfo;
+
+import java.util.Map;
+
+import org.hdcd.vo.MemberVO;
+
+public interface MainPageService {
+
+	Map<String, Object> getMemberInfo(String sessionId);
+
+}

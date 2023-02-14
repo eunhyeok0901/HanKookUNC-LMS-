@@ -1,0 +1,11 @@
+package org.hdcd.service.manager.volunteer;
+
+import java.util.List;
+
+import org.hdcd.vo.VolunteerOutVO;
+
+public interface MVolunteerManageService {
+
+	public List<VolunteerOutVO> selectRegisterList();
+	
+}

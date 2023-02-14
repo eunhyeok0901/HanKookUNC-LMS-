@@ -1,0 +1,11 @@
+package org.hdcd.mapper;
+
+import java.util.List;
+
+import org.hdcd.vo.DepartmentVO;
+
+public interface ChartMapper {
+
+	List<DepartmentVO> getDepartmentInfo();
+	
+}

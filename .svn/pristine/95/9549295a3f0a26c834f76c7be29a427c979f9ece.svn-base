@@ -1,0 +1,44 @@
+package org.hdcd.controller.manager.chart_manage;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.hdcd.service.manager.chart.ChartService;
+import org.hdcd.vo.DepartmentVO;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RequestMapping("/chartManage")
+@Controller
+public class ChartController {
+	
+	@Inject
+	ChartService chartService;
+	
+	@GetMapping("/chartPage")
+	public String chartPage() {
+		log.debug("chartPage 입니다");
+		
+		
+		return "manager/mChartPage"; 
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "/getDepartmentInfo", produces = "application/json;charset=utf-8")
+	public List<DepartmentVO> getDepartmentInfo(){
+		
+		List<DepartmentVO> departmentinfoList = chartService.getDepartmentInfo();
+		
+		return departmentinfoList;
+		
+	}
+	
+	
+}

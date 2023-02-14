@@ -1,0 +1,15 @@
+package org.hdcd.service.student.volunteer;
+
+import java.util.List;
+
+import org.hdcd.vo.VolunteerOutVO;
+
+public interface SVolunteerService {
+
+	public List<VolunteerOutVO> volunteerOutSelectList(String id) throws Exception;
+
+	public int countMyTime(String id) throws Exception;
+
+
+
+}

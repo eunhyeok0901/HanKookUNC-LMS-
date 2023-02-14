@@ -1,0 +1,10 @@
+package org.hdcd.service.common.calendar;
+
+import java.util.List;
+import java.util.Map;
+
+public interface CalendarService {
+	List<Map<String, Object>> getCalendarList(Map<String, Object> dataMap);
+	List<Map<String, Object>> getCalendarList2(Map<String, Object> dataMap);
+}
+

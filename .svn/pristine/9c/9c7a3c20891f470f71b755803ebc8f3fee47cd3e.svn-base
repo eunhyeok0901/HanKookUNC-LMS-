@@ -1,0 +1,12 @@
+package org.hdcd.service.manager.volunteer;
+
+import java.util.List;
+import java.util.Map;
+
+public interface MVolunteerManageService {
+
+	public List<Map<String, Object>> selectRegisterList() throws Exception;
+
+	public Map<String, Object> selectDetail(String volo_code) throws Exception;
+	
+}

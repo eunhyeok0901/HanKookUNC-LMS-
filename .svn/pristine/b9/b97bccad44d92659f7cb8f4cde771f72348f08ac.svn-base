@@ -1,0 +1,400 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<div class="container-fluid bg-white custom-div-radius p-2 mb-3" style="height:1180px;">
+	<div class="col-sm-12 bg-gray pl-5 pr-5 pt-3 custom-div-radius mb-5">
+		<div class="row">
+			<h4 class="custom-font-dark mb-2">강의평가 결과는 교원업적평가에 반영되고 강사 위촉시
+				자료로 활용되며, 평가내용이 교과목별 담당교수에게 전달되어 교수내용 및 수업방식의 개선에 활용됩니다. </h4><br>
+			<h4 class="custom-font-dark">공정하고 진지한 응답을 부탁드립니다.</h4>
+		</div>
+	</div>
+
+	<div class="col-sm-12 bg-gray p-3 custom-div-radius mb-5">
+		<div class="row">
+			<div class="col-3">
+				<label for="year" class="custom-font-dark">년도</label> <input
+					type="text" class="form-control" placeholder="2023" id="year">
+			</div>
+			<div class="col-3">
+				<label for="semester" class="custom-font-dark">학기</label> <input
+					type="text" class="form-control" placeholder="1" id="semester">
+			</div>
+			<div class="col-3">
+				<label for="smemno" class="custom-font-dark">학번</label> <input
+					type="text" class="form-control" placeholder="20220001" id="smemno">
+			</div>
+			<div class="col-3">
+				<label for="memName" class="custom-font-dark">이름</label> <input
+					type="text" class="form-control" placeholder="한상훈" id="memName">
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-12 bg-gray p-3 custom-div-radius mb-5">
+		<div class="row">
+			<div class="col-12">
+				<table class="table table-sm">
+					<thead> 
+						<tr>
+							<th colspan=8 class="text-center custom-font-dark">강의평가실시현황</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="bg-whitegray">대상</td>
+							<td class="bg-white" id="evalNum">7</td>
+							<td class="bg-whitegray">실시</td>
+							<td class="bg-white" id="doNum">0</td>
+							<td class="bg-whitegray">미실시</td>
+							<td class="bg-white" id="notNum">7</td>
+							<td> </td>
+							<td class="bg-white text-danger" id="posibleShow">성적조회불가능</td>
+						</tr>
+					</tbody>
+				</table>				
+			</div>
+			<div class="col-12 height-300 overflow-auto">
+				<table class="table table-md table-sticky">
+					<thead>
+						<tr class="custom-font-dark"
+							style="position: relative; top: -10px;">
+							<th>교과목번호</th>
+							<th>교과목명</th>
+							<th>이수구분</th>
+							<th>학점</th>
+							<th>담당교수</th>
+							<th>평가상태</th>
+						</tr>
+					</thead>
+					<tbody id="myLecGrade" style="cursor:pointer;">
+						<tr class="custom-font-dark bg-white" onclick="detailLec(this)">
+							<td>LA0364</td>
+							<td>javascript</td>
+							<td>전공/필수</td>
+							<td>3</td>
+							<td>이철희</td>
+							<td><span>미실시</span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-lg-12 bg-gray custom-div-radius">
+		<div class="row">
+			<div class="col-12 text-center">
+				<i class="fas fa-chevron-circle-up fa-2x" id="icon"></i>
+			</div>
+			<div class="col-12 custom-acotianOff border-top" id="dataBox">
+				<div class="container p-3 ">
+					<div id="contentBox">
+						<form id="evalForm">
+							<input type="text" value="교과목번호" id="lecCode"> 
+							<input type="text" value="과목명" id="lecName"> 
+							<input type="text" value="교수명" id="proName">
+							<div class="col-12">
+								<p>1.수업의 목표와 내용에 연관된 핵심적인 내용들이 다루어 졌다.</p>
+								<div class="row">
+									<input type="radio" value="5" name="q1">매우 그렇다.
+									<input type="radio" value="4" name="q1">그렇다.
+									<input type="radio" value="3" name="q1">보통이다.
+									<input type="radio" value="2" name="q1">그렇지 않다.
+									<input type="radio" value="1" name="q1">전혀 그렇지 않다.
+								</div>
+							</div> 
+							<p>2.교수는 학문적 이해를 바탕으로 열성적으로 수업을 진행하였다.</p>
+							<div class="row">
+								<input type="radio" value="5" name="q2">매우 그렇다.
+								<input type="radio" value="4" name="q2">그렇다.
+								<input type="radio" value="3" name="q2">보통이다.
+								<input type="radio" value="2" name="q2">그렇지 않다.
+								<input type="radio" value="1" name="q2">전혀 그렇지 않다.
+							</div>
+							<p>3.수업을 통하여 해당분야에 대한 이해와 지식이 향상되었다.</p>
+							<div class="row">
+								<input type="radio" value="5" name="q3">매우 그렇다.
+								<input type="radio" value="4" name="q3">그렇다.
+								<input type="radio" value="3" name="q3">보통이다.
+								<input type="radio" value="2" name="q3">그렇지 않다.
+								<input type="radio" value="1" name="q3">전혀 그렇지 않다.
+							</div>
+							<p>4.교수는 철저하게 수업을 관리하였다.(출결관리, 학습분위기 조성, 휴강 시 보강 등)</p>
+							<div class="row">
+								<input type="radio" value="5" name="q4">매우 그렇다.
+								<input type="radio" value="4" name="q4">그렇다.
+								<input type="radio" value="3" name="q4">보통이다.
+								<input type="radio" value="2" name="q4">그렇지 않다.
+								<input type="radio" value="1" name="q4">전혀 그렇지 않다.
+							</div>
+							<p>5.수업은 전반적으로 만족스러웠다.</p>
+							<div class="row">
+								<input type="radio" value="5" name="q5">매우 그렇다.
+								<input type="radio" value="4" name="q5">그렇다.
+								<input type="radio" value="3" name="q5">보통이다.
+								<input type="radio" value="2" name="q5">그렇지 않다.
+								<input type="radio" value="1" name="q5">전혀 그렇지 않다.
+							</div>
+							<input type="button" class="btn btn-info" value="등록" id="evalBtn">
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+var nowClick;
+window.onload = function(){
+	
+	showList();
+	keyEvent();
+	
+}
+
+function keyEvent(){
+	
+	// 등록버튼요
+	var evalBtn = document.querySelector("#evalBtn");
+	evalBtn.addEventListener("click", function(){
+		
+		var evalArray = [];
+		var jsonObject={};
+		var countCheck = 0;
+		for(let i=1;i<=5;i++){
+			var question = document.getElementsByName("q"+i);
+			question.forEach((data,j)=>{
+				if(data.checked){
+					var value = data.value;
+					jsonObject["ls_question"+i] = value*(1);
+					countCheck++;
+					
+				}
+			})
+		}
+		jsonObject["lec_code"] = document.querySelector("#lecCode").value;
+		
+		evalArray.push(jsonObject);
+		
+		console.log(jsonObject)
+		
+		// 항목을 전부 체크하지않았을때 예외처리 해줘야 합니다.
+		if(countCheck < 5){
+			alert("모든 항목을 체크하셔야 합니다.")
+			return;
+		}
+
+		var header = $("meta[name='_csrf_header']").attr('content');
+		var token = $("meta[name='_csrf']").attr('content');
+		
+		var lecCode = document.querySelector("#lecCode").innerText;
+		// DB 작업
+		
+		$.ajax({
+			url:"/evaluation/insertEval",
+			data:JSON.stringify(jsonObject),
+			type:"post",
+	     	beforeSend : function(xhr){
+	        	xhr.setRequestHeader(header, token);
+	        },
+			contentType:"application/json ",
+			dataType:"text",
+			success:function(res){
+				alert("강의평가 완료 ~ ")
+				successEval();
+			},
+			error:function(xhr){
+				alert("잘못입력하셨네여.....")
+			}
+		})
+		
+		// 성적조회 기준 충족여부 확인
+		checkPosible();
+	})
+}
+
+//평가완료시
+function successEval(){
+	nowClick.children[5].innerHTML = "<span class='text-success'>실시</span>";
+	var doNum = document.querySelector("#doNum");
+	var notNum = document.querySelector("#notNum");
+	
+	doNum.innerText = doNum.innerText*(1) + 1;
+	notNum.innerText = notNum.innerText*(1) - 1;
+}
+
+
+function checkPosible(){
+	var evalNum = document.querySelector("#evalNum");
+	var doNum = document.querySelector("#doNum");
+	
+
+	console.log(evalNum.innerText==doNum.innerText)
+	console.log(doNum.innerText)
+	
+	
+	if(evalNum.innerText == doNum.innerText){
+		document.querySelector("#posibleShow").innerHTML = "<span class='text-success'>성적조회가능</span>";
+	}
+	
+	
+}
+
+function showList(){
+
+	$.ajax({
+		url : "/evaluation/myEvalList",
+		type: "get",
+		success:function(res){
+			
+			var count = res.length;
+			var doEval = 0;
+			var notEval = 0;
+			var myLecGrade = document.querySelector("#myLecGrade");
+			
+			var text = '';
+			res.forEach((data, i) => {
+				text += '<tr class="custom-font-dark bg-white" onclick="detailLec(this)">';
+				text += '<td>'+data.LEC_CODE+'</td>';
+				text += '<td>'+data.LH_LECNAME+'</td>';
+				text += '<td>'+data.LG_AREA+'</td>';
+				text += '<td>'+data.LH_CREDIT+'</td>';
+				text += '<td>'+data.LH_PROFESSOR+'</td>';
+				if(data.LS_STATE == 0){
+					text += '<td><span>미실시</span></td>';
+				}else{
+					text += '<td><span class="text-success">실시</span></td>';
+				}
+				text += '</tr>';
+				
+				if(data.LS_STATE == 0){
+					notEval++;
+				}
+				if(data.LS_STATE == 1){
+					doEval++
+				}
+			});
+			
+			if(notEval == 0){
+				var posibleShow = document.querySelector("#posibleShow");
+				posibleShow.innerHTML = "<span class='text-success'>성적조회가능</span>"
+			}
+			
+			myLecGrade.innerHTML += text;
+			var evalNum = document.querySelector("#evalNum");
+			evalNum.innerText = count;
+			var doNum = document.querySelector("#doNum");
+			doNum.innerText = doEval;
+			var notNum = document.querySelector("#notNum");
+			notNum.innerText = notEval;
+			
+		}
+	})
+}
+
+
+// 클릭시 아코디언 대충만들어서 지저분한상태
+function detailLec(data){
+	console.log(data)
+	
+	var evalBtn = document.querySelector("#evalBtn");
+	if(data.children[5].children[0].innerText=="실시"){
+		evalBtn.disabled = true;
+	}else{
+		evalBtn.disabled = false;
+	}
+	
+	console.log(data.children[5].children[0].innerText)
+	
+	// 내용이 담김 상자
+	var dataBox = document.querySelector("#dataBox");
+	nowClick = data;
+	
+	
+	//열고 닫는 함수
+	// 닫힌상태로 누르면 열리고, 열린상태에서 다른사람꺼 눌렀을때는 안닫혀야함
+	if(dataBox.classList.contains("custom-acotianOn")){
+		if(data.classList.contains("onBox")){
+			data.classList.toggle("onBox");
+			
+			data.classList.toggle("bg-white");
+			data.classList.toggle("bg-secondary");
+			
+			iconRotate(data);
+			openAco(dataBox);
+			formReset(true);
+		}else{
+			// 여기선 안닫힘
+			var searchOnBox = document.querySelector(".onBox")
+			
+			data.classList.toggle("bg-white");
+			data.classList.toggle("bg-secondary");
+			searchOnBox.classList.toggle("bg-white");
+			searchOnBox.classList.toggle("bg-secondary");
+			
+			searchOnBox.classList.toggle("onBox");
+			data.classList.toggle("onBox");
+			formReset(false);
+			formDataAdd();
+		}
+	}else{
+		// 현재 닫혀있음
+		data.classList.toggle("bg-white");
+		data.classList.toggle("bg-secondary");
+		
+		data.classList.toggle("onBox");
+		formDataAdd();
+		iconRotate(data);
+		openAco(dataBox);
+	}
+	
+
+}
+function openAco(dataBox){
+	
+	dataBox.classList.toggle("custom-acotianOn");
+	dataBox.classList.toggle("custom-acotianOff");
+}
+
+function formReset(flag){
+	var evalForm = document.querySelector("#evalForm");
+	
+	if(flag){
+		setTimeout(function(){
+			evalForm.reset();
+		}, 400)
+	}else{
+		evalForm.reset();
+	}
+	
+}
+function formDataAdd(){
+	
+	var contentBox = document.querySelector("#contentBox");
+	
+	var lecCode = document.querySelector("#lecCode");
+	var lecName = document.querySelector("#lecName");
+	var proName = document.querySelector("#proName");
+	lecCode.value = nowClick.children[0].innerText;
+	lecName.value = nowClick.children[1].innerText;
+	proName.value = nowClick.children[4].innerText;
+	
+}
+
+function iconRotate(data){
+	var dataBox = document.querySelector("#dataBox");
+	var imageIcon = document.querySelector("#icon");
+	var rotate;
+	
+	rotate = "rotate(180deg)";
+	if(dataBox.classList.contains("custom-acotianOn")){
+		rotate = "rotate(0)";
+	}
+	
+	imageIcon.style.transform = rotate;
+	imageIcon.style.transition = "all 0.35s";
+	
+}
+
+
+</script>

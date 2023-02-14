@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hdcd.mapper.AttendApplyMapper">
+
+	<select id="selectMyAbsentList" parameterType="string" resultType="map">
+		select a.* , st.*, lol.lol_name
+		  from attendance a, stu_timetable st, lecture l, lec_open_list lol
+		 where lol.lol_code = l.lol_code
+		   and l.lec_code = a.lec_code
+		   and a.lec_code = st.lec_code  
+		   and a.smem_no = st.smem_no
+		   and a.smem_no = #{userId}
+		   and a.attend_state = 2
+	</select>
+
+	<insert id="insertAttendApply" parameterType="AttendApplyVO">
+		<selectKey order="BEFORE" resultType="string" keyProperty="aa_code">
+			 select 'AA' || lpad(seq_aa_code.nextval, 3, '0') from dual
+		</selectKey>
+		insert into attend_apply (
+			aa_code, attend_code, aa_state, aa_reason, aa_detail
+		)values (
+			#{aa_code}, #{attend_code}, 0, #{aa_reason}, #{aa_detail}
+		)
+	</insert>
+	
+	<insert id="insertAttendProve" parameterType="AttendProveVO">
+		insert into attend_prove (
+			ap_code, file_name, file_size, file_originnm, file_path, aa_code, file_typ
+		)values (
+			'AP' || lpad(seq_ap_code.nextval, 3, '0'), #{file_name}, #{file_size}, #{file_originnm}, #{file_path}, #{aa_code}, #{file_typ}
+		)
+
+	</insert>
+</mapper>

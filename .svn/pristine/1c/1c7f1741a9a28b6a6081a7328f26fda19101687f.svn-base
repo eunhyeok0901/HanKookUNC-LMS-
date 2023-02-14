@@ -1,0 +1,131 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<div class="container-fluid bg-white custom-div-radius">
+	<div class="container">
+		<div class="row">
+			<div class="col-4 height-200 border-1px-solid bg-gray">
+				<h2>친구목록뜨는창</h2>
+			</div>
+			<div class="col-8 height-200 border-1px-solid bg-gray">
+				<h2>친구창</h2>
+				<table class="custom-table-sm" border=1>
+					<thead>
+						<tr>
+							<th>학번</th>
+							<th>이름</th>
+							<th>학년</th>
+							<th>이메일</th>
+							<th>전화번호</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="friendAdd" draggable="true">
+							<td>12345</td>
+							<td>홍길동</td>
+							<td>1</td>
+							<td>asb@dasdad.com</td>
+							<td>010-1234-1234</td>
+						</tr>
+						<tr class="friendAdd" draggable="true">
+							<td>75345</td>
+							<td>홍길은</td>
+							<td>2</td>
+							<td>azxcsb@dasdad.com</td>
+							<td>010-1234-1234</td>
+						</tr>
+						<tr class="friendAdd" draggable="true">
+							<td>46445</td>
+							<td>홍길금</td>
+							<td>2</td>
+							<td>bgasb@dasdad.com</td>
+							<td>010-1234-1234</td>
+						</tr>
+						<tr class="friendAdd" draggable="true">
+							<td>99345</td>
+							<td>홍상동</td>
+							<td>1</td>
+							<td>gasb@dasdad.com</td>
+							<td>010-1234-1234</td>
+						</tr>
+						<tr class="friendAdd" draggable="true">
+							<td>65345</td>
+							<td>홍상길</td>
+							<td>1</td>
+							<td>masb@dasdad.com</td>
+							<td>010-1234-1234</td>
+						</tr>
+					</tbody>
+				</table>
+				
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="scheduleBox col-12">
+				<div class="row">
+					<div class="col-4 height-600 border-1px-solid bg-gray">
+						<h2>첫번쨰 스케줄</h2>
+					</div>
+					<div class="col-4 height-600 border-1px-solid bg-gray">
+						<h2>두번쨰 스케줄</h2>
+					</div>
+					<div class="col-4 height-600 border-1px-solid bg-gray">
+						<h2>결과값</h2>
+					</div>
+				</div>
+			</div>
+		
+		</div>
+	</div>
+</div>    
+<script>
+// 드래그 했을때
+var friendAdd = document.querySelectorAll(".friendAdd");
+friendAdd.forEach((data, i) =>{
+// 	data.addEventListener("drag", function(e){
+// 		e.preventDefault();
+// 		console.log(this.innerHTML)
+// 		e.dataTransfer.setData("trTag", this);
+// // 		console.log("drag on")
+// 	})
+// 	data.addEventListener("dragend", function(e){
+// 		e.preventDefault();
+// 		console.log(e.dataTransfer.getData("trTag"))
+// 		console.log("dragend")
+// 	})
+	
+	
+	data.addEventListener("dragstart", function(){
+		console.log("dragstart")
+		data.classList.add("dragging");
+	})
+	data.addEventListener("dragend", function(){
+		console.log("dragend")
+		data.classList.remove("dragging");
+	})
+	
+})
+
+// 드래그한 요소가 안으로 들어 왔을때
+var scheduleBox = document.querySelector(".scheduleBox");
+scheduleBox.addEventListener("dragenter", function(e){
+	e.preventDefault();
+	console.log("dragEnter");
+})
+scheduleBox.addEventListener("dragleave", function(e){
+	e.preventDefault();
+	console.log("dragleave");
+})
+scheduleBox.addEventListener("dragover", function(e){
+	e.preventDefault();
+// 	console.log("dragover");
+})
+scheduleBox.addEventListener("drop", function(e){
+	e.preventDefault();
+	console.log("drop");
+})
+
+
+
+
+</script>

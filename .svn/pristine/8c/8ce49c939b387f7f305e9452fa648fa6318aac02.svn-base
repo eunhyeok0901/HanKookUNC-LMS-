@@ -1,0 +1,300 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
+<h4 class="card-title">
+	<i class="fa-solid fa-graduation-cap"></i>장학관리
+</h4>
+
+<div class="row">
+	<div class="col-lg-8">
+		<div class="card">
+			<div class="card-body">
+				<div class="card-title">
+					<h4 class="card-title" style="display: inline-block;">장학금 신청 관리</h4>&nbsp;&nbsp;&nbsp;
+					<a href="#"><button type="button" class="btn mb-1 btn-dark">장학금 승인 관리>></button></a>
+				</div>
+				<div class="table-responsive" id="scholarTotalListSpace">
+					<!--
+						동적 table insert 위치
+					-->
+				</div>
+			</div>
+		</div>
+	</div>
+						
+	<div class="col-lg-4" style="height: auto;">
+		<div class="card">
+			<div class="card-body">
+				<div class="card-title">장학금 신청 상세 내역&nbsp;&nbsp;			
+					<a href="#"><button type="button" class="btn mb-1 btn-dark">신청 학생 조회&gt;&gt;</button></a>
+				</div>
+				<p class="text-muted">※ 장학금별 <code>증빙서류</code> 확인 후 상태값을 변경해주십시오.</p>
+				<hr/>
+				<div class="form-validation">
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label">신청번호</label>
+						<div class="col-sm-8">
+							<input type="email" class="form-control" placeholder="신청번호" disabled="disabled" id="scha_no">
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label">학번
+						</label>
+						<div class="col-sm-8">
+							<input type="email" class="form-control" placeholder="신청 학생의 학번" disabled="disabled" id="smem_no">
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label">신청장학금명</label>
+						<div class="col-sm-8">
+							<input type="email" class="form-control" placeholder="신청 장학금 명칭" disabled="disabled" id="schl_name">
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label">신청일</label>
+						<div class="col-sm-8">
+							<input type="email" class="form-control" placeholder="신청 날짜" disabled="disabled" id="scha_date">
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label">첨부파일</label>
+						<div class="col-sm-8" id="scha_file">
+							
+						</div>
+					</div>
+					<form id="scholarApprovalForm" class="form-valide" novalidate="novalidate">
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label">상태</label>
+							<!--
+							<p class="text-muted" id="scha_state"></p>
+							-->
+							<div class="col-sm-8">
+								<div class="form-group">
+									<label class="radio-inline mr-3">
+										<input type="radio" name="scha_state" value="0"> 대기
+									</label>
+									<label class="radio-inline mr-3">
+										<input type="radio" name="scha_state" value="1"> 승인
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="scha_state" value="2"> 반려
+									</label>
+								</div>
+							</div>
+						</div>
+	
+						<div class="form-group row">
+							<label class="col-sm-12 col-form-label">반려 사유</label>
+						</div>
+						<div class="form-group row is-invalid">
+							<div class="col-lg-12">
+								<textarea class="form-control" id="scha_reject"
+									name="val-suggestions" rows="5"
+									placeholder="반려 시에는 반려 사유를 상세히 입력해주십시오." style="height: 129px;"
+									aria-required="true" aria-describedby="val-suggestions-error"
+									aria-invalid="true"></textarea>
+								<div id="val-suggestions-error"
+									class="invalid-feedback animated fadeInDown"
+									style="display: block;">반려 시에는 반려 사유를 상세히 입력해주십시오</div>
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label">상태 결정일</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" placeholder="상태 결정일" disabled="disabled" id="scha_cdate">
+							</div>
+						</div>
+	
+						<div class="form-group row">
+							<div class="col-lg-8 ml-auto">
+								<input type="submit" class="btn btn-success" value="결정" onclick="decideScholar()" disabled="disabled">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	// 스프링 인증 토큰
+	var header = '${_csrf.headerName}';
+	var token = '${_csrf.token}';
+
+	// TotalList를 뿌릴 id
+	const scholarTotalListSpace = document.querySelector("#scholarTotalListSpace");
+  
+	// 값을 적절한 위치에 출력하기 위한 id 혹은 name
+	// scha_no, smem_no, schl_name, scha_date, scha_file, scha_state
+	let scha_no = document.querySelector("#scha_no");
+	let smem_no = document.querySelector("#smem_no");
+	let schl_name = document.querySelector("#schl_name");
+	let scha_date = document.querySelector("#scha_date");
+	let scha_file = document.querySelector("#scha_file");
+	let scha_state = document.getElementsByName("scha_state");
+	let scha_cdate = document.querySelector("#scha_cdate");
+	let scha_reject = document.querySelector("#scha_reject");
+
+	// DOMContentLoaded시 scholarTotalList() 호출
+	window.addEventListener("DOMContentLoaded", function() {
+		scholarTotalList();
+	});
+
+	//let fileArr = [];
+	//let pathArr = [];
+	function scholarTotalList() {
+		let xhr = new XMLHttpRequest();
+		xhr.open("get", "/scholarManage/totalList", true);
+		xhr.setRequestHeader(header, token);
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+
+				let data = JSON.parse(xhr.responseText);
+
+				let tblStr = "<table class='table table-hover' id='scholarTotalTable'>";
+				tblStr += "<thead>";
+				tblStr += "<tr draggable='false'><th>신청번호</th><th>학번</th><th>신청장학금명</th><th>신청일</th><th>첨부파일</th><th>상태</th><th>결정일</th></tr></thead><tbody>";
+
+				for (let i = 0; i < data.length; i++) {
+					for (let j = 0; j < data[i].scholarApplyList.length; j++) {
+						let vscha_no = data[i].scholarApplyList[j].scha_no; // 장학금신청번호
+						let vsmem_no = data[i].scholarApplyList[j].smem_no; // 신청학생학번
+						let vschl_name = data[i].schl_name; // 신청장학금명
+						let vschl_code = data[i].schl_code; // 신청장학금코드
+						let vscha_date = data[i].scholarApplyList[j].scha_date.substring(0, 10); // 신청일
+						let vscha_state = data[i].scholarApplyList[j].scha_state; // 상태
+						
+						let vscha_cdate = data[i].scholarApplyList[j].scha_cdate;
+						if(vscha_cdate==null){
+							vscha_cdate = "-";
+						}else{
+							vscha_cdate = scha_cdate.substring(0,10);
+						}
+						
+						let vscha_reject = data[i].scholarApplyList[j].scha_reject;
+						
+						// console.log("파일리스트:",data[i].scholarApplyList[j].schaFileList);
+
+						// let files = {};
+						// let paths = {};
+						let file_path_arr = [];
+						let file_originnm_arr = [];
+
+						for (let k = 0; k < data[i].scholarApplyList[j].schaFileList.length; k++) {
+							file_originnm_arr[k] = data[i].scholarApplyList[j].schaFileList[k].file_originnm;
+							file_path_arr[k] = data[i].scholarApplyList[j].schaFileList[k].file_path;
+						}
+						// fileArr.push(files)
+						// pathArr.push(paths)
+
+						// console.log("체크1:",file_originnm_arr);
+						// console.log("체크2:",file_path_arr);
+
+						tblStr += `<tr>`;
+						tblStr += `<td>\${vscha_no}</td>`;
+						tblStr += `<td>\${vsmem_no}</td>`;
+						tblStr += `<td>\${vschl_name}</td>`;
+						tblStr += `<td>\${vscha_date}</td>`;
+
+						tblStr += "<td>";
+
+						for (let s = 0; s < file_path_arr.length; s++) {
+							tblStr += "<a href='" + file_path_arr[s]
+						       +    "' download='" + file_originnm_arr[s] + "'>"
+									+ file_originnm_arr[s] + "</a><br/>";
+						}
+						tblStr += "</td>";
+
+						switch (vscha_state) {
+						case 0:
+							tblStr += "<td><button type='button' class='btn mb-1 btn-outline-dark' disabled='disabled'>대기</button></td>";
+							break;
+						case 1:
+							tblStr += "<td><button type='button' class='btn mb-1 btn-outline-success' disabled='disabled'>승인</button></td>";
+							break;
+						case 2:
+							tblStr += "<td><button type='button' class='btn mb-1 btn-outline-danger' disabled='disabled'>반려</button></td>";
+							break;
+						default:
+							tblStr += "<td>-</td>";
+							break;
+						};
+						
+						tblStr += `<td>\${vscha_cdate}</td>`;
+					};
+				};
+
+				tblStr += `</tbody>`;
+				scholarTotalListSpace.innerHTML = tblStr;
+
+				getScholarDetails();
+
+			};
+		}
+		xhr.send();
+	}
+	
+	function getScholarDetails(){
+		// 리스트에서 tr클릭시 상세내역 테이블에서 동적으로 조회 
+		const trTags = document
+				.querySelectorAll("#scholarTotalTable tbody tr");
+		const scholarDetailSpace = document
+				.querySelector("#scholarDetailSpace");
+
+		trTags.forEach(function(trTag) {
+			trTag.addEventListener("click", function(event) {
+				let tdText = event.target.parentElement.innerHTML;
+				tdText = tdText.replace(/<td>/g, '').replace(/<\/td>/g,
+						'?'); // ,는 파일명에 들어갈 수 있으므로 파일명으로 안 들어가는 문자인 ?로 대체
+				// scholarDetailSpace.innerHTML = tdText;
+				let tdArr = tdText.split('?');
+				console.log("값", tdArr);
+				
+				// tdArr[5]는 상태
+				if(tdArr[5].includes("대기")){
+					tdArr[5] = 0;
+				}else if(tdArr[5].includes("승인")){
+					tdArr[5] = 1;
+				}else if(tdArr[5].includes("반려")){
+					tdArr[5] = 2;
+				}
+				
+				// 값을 적절한 위치에 출력하기 위해 id 혹은 name을 상단에 변수로 선언해두었다.
+				if (event.target.parentElement !== event.currentTarget) return; // 자식 요소(a태그, 버튼)의 이벤트 발생 방지
+
+				scha_no.value = tdArr[0];
+				smem_no.value = tdArr[1];
+				schl_name.value = tdArr[2];
+				scha_date.value = tdArr[3];
+				scha_file.innerHTML = tdArr[4];
+				
+				// 체크박스 반영하기
+				for(let i = 0; i < scha_state.length; i++){
+					if(scha_state[i].getAttribute("value") == tdArr[5]){
+						scha_state[i].checked = true;
+					}
+				}
+				
+				scha_cdate.value = tdArr[6];
+				if(tdArr[7] == null){					
+					scha_reject.value = "등록된 반려 사유가 없습니다.";
+				}else{
+					scha_reject.innerHTML = tdArr[7];
+				}
+				
+			});
+
+		});
+	}
+	
+	function decideScholar(){
+		console.log("하이");
+		const scha_no_value = scha_no.value; // 장학금 신청 번호
+		const scha_state_value = document.querySelector("input[type=radio][name=scha_state]:checked").value; // 체크된 값 가져오기
+		if(scha_state_value == 0 || scha_state_value == 1){
+		    scha_reject.style.readonly="readonly";
+		}
+	}
+</script>

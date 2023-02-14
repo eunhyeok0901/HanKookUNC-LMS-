@@ -1,0 +1,44 @@
+package org.hdcd.service.student.volunteer;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.hdcd.mapper.SVolunteerMapper;
+import org.hdcd.vo.VolunteerOutVO;
+import org.springframework.stereotype.Service;
+
+@Service
+public class SVolunteerServiceImpl implements SVolunteerService{
+
+	@Inject
+	private SVolunteerMapper mapper;
+	
+	@Override
+	public List<VolunteerOutVO> volunteerOutSelectList(String id) {
+		// TODO Auto-generated method stub
+		return mapper.selectOutList(id);
+	}
+
+	@Override
+	public int countMyTime(String id) throws Exception {
+		// TODO Auto-generated method stub
+		return mapper.selectMyTime(id);
+	}
+
+	@Override
+	public int registerOutVol(VolunteerOutVO vo) throws Exception {
+		// TODO Auto-generated method stub
+		int res = mapper.insertOutVol(vo);
+		return res;
+	}
+
+	@Override
+	public void deleteOutRegister(String volo_code) throws Exception {
+		// TODO Auto-generated method stub
+		
+		mapper.deleteOutRegister(volo_code);
+		
+	}
+
+}

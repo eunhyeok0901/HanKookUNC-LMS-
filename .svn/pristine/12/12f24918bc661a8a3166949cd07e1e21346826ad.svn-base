@@ -1,0 +1,13 @@
+package org.hdcd.vo;
+
+import lombok.Data;
+
+@Data
+public class AttendanceVO {
+	private String attend_code;
+	private String lec_code;
+	private String smem_no;
+	private int attend_state;
+	private String attend_date;
+	private String attend_reason;
+}

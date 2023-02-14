@@ -1,0 +1,20 @@
+package org.hdcd.service.common.seat;
+
+import javax.inject.Inject;
+
+import org.hdcd.mapper.SeatMapper;
+import org.springframework.stereotype.Service;
+
+@Service
+public class SeatServiceImpl implements ISeatService{
+	
+	@Inject
+	private SeatMapper mapper;
+	
+	@Override
+	public String getName(String smem_no) throws Exception {
+		// TODO Auto-generated method stub
+		return mapper.selectMemName(smem_no);
+	}
+
+}

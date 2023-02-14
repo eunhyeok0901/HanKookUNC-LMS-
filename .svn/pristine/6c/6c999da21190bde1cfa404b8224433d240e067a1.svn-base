@@ -1,0 +1,14 @@
+package org.hdcd.vo;
+
+import lombok.Data;
+
+@Data
+public class CommunityFileVO {
+	private String cmntf_code;
+	private String cmnt_no;
+	private String file_name;
+	private String file_originnm;
+	private int file_size;
+	private String file_path;
+	private String file_type;
+}

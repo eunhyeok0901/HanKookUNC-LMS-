@@ -1,0 +1,79 @@
+@charset "UTF-8";
+
+/* div 테두리 둥글게 */
+.custom-div-radius{
+	border-radius : 10px;
+}
+
+/* 배경색 파란색연한느낌? */
+.bg-gray{
+	background-color : #d8e3f2;
+}
+
+/* 진한 글씨색 */
+.custom-font-dark {
+   color : #0a3875;
+   font-weight : bold;
+}
+
+/* 테이블 간격요 */
+.table-spacing{
+	border-collapse: separate;
+	border-spacing: 0 10px;
+}
+
+/* 높이 */
+.height-100{
+	height : 100px;
+}
+.height-200{
+	height : 200px;
+}
+.height-300{
+	height : 300px;
+}
+.height-400{
+	height : 400px;
+}
+.height-500{
+	height : 500px;
+}
+.height-600{
+	height : 600px;
+}
+.height-700{
+	height : 700px;
+}
+.height-800{
+	height : 800px;
+}
+
+/* overflow-auto */
+.overflow-auto{
+	overflow:auto;
+}
+
+/* 테이블 헤더 고정 */
+.table-sticky thead tr th{
+	position: sticky;top:0;background-color : #d8e3f2;
+}
+
+
+/* 숨기기 */
+.content-fade{
+	display:none;
+}
+.content-unfade{
+	display:block;
+	height:300px;
+	transition:all 1s;
+}
+
+/* test */
+
+
+
+
+
+
+

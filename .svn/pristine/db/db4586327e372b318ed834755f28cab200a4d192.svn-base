@@ -1,0 +1,20 @@
+package org.hdcd.vo;
+
+import lombok.Data;
+
+@Data
+public class VolunteerOutVO {
+	private String volo_code;
+	private String smem_no;
+	private String volo_start;
+	private String volo_end;
+	private String volo_time;
+	private String volo_company;
+	private String volo_content;
+	private String volo_file;
+	private int volo_state;
+	private String volo_reject;
+	private String volo_date;
+	private int volo_semester;
+	private int volo_year;
+}

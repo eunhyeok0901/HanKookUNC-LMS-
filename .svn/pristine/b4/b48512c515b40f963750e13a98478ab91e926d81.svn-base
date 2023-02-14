@@ -1,0 +1,167 @@
+window.onload = function(){
+  // 포틀릿 테이블에서 다음과 같은 순서의 데이터베이스를 가져왔다고 가정한다.
+  let databaseData = "0,1,2,3,4,5,6,7,8,9,10,11";
+  
+  let myportlets = databaseData.split(",");
+  
+  // 12개의 체크박스 class을 읽어온다.
+  let myportletCheckbox = document.querySelectorAll(".portletCheck");
+
+  // 포틀릿 레이아웃 클래스를 읽어온다.
+  let container = document.querySelector(".potletModalLayout");
+
+  // 데이터베이스에 존재하는 번호인 경우 checkbox-checked상태로 만들어준다.
+  for(let i = 0; i < myportlets.length; i++){
+    let myportlet = myportlets[i];
+    myportletCheckbox[myportlet].setAttribute("checked", "checked");
+    switch(myportlet){
+      case "0":
+        container.innerHTML += "<div class='item item0' draggable='true'>0번 메뉴</div>";
+        break;
+      case "1":
+        container.innerHTML += "<div class='item item1' draggable='true'>1번 메뉴</div>";
+        break;
+      case "2":
+        container.innerHTML += "<div class='item item2' draggable='true'>2번 메뉴</div>";
+        break;
+      case "3":
+        container.innerHTML += "<div class='item item3' draggable='true'>3번 메뉴</div>";
+        break;
+      case "4":
+        container.innerHTML += "<div class='item item4' draggable='true'>4번 메뉴</div>";
+        break;
+      case "5":
+        container.innerHTML += "<div class='item item5' draggable='true'>5번 메뉴</div>";
+        break;
+      case "6":
+        container.innerHTML += "<div class='item item6' draggable='true'>6번 메뉴</div>";
+        break;
+      case "7":
+        container.innerHTML += "<div class='item item7' draggable='true'>7번 메뉴</div>";
+        break;
+      case "8":
+        container.innerHTML += "<div class='item item8' draggable='true'>8번 메뉴</div>";
+        break;
+      case "9":
+        container.innerHTML += "<div class='item item9' draggable='true'>9번 메뉴</div>";
+        break;
+      case "10":
+        container.innerHTML += "<div class='item item10' draggable='true'>10번 메뉴</div>";
+        break;
+      case "11":
+        container.innerHTML += "<div class='item item11' draggable='true'>11번 메뉴</div>";
+        break;      
+    }
+  } 
+
+  myportletCheckbox.forEach(function(myportletCheck){
+    myportletCheck.addEventListener("click", function(e){
+      const target = e.target;
+      console.log(target.checked);
+      if(target.checked){          
+        switch(target.id){
+          case "portletCheck0":
+            container.innerHTML += "<div class='item item0' draggable='true'>0번 메뉴</div>";
+            break;
+          case "portletCheck1":
+            container.innerHTML += "<div class='item item1' draggable='true'>1번 메뉴</div>";
+            break;
+          case "portletCheck2":
+            container.innerHTML += "<div class='item item2' draggable='true'>2번 메뉴</div>";
+            break;
+          case "portletCheck3":
+            container.innerHTML += "<div class='item item3' draggable='true'>3번 메뉴</div>";
+            break;
+          case "portletCheck4":
+            container.innerHTML += "<div class='item item4' draggable='true'>4번 메뉴</div>";
+            break;
+          case "portletCheck5":
+            container.innerHTML += "<div class='item item5' draggable='true'>5번 메뉴</div>";
+            break;
+          case "portletCheck6":
+            container.innerHTML += "<div class='item item6' draggable='true'>6번 메뉴</div>";
+            break;
+          case "portletCheck7":
+            container.innerHTML += "<div class='item item7' draggable='true'>7번 메뉴</div>";
+            break;
+          case "portletCheck8":
+            container.innerHTML += "<div class='item item8' draggable='true'>8번 메뉴</div>";
+            break;
+          case "portletCheck9":
+            container.innerHTML += "<div class='item item9' draggable='true'>9번 메뉴</div>";
+            break;
+          case "portletCheck10":
+            container.innerHTML += "<div class='item item10' draggable='true'>10번 메뉴</div>";
+            break;
+          case "portletCheck11":
+            container.innerHTML += "<div class='item item11' draggable='true'>11번 메뉴</div>";
+            break;
+        }
+      }else{
+        switch(target.id){
+          case "portletCheck0":
+            document.querySelector(".item0").remove();
+            break;
+          case "portletCheck1":
+            document.querySelector(".item1").remove();
+            break;
+          case "portletCheck2":
+            document.querySelector(".item2").remove();
+            break;
+          case "portletCheck3":
+            document.querySelector(".item3").remove();
+            break;
+          case "portletCheck4":
+            document.querySelector(".item4").remove();
+            break;
+          case "portletCheck5":
+            document.querySelector(".item5").remove();
+            break;
+          case "portletCheck6":
+            document.querySelector(".item6").remove();
+            break;
+          case "portletCheck7":
+            document.querySelector(".item7").remove();
+            break;
+          case "portletCheck8":
+            document.querySelector(".item8").remove();
+            break;
+          case "portletCheck9":
+            document.querySelector(".item9").remove();
+            break;
+          case "portletCheck10":
+            document.querySelector(".item10").remove();
+            break;
+          case "portletCheck11":
+            document.querySelector(".item11").remove();
+            break;
+        }          
+      }
+    })
+  })
+
+
+  //------------------------------------------------------
+  
+  let picked = null;
+  let pickedIndex = null;
+
+  // 드래그 dragstart, dragover, drop
+  container.addEventListener("dragstart", (e)=>{
+    // console.log(e.target);
+    const obj = e.target;
+    picked = obj;
+    pickedIndex = ([...obj.parentNode.children].indexOf(obj));
+    // console.log(pickedIndex);
+  });
+
+  container.addEventListener("dragover", (e)=>{
+    e.preventDefault();
+  });
+
+  container.addEventListener("drop", (e)=>{
+    const obj = e.target;
+    const index = ([...obj.parentNode.children].indexOf(obj));
+    index > pickedIndex ? obj.after(picked): obj.before(picked);
+  });
+}

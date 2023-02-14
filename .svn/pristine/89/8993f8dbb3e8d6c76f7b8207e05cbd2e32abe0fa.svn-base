@@ -1,0 +1,36 @@
+package org.hdcd.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.hdcd.vo.CommunityFileVO;
+import org.hdcd.vo.CommunityVO;
+import org.hdcd.vo.ReplyVO;
+
+@Mapper
+public interface CommunityMapper {
+	// ■■■■■■■■■■■■■■■■ 학생 ■■■■■■■■■■■■■■■■■■■■
+	
+	int registerCmntPost(CommunityVO communityVO);
+
+	int registerCmntPostFile(CommunityFileVO cmntfile);
+
+	CommunityVO getCmntDetail(String cmnt_no);
+
+	List<CommunityVO> getCmntTotalList();
+
+	List<CommunityFileVO> getCmntFileTotalList();
+
+	int countReply(String cmnt_no);
+
+	CommunityVO getCmnt(String cmnt_no);
+
+	List<CommunityFileVO> getCmntFile(String cmnt_no);
+
+	List<ReplyVO> getCmntReply(String cmnt_no);
+
+	int registerReply(ReplyVO replyVO);
+	
+	
+
+}

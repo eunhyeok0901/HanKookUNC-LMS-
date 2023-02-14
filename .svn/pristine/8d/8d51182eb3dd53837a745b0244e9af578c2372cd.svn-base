@@ -1,0 +1,326 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<meta charset="UTF-8">
+<style>
+
+#redColor{
+	background-color: #FF5733;
+	z-index:1;
+	width:25px;
+	height:25px;
+	border-radius:50%;
+}
+
+#oranColor{
+	background-color: #FFBD33;
+	z-index:1;
+	width:25px;
+	height:25px;
+	border-radius:50%;
+}
+
+#lemonColor{
+	background-color: #DBFF33;
+	z-index:1;
+	width:25px;
+	height:25px;
+	border-radius:50%;
+}
+
+#greenColor{
+	background-color: #33FF57;
+	z-index:1;
+	width:25px;
+	height:25px;
+	border-radius:50%;
+}
+
+#darkGreenColor{
+	background-color: #33FFBD;
+	z-index:1;
+	width:25px;
+	height:25px;
+	border-radius:50%;
+}
+
+input[name=color]{
+ 	display:none;
+}
+
+input[name=color]:checked + label{
+	border:2px solid black;
+}
+
+.fc-day-sun{
+	color : red;
+}
+.fc-day-sat{
+	color:blue;
+}
+
+#calendar{
+	width: 1400px;
+}
+
+
+</style>
+<div class="container-flude">
+	<div class="row d-flex justify-content-center">
+		<div id="calendar" class=" ">
+	</div>
+</div>
+<div class="modal fade" id="dataModal" style="display: none;" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	    		<div class="card">
+                      <div class="card-header bg-darkGreen custom-fontColor-white">
+                          <h5 class="mb-0 collapsed " data-toggle="collapse" data-target="#collapseOne1" aria-expanded="false" aria-controls="collapseOne1"><i class="fa" aria-hidden="true"></i>내 일정등록</h5>
+                      </div>
+					<div class="card-body">
+						<div class="card-text">
+							<div class="row">
+								<label for="title" class="custom-font-dark">제목</label>
+								<input type="text" id="title" placeholder="제목" class="form-control col-12 mb-1">
+								<label for="content" class="custom-font-dark">내용</label>
+								<input type="text" id="content" placeholder="내용" class="form-control col-12 mb-2">
+							</div>
+							<div class="row">	
+								<span class="custom-font-dark">시간</span>
+							</div>
+							<div class="row">
+								<input type="text" class="form-control col-6" placeholder="시작날짜" id="min-date">
+								<input type="text" class="form-control col-6" placeholder="끝 날짜" id="max-date">
+								<span class="mt-2 custom-font-dark">색상</span><label class="mt-2 custom-font-dark offset-6">AllDay<input type="checkBox" id="allDay" class="ml-2"></label>
+							</div>
+							<div class="row">
+								<div class="col-6">
+									<input type="radio" name="color" id="color1" value="#FF5733">
+									<label for="color1" id="redColor" class="mr-2"></label>
+									<input type="radio" name="color" id="color2" value="#FFBD33">
+									<label for="color2" id="oranColor" class="mr-2"></label>
+									<input type="radio" name="color" id="color3" value="#DBFF33">
+									<label for="color3" id="lemonColor" class="mr-2"></label>
+									<input type="radio" name="color" id="color4" value="#33FF57">
+									<label for="color4" id="greenColor" class="mr-2"></label>
+									<input type="radio" name="color" id="color5" value="#33FFBD">
+									<label for="color5" id="darkGreenColor"></label>
+								</div>
+								<div class="offset-1">
+									
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-footer">
+						<input type="button" class="btn" value="등록" id="insertBtn">
+					</div>
+				</div>			
+	    </div>
+	</div>
+</div>
+
+</div>
+
+<script>
+let minDate;
+let maxDate;
+let insertBtn = document.querySelector("#insertBtn");
+let calendar;
+let header;
+let token;
+
+window.onload = function(){
+	header = $("meta[name='_csrf_header']").attr('content');
+	token = $("meta[name='_csrf']").attr('content');
+	
+	insertBtn.addEventListener("click", insertCal);
+	$("#min-date, #max-date").bootstrapMaterialDatePicker({
+			format: 'YYYY/MM/DD HH:mm',
+			minDate : new Date()
+	});
+	
+	drawCalendar(null);
+}
+
+function drawCalendar(data){
+	
+	let jsonObject = {
+			CLDR_CATEGORY : data
+	}
+	
+	
+	
+	var calendarEl = document.getElementById('calendar');
+    calendar = new FullCalendar.Calendar(calendarEl, {
+    	headerToolbar : {
+    		start : 'university,department,mycalen',
+    		center: 'title',
+    		end: 'prev,today,next'
+    	},
+    	events : function(info, successCallback, failureCallback) {
+			$.ajax({
+				  url: "/calendar/showList",
+				  type: "POST",
+				  data:JSON.stringify(jsonObject),
+				  dataType: "JSON",
+				  contentType:"application/json;charset=utf-8",
+				  beforeSend : function(xhr){
+			        xhr.setRequestHeader(header, token);
+			      },
+				  success : function(data){
+					successCallback(data);
+				  },
+				  error : function(request,status,error){
+					alert("code = "+ request.status + " message = " + request.responseText + " error = " + error); // 실패 시 처리
+					console.log("code = "+ request.status + " message = " + request.responseText + " error = " + error);
+				  }
+			});
+		},
+		windowResize:function(res){
+			console.log(res + "resize중입니다....")
+		},
+    	customButtons : {
+    		university:{
+    			text:'학교',
+    			background:"red",
+    			click:function(){
+    				drawCalendar("university")
+    				console.log("university")
+    			}
+    		},
+    		department : {
+    			text:'학과',
+    			click:function(){
+    				drawCalendar("department")
+    				console.log("department")
+    			}
+    		},
+    		mycalen:{
+    			text:'내일정',
+    			click:function(){
+    				drawCalendar("${userId}")
+    				console.log("mycalen")
+    			}
+    		}
+    	},
+//     	googleCalendarApiKey :"AIzaSyDOhTFL_1nFI7zFpge14SZA9lC8_5rsR6o",
+//         eventSources :[ 
+//             {
+//                 googleCalendarId:'ko.south_korea#holiday@group.v.calendar.google.com', 
+//                 color: 'white', 
+//                 textColor: 'red' // an option!
+//             } 
+//         ],
+	    height: 800,
+	    contentHeight: 780,
+	    aspectRatio: 3,  // see: https://fullcalendar.io/docs/aspectRatio
+      	initialView: 'dayGridMonth',
+      	locale : 'ko',   // 언어설정
+        editable: true,  // 편집
+        selectable: true,  // 선택
+        droppable: false,  // 드롭
+        weekends:true,     // 주말
+      	select : function(event){
+      		console.log(event)
+      		addInfo(event);
+      	},
+      	eventClick:function(event){
+      		if(!(event.event.extendedProps.category == "${userId}")){
+      			alert("권한이 없습니다.")
+      			
+      			return;
+      		}
+      		
+      		if(confirm("해당 메모를 삭제하시겠습니까?")){
+      			event.event.remove();
+      		}
+      	},
+      	eventDragStart:function(event){
+      		console.log(event)
+      		if(!(event.event.extendedProps.category == "${userId}")){
+      			alert("권한이 없습니다.")
+      			return;
+      		}
+      	},
+      	eventDragStop:function(res){
+      		console.log(res)
+      	},
+      	eventDrop:function(event){
+      		if(confirm("일정을 수정하시겠습니까?")){
+      			
+      		}
+      	}
+      	
+    });
+    
+    
+    calendar.render();
+	
+	
+};
+
+function addInfo(info){
+	$("#dataModal").modal('show');
+	let date = new Date();
+	
+	console.log(moment(date).format("HH:mm"));
+	
+	let start = info.startStr + " " +moment(date).format("HH:mm");
+	let end = info.endStr + " " +date.getHours() + ":" + date.getMinutes();
+	
+	date = new Date(end);
+	
+	let tmptomorrow = new Date(date.setDate(date.getDate()-1));
+	let tomorrow = moment(tmptomorrow).format("YYYY-MM-DD HH:mm")
+	
+	document.querySelector("#min-date").value = start;
+	document.querySelector("#max-date").value = tomorrow;
+}
+
+
+function insertCal(){
+	
+	let title = document.querySelector("#title").value;
+	let content = document.querySelector("#content").value;
+	let start = document.querySelector("#min-date").value;
+	let end = document.querySelector("#max-date").value;
+	let color = document.querySelector("input[name='color']:checked").value;
+	let allDay = document.querySelector("#allDay").checked
+	
+	let jsonObject = {
+		title:title,
+		content:content,
+		start:start,
+		end:end,
+		color:color,
+		allDay:allDay
+	}
+	
+	console.log(jsonObject)
+	
+	let xhr = new XMLHttpRequest();
+	xhr.open("post", "/calendar/insertCal", true);
+	xhr.onreadystatechange = () =>{
+		if(xhr.readyState == 4 && xhr.status == 200){
+			console.log("등록성공")
+			
+			document.querySelector("#title").value = ""
+			document.querySelector("#content").value = ""
+			document.querySelector("#min-date").value = ""
+			document.querySelector("#max-date").value = ""
+			document.querySelector("input[name='color']:checked").checked = false;
+			document.querySelector("#allDay").checked = false;
+			
+			$("#dataModal").modal('hide');
+			
+			calendar.addEvent(jsonObject)
+		}
+	}
+	
+	xhr.setRequestHeader(header,token);"C:/Users/PC-09/Desktop/requestBody.png"
+	xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8")
+	
+	xhr.send(JSON.stringify(jsonObject));
+}
+
+</script>

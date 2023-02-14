@@ -1,0 +1,13 @@
+package org.hdcd.service.student.record;
+
+import java.util.List;
+
+import org.hdcd.vo.RecordApplyVO;
+
+public interface IRecordApplyService {
+	public int recordapply(RecordApplyVO recordVO) throws Exception;
+	
+	public List<RecordApplyVO> selectrecordapply(RecordApplyVO recordVO) throws Exception;
+	
+	
+}

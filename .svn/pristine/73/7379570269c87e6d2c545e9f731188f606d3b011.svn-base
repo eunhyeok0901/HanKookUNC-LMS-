@@ -1,0 +1,34 @@
+package org.hdcd.controller.manager.volunteer_manage;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.hdcd.service.manager.volunteer.MVolunteerManageService;
+import org.hdcd.vo.VolunteerOutVO;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+@RequestMapping("/volunteer/manage")
+public class VolunteerManage {
+	
+	@Inject
+	private MVolunteerManageService service;
+	
+	@GetMapping(value = "/registerList", produces = "text/plain;charset=UTF-8")
+	public List<VolunteerOutVO> selectVolunteerList() {
+		log.debug("selectVolunteerList 시작 ~");
+		
+		List<VolunteerOutVO> volList = service.selectRegisterList();
+		log.info("volList : "+ volList);
+		
+		return volList;
+	}
+	
+	
+}

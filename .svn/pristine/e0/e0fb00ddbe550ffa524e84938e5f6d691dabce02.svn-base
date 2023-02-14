@@ -1,0 +1,21 @@
+package org.hdcd.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import org.hdcd.vo.StudentVO;
+
+public interface POpenLecAttendMapper {
+
+	public List<Map<String, Object>> selectMyOpenLecList(String userId) throws Exception;
+
+	public List<Map<String, Object>> selectMyLecNameNCode(String userId) throws Exception;
+
+	public List<Map<String, Object>> selectLecStudentList(String lec_code) throws Exception;
+
+	public Map<String, Object> selectLecStudentInfo(StudentVO studentVO) throws Exception;
+
+	public List<Map<String, Object>> selectLecWeekList(String lolCode) throws Exception;
+	
+	
+}

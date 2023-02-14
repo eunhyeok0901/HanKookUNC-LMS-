@@ -1,0 +1,20 @@
+package org.hdcd.vo;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+public class EnrollFeeVO {
+	private String enrl_code;
+	private int enrl_year;
+	private int enrl_semester;
+	private int enrl_admiss;
+	private int enrl_fee;
+	private int scholarship;
+	private int enrl_total;
+	private int enrl_date;
+	private String enrl_bank;
+}

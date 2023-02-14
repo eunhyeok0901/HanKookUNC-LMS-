@@ -1,0 +1,107 @@
+package org.hdcd.service.manager.mail;
+
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailAttachment;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.MultiPartEmail;
+import org.apache.commons.mail.SimpleEmail;
+import org.springframework.stereotype.Service;
+
+@Service
+public class MailServiceImpl implements MailService{
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public String sendMail(String[] mem_email) throws EmailException {
+//		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(Config.class); 
+//		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(Config.class); 
+//		JavaMailSenderImpl mailSender = (JavaMailSenderImpl)ctx.getBean("mailSender");
+//		
+//		// 메일 내용
+//		String subject = "테스트 제목 1";
+//		String content = "테스트 내용1";
+//
+//		// 보내는 사람
+//		String from = "dlstmdwn@naver.com";
+//
+//		// 받는 사람
+////		String[] to = new String[mem_email.length];
+////		
+////		for (int i = 0; i < mem_email.length; i++) {
+////			to[i] = mem_email[i];
+////		}
+//		
+//		// 테스트용
+//		String[] to = new String[1];
+//		to[0] = "eunhyeok0901@naver.com";
+//
+//		try {
+//			// 메일 내용 넣을 객체와, 이를 도와주는 Helper 객체 생성
+//			MimeMessage mail = mailSender.createMimeMessage();
+//			MimeMessageHelper mailHelper = new MimeMessageHelper(mail, "UTF-8");
+//
+//			// 메일 내용을 채워줌
+//			mailHelper.setFrom(from);	// 보내는 사람 셋팅
+//			mailHelper.setTo(to);		// 받는 사람 셋팅
+//			mailHelper.setSubject(subject);	// 제목 셋팅
+//			mailHelper.setText(content);	// 내용 셋팅
+//
+//			// 메일 전송
+//			mailSender.send(mail);
+//			
+//			return "OK";
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//		}
+		// -------------------------------------- apache사용 --------------------------------------
+//		Email email = new SimpleEmail();
+//		email.setHostName("smtp.naver.com");
+//		email.setSmtpPort(465);
+//		email.setCharset("utf-8"); // 인코딩 설정(utf-8, euc-kr)
+//		email.setAuthenticator(new DefaultAuthenticator("dlstmdwn", "isj1473510"));
+//		email.setSSL(true);
+//		email.setFrom("dlstmdwn@naver.com", "인승주");
+//		email.setSubject("태스트1");
+//		email.setMsg("테스트내용1");
+//		email.addTo("eunhyeok0901@naver.com", "이름");
+//		email.send();
+
+		EmailAttachment at = new EmailAttachment();
+		at.setPath("D:/A_TeachingMaterial/08_Framework/02. SPRING/workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/University_Project/resources/popUp/Coca-Cola-logo3.png");
+		at.setDisposition(EmailAttachment.ATTACHMENT);
+		at.setDescription("파일전송 테스트");
+		at.setName("관리자");
+		
+		EmailAttachment at2 = new EmailAttachment();
+		at.setPath("D:/A_TeachingMaterial/08_Framework/02. SPRING/workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/University_Project/resources/popUp/Coca-Cola-logo3.png");
+		at.setDisposition(EmailAttachment.ATTACHMENT);
+		at.setDescription("파일전송 테스트");
+		at.setName("관리자");
+		
+		MultiPartEmail email = new MultiPartEmail();
+		email.setHostName("smtp.naver.com");
+		email.setSmtpPort(465);
+		email.setCharset("utf-8"); // 인코딩 설정(utf-8, euc-kr)
+		email.setAuthenticator(new DefaultAuthenticator("dlstmdwn", "isj1473510"));
+		email.setSSL(true);
+		email.setFrom("dlstmdwn@naver.com", "인승주");
+		email.addTo("eunhyeok0901@naver.com", "이름");
+		email.setSubject("파일 태스트1");
+		email.setMsg("파일 테스트 내용 1");
+		
+		email.attach(at);
+//		email.attach(at2);
+		
+		email.send();
+		
+		
+		// 이매일 파일 첨부 가능 기능 URL
+		// https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=agapeuni&logNo=60059429635 
+		
+		
+		
+		return "NG";
+	}
+
+}

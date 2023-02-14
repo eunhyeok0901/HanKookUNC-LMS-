@@ -1,0 +1,17 @@
+package org.hdcd.service.student.community;
+
+import java.util.List;
+
+import org.hdcd.vo.CommunityVO;
+import org.hdcd.vo.LikeVO;
+import org.hdcd.vo.ReplyVO;
+
+public interface IMyCommunityService {
+
+	List<CommunityVO> getMyPost(String smem_no);
+
+	List<ReplyVO> getMyReply(String smem_no);
+
+	List<LikeVO> getMyLike(String smem_no);
+
+}

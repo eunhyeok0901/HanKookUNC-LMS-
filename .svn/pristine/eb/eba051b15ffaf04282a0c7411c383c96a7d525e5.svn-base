@@ -1,0 +1,241 @@
+package org.hdcd.service.student.lecture;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.hdcd.mapper.SLectrueMapper;
+import org.hdcd.vo.DepartmentVO;
+import org.hdcd.vo.LecApplyVO;
+import org.hdcd.vo.LecGradeVO;
+import org.hdcd.vo.LecHistoryVO;
+import org.hdcd.vo.LecOpenListVO;
+import org.hdcd.vo.LecturePlanVO;
+import org.hdcd.vo.LectureVO;
+import org.hdcd.vo.MemberVO;
+import org.hdcd.vo.ProfessorVO;
+import org.springframework.stereotype.Service;
+
+@Service
+public class StudenLectureServiceImpl implements StudentLectureService{
+
+	@Inject
+	SLectrueMapper mapper;
+	
+	// 강좌 전체 리스트
+	@Override
+	public List<LecOpenListVO> selectAll() {
+		return mapper.selectLolAll();
+	}
+
+	// 교수 정보
+	@Override
+	public ProfessorVO selectPmem(String pMemNo) {
+		return mapper.selectPmem(pMemNo);
+	}
+
+	// 맴버 정보 
+	@Override
+	public MemberVO selectMem(String pMemNo) {
+		return mapper.selectMem(pMemNo);
+	}
+
+	// 학과정보
+	@Override
+	public DepartmentVO selectDep(String depCode) {
+		return mapper.selectDep(depCode);
+	}
+
+	// 강의 계획 정보
+	@Override
+	public LecturePlanVO selectLecP(String lolCode) {
+		return mapper.selectLecP(lolCode);
+	}
+
+	// 강의 개설 정보
+	@Override
+	public LecOpenListVO selectLecOpen(String lol_code) {
+		return mapper.selectLecOpen(lol_code);
+	}
+
+	// 강의 전체 조회
+	@Override
+	public List<LectureVO> selectLecAll() {
+		
+		List<LectureVO> lectureList = mapper.selectLecAll();
+		
+		return lectureList;
+	}
+
+	
+	// 강의목록 전체 출력
+	@Override
+	public List<Map<String, Object>> selectLecList() {
+		
+		List<Map<String, Object>> dataList = new ArrayList<Map<String,Object>>();
+		Map<String, Object> dataMap = null;
+		
+		List<LectureVO> lecList = mapper.selectLecAll();
+		
+		for(LectureVO lecture : lecList) {
+			
+			dataMap = new HashMap<String, Object>();
+			
+			// 강의 개설 정보 가져오기
+			String lolCode = lecture.getLol_code();
+			LecOpenListVO lecOpen = mapper.selectLecOpen(lolCode);
+			
+			// 강의 계획서 정보 가져오기
+			LecturePlanVO lecturePlan = mapper.selectLecP(lolCode);
+			
+			// 교수 정보 가져오기
+			String pMemNo = lecOpen.getPmem_no();
+			ProfessorVO professor = mapper.selectPmem(pMemNo);
+			
+			// 교수-회원 정보 가져오기
+			MemberVO member = mapper.selectMem(pMemNo);
+			
+			// 학과정보 가져오기
+			String depCode = professor.getDep_code();
+			DepartmentVO department = mapper.selectDep(depCode);
+			
+			dataMap.put("lecture", lecture);
+			dataMap.put("lecOpen", lecOpen);
+			dataMap.put("lecturePlan", lecturePlan);
+			dataMap.put("professor", professor);
+			dataMap.put("member", member);
+			dataMap.put("department", department);
+			
+			dataList.add(dataMap);
+		}
+		return dataList;
+	}
+	
+	// 예비수강 바구니 추가
+	@Override
+	public void inserApply(LecApplyVO lecApply) {
+		mapper.inserApply(lecApply);
+	}
+	
+	// 내 수강바구니 전체 출력
+	@Override
+	public List<LecApplyVO> selectLecApplyAll(String userId) {
+		return mapper.selectLecApplyAll(userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectMyLecApply(String userId) {
+		
+		List<Map<String, Object>> dataList = new ArrayList<Map<String,Object>>();
+		Map<String, Object> dataMap = null;
+		List<LecApplyVO> lecApplyList = mapper.selectLecApplyAll(userId);
+		
+		for(LecApplyVO lecApply : lecApplyList) {
+			dataMap = new HashMap<String, Object>();
+			String lecCode = lecApply.getLec_code();
+			LectureVO lecture = mapper.selectLec(lecCode);
+			LecOpenListVO lecOpenList = mapper.selectLecOpen(lecture.getLol_code());
+			ProfessorVO professor = mapper.selectPmem(lecOpenList.getPmem_no());
+			MemberVO member = mapper.selectMem(professor.getPmem_no());
+			DepartmentVO department = mapper.selectDep(professor.getDep_code());
+			
+			dataMap.put("lecApply", lecApply);
+			dataMap.put("lecture", lecture);
+			dataMap.put("lecOpenList", lecOpenList);
+			dataMap.put("professor", professor);
+			dataMap.put("member", member);
+			dataMap.put("department", department);
+			
+			dataList.add(dataMap);
+		}
+		
+		return dataList;
+	}
+
+	@Override
+	public LecOpenListVO deleteLecApply(LecApplyVO lecApply) {
+		
+		LecApplyVO newLecApply =  mapper.selectLecApplyOne(lecApply);
+		
+		String lecCode = newLecApply.getLec_code();
+		LectureVO lecture = mapper.selectLec(lecCode);
+		LecOpenListVO lecOpenList = mapper.selectLecOpen(lecture.getLol_code());
+		mapper.deleteLecApply(lecApply.getLa_code());
+		
+		return lecOpenList;
+	}
+
+	@Override
+	public LectureVO selectLec(String lec_code) {
+		return mapper.selectLec(lec_code);
+	}
+
+	@Override
+	public LecApplyVO selectLecApplyOne(LecApplyVO lecApply) {
+		return mapper.selectLecApplyOne(lecApply);
+	}
+
+	@Override
+	public Map<String, Object> insertHis(LecApplyVO tmpLecApply, HttpServletRequest request) {
+		
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		
+		HttpSession session = request.getSession();
+		String smemNo = (String)session.getAttribute("userId");
+		tmpLecApply.setSmem_no(smemNo);
+		
+		if(tmpLecApply.getLa_state() == 1) {
+			mapper.updateLecApply(tmpLecApply);
+		}else if(tmpLecApply.getLa_state() == 0) {
+			mapper.inserApply(tmpLecApply);
+		}
+		
+		// 수강바구니
+		LecApplyVO lecApply = mapper.selectLecApplyOne(tmpLecApply);
+		// 강의
+		LectureVO lecture = mapper.selectLec(lecApply.getLec_code());
+		// 강의목록
+		LecOpenListVO lecOpenList = mapper.selectLecOpen(lecture.getLol_code());
+		// 회원정보(교수)
+		MemberVO member = mapper.selectMem(lecOpenList.getPmem_no());
+		
+		LecHistoryVO lecHistory = new LecHistoryVO();
+		lecHistory.setLol_code(lecture.getLol_code());
+		lecHistory.setLaCode(lecApply.getLa_code());
+		lecHistory.setLh_semester(lecOpenList.getLol_semester());
+		lecHistory.setLh_year(lecOpenList.getLol_year());
+		lecHistory.setLh_lecname(lecOpenList.getLol_name());
+		lecHistory.setLh_professor(member.getMem_name());
+		
+		int cnt = mapper.insertHis(lecHistory);
+		
+		if(cnt > 0) {
+			mapper.updateLecApply(lecApply);
+		}
+		
+		dataMap.put("lecApply", lecApply);
+		dataMap.put("lecture", lecture);
+		dataMap.put("lecOpenList", lecOpenList);
+		dataMap.put("member", member);
+		dataMap.put("lecApply", lecApply);
+		
+		return dataMap;
+	}
+
+	@Override
+	public List<LecGradeVO> getMyGradeList(String userId) {
+		return mapper.getMyGradeList(userId);
+	}
+
+
+	
+
+	
+	
+
+}

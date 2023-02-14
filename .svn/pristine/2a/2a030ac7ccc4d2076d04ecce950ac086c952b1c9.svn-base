@@ -1,0 +1,1806 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<style>
+body {
+    /* height: 100vh; */
+    /* width: 100vw; */
+    background-color: #ECEFEE;
+    background-image: linear-gradient( rgba( 255, 255, 255, 0.1), rgba( 255, 255, 255, 0.9) ), url('/resources/images/main/배경7.jpg');
+    /* background-image: url(); */
+    background-repeat: no-repeat;
+    background-size: 100% 24%;
+}
+#chartTable th{
+	padding-left:7px;
+	padding-right:8px;
+}
+
+/**.grid-stack { background: mediumturquoise; }**/
+.portlet-item {}
+.grid-stack-item-content {}
+
+.portlet-item>.card-body{
+	height : 600px;
+}
+</style>
+
+<%
+		String userId = (String)request.getSession().getAttribute("userId");
+		int userIdLength = userId.length(); 
+%>
+<style>
+
+
+</style>
+<link href="${pageContext.request.contextPath }/resources/css/main.css" rel="stylesheet">
+	<div class="container-fluid">
+		<div class="row portlet-container">
+<!-- 관리자인 경우 -->
+<c:if test="${role eq 'ROLE_ADMIN' }">
+		<div class="col-lg-4 col-sm-6">
+			<div class="card">
+				<div class="card-body">
+					<div class="text-center">
+						<img src="/resources/images/관리자.png" class="rounded-circle" alt="" width="70" height="70">
+						<h5 class="mt-3 mb-1">관리자(${userId })</h5>
+						<p class="m-0">한국대학교 홈페이지 총괄관리자</p>
+						<button class="btn mb-1 btn-primary custom-btn-m openPortletModalBtn" data-toggle="modal" data-target="#exampleModalpopover">화면 배치 설정</button>
+						<div class="bootstrap-modal">
+							<div class="modal fade" id="exampleModalpopover">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">화면 배치 설정</h5>
+											<button type="button" class="close" data-dismiss="modal">
+												<span>&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<h5>내가 원하는 순서대로 화면을 조작해보세요</h5>
+											<p>왼쪽의 체크박스에서 보고 싶은 메뉴를 선택하고, 오른쪽에서 마우스 끌기로 메뉴 위치를 지정하세요.</p>
+											<div class="potletModalContainer">
+												<div class="potletModalCheck"></div>
+												<div class="potletModalLayout"></div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn mb-1 btn-outline-dark"
+												data-dismiss="modal">닫기</button>
+											<button type="button" class="btn mb-1 btn-primary custom-btn-m">설정 정보 저장하기</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-6 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-graduation-cap fa-2x"></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">학적 변동 신청</p>
+								<c:choose>
+									<c:when test="${empty admin.a1 }">
+										<h4 class="m-1">-</h4>
+									</c:when>
+									<c:otherwise>
+										<h4 class="m-1">${admin.a1 }</h4>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-person-chalkboard fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">개설 과목 신청</p>
+								<c:choose>
+									<c:when test="${empty admin.a2 }">
+										<h4 class="m-1">-</h4>
+									</c:when>
+									<c:otherwise>
+										<h4 class="m-1">${admin.a2 }</h4>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-4 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-sharp fa-solid fa-hand-holding-hand fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">등록금</p>
+								<c:choose>
+									<c:when test="${admin.a3 eq 0}">
+										<h4 class="m-1">CLOSED</h4>
+									</c:when>
+									<c:otherwise>
+										<h4 class="m-1">OPEN</h4>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</div>
+					<div class="col-4 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-sharp fa-solid fa-stamp fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">등록금 납부 상태</p>
+								<c:choose>
+									<c:when test="${admin.a3 eq 0}">
+										<h4 class="m-1">-</h4>
+									</c:when>
+									<c:when test="${admin.a4 eq 0}">
+										<h4 class="m-1">0/${admin.a3 }</h4>
+									</c:when>
+									<c:otherwise>
+										<h4 class="m-1">${admin.a4 }/${admin.a3 }</h4>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-sharp fa-solid fa-comment fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">자격증 신청</p>
+								<c:choose>
+									<c:when test="${empty admin.a5 }">
+										<h4 class="m-1">-</h4>
+									</c:when>
+									<c:otherwise>
+										<h4 class="m-1">${admin.a5 }</h4>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-4 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-hand-holding-dollar fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">봉사 신청</p>
+								<c:choose>
+									<c:when test="${empty admin.a6 }">
+										<h4 class="m-1">-</h4>
+									</c:when>
+									<c:otherwise>
+										<h4 class="m-1">${admin.a6 }</h4>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</div>
+					<div class="col-4 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-circle-check fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">장학금 신청</p>
+								<c:choose>
+									<c:when test="${empty admin.a7 }">
+										<h4 class="m-1">-</h4>
+									</c:when>
+									<c:otherwise>
+										<h4 class="m-1">${admin.a7 }</h4>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-comments-dollar fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">커뮤니티 신고</p>
+								<c:choose>
+									<c:when test="${empty admin.a8 }">
+										<h4 class="m-1">-</h4>
+									</c:when>
+									<c:otherwise>
+										<h4 class="m-1">${admin.a8 }</h4>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</c:if>		
+<!-- 학생인 경우 -->
+<c:if test="${role eq 'ROLE_STUDENT' }">
+		<div class="col-lg-4 col-sm-6">
+			<div class="card">
+				<div class="card-body">
+					<div class="text-center">
+						<c:choose>
+							<c:when test="${empty student.photo }">
+								<img src="/resources/images/김석진.jpg" class="rounded-circle" alt="" width="70" height="70">
+							</c:when>
+							<c:otherwise>
+								<img src="${student.photo }" class="rounded-circle" alt="" width="70" height="70">
+							</c:otherwise>
+						</c:choose>
+						<h5 class="mt-3 mb-1">${student.name } (${userId })</h5>
+						<p class="m-0">${student.college } ${student.department } *포틀릿 순서: ${student.portlet }</p>
+						<a href="/mypage/List">
+							<button type="button" class="btn mb-1 btn-primary custom-btn-s">마이페이지</button>
+						</a>
+						<button class="btn mb-1 btn-primary custom-btn-s openPortletModalBtn" data-toggle="modal" data-target="#exampleModalpopover">화면 배치 설정</button>
+						<div class="bootstrap-modal">
+							<div class="modal fade" id="exampleModalpopover">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">화면 배치 설정</h5>
+											<button type="button" class="close" data-dismiss="modal">
+												<span>&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<h5>내가 원하는 순서대로 화면을 조작해보세요</h5>
+											<p>왼쪽의 체크박스에서 보고 싶은 메뉴를 선택하고, 오른쪽에서 마우스 끌기로 메뉴 위치를 지정하세요.</p>
+											<div class="potletModalContainer">
+												<div class="potletModalCheck"></div>
+												<div class="potletModalLayout"></div>
+											</div>
+											<br/>
+											<div class="alert alert-danger" id="successMessage" style="display: none;">변경에 성공하였습니다. 2초 뒤에 창이 닫힙니다.</div>
+											<div class="alert alert-dark" id="failMessage" style="display: none;">변경에 실패했습니다. 추후에 다시 시도해주십시오. 2초 뒤에 창이 닫힙니다.</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn mb-1 btn-outline-dark portletCloseBtn"
+												data-dismiss="modal">닫기</button>
+											<button type="button" class="btn mb-1 btn-primary custom-btn-m" onclick="saveSPortlet(this)">설정 정보 저장하기</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-6 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-clipboard-user fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">학적 상태</p>
+								<h4 class="m-1">${student.s1 }</h4>
+							</div>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-star fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">이수학점</p>
+								<c:choose>
+									<c:when test="${empty student.s2 }">
+										<h4 class="m-1">-</h4>
+									</c:when>
+									<c:otherwise>
+										<h4 class="m-1">${student.s2 }</h4>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-4 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-brands fa-hire-a-helper fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">교내 봉사</p>
+								<c:choose>
+									<c:when test="${empty student.s3 }">
+										<h4 class="m-1">0/36</h4>
+									</c:when>
+									<c:otherwise>
+										<h4 class="m-1">${student.s3 }/36</h4>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</div>
+					<div class="col-4 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-sharp fa-solid fa-hand-holding-hand fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">교외 봉사</p>
+								<c:choose>
+									<c:when test="${empty student.s4 }">
+										<h4 class="m-1">0/36</h4>
+									</c:when>
+									<c:otherwise>
+										<h4 class="m-1">${student.s4 }/36</h4>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-sharp fa-solid fa-stamp fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">자격증 승인이력</p>
+								<c:choose>
+									<c:when test="${empty student.s5 }">
+										<h4 class="m-1">-</h4>
+									</c:when>
+									<c:otherwise>
+										<h4 class="m-1">${student.s5 }</h4>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-4 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-book fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">도서 대출 반납일</p>
+								<c:choose>
+									<c:when test="${empty student.s6 }">
+										<h4 class="m-1">-</h4>
+									</c:when>
+									<c:otherwise>
+										<h4 class="m-1">${fn:substring(student.s6, 0, 10)}</h4>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</div>
+					<div class="col-4 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-sharp fa-solid fa-comment fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">커뮤니티 내 글</p>
+								<c:choose>
+									<c:when test="${empty student.s7 }">
+										<h4 class="m-1">-</h4>
+									</c:when>
+									<c:otherwise>
+										<h4 class="m-1">${student.s7 }</h4>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-chalkboard-user fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">상담 이력</p>
+								<c:choose>
+									<c:when test="${empty student.s8 }">
+										<h4 class="m-1">-</h4>
+									</c:when>
+									<c:otherwise>
+										<h4 class="m-1">${fn:substring(student.s8, 0, 10)}</h4>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</c:if>
+
+<!-- 교수인 경우 -->
+<c:if test="${role eq 'ROLE_PROFESSOR' }">
+
+		<div class="col-lg-4 col-sm-6">
+			<div class="card">
+				<div class="card-body">
+					<div class="text-center">
+						<c:choose>
+							<c:when test="${empty professor.photo }">
+								<img src="/resources/images/박명수.jpg" class="rounded-circle" alt="" width="70" height="70">
+							</c:when>
+							<c:otherwise>
+								<img src="${professor.photo }" class="rounded-circle" alt="" width="70" height="70">
+							</c:otherwise>
+						</c:choose>
+						<h5 class="mt-3 mb-1">${professor.name } 교수 (${userId })</h5>
+						<p class="m-0">${professor.college } ${professor.department } *포틀릿 순서: ${professor.portlet }</p>
+						<a href="/mypage/List">
+							<button type="button" class="btn mb-1 btn-primary custom-btn-p">마이페이지</button>
+						</a>
+						<button class="btn mb-1 btn-primary custom-btn-p openPortletModalBtn" data-toggle="modal" data-target="#exampleModalpopover">화면 배치 설정</button>
+						<!-- [모달] 포틀릿 설정 시작-->
+						<div class="bootstrap-modal">
+							<div class="modal fade" id="exampleModalpopover">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">화면 배치 설정</h5>
+											<button type="button" class="close" data-dismiss="modal">
+												<span>&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<h5>내가 원하는 순서대로 화면을 조작해보세요</h5>
+											<p>왼쪽의 체크박스에서 보고 싶은 메뉴를 선택하고, 오른쪽에서 마우스 끌기로 메뉴 위치를 지정하세요.</p>
+											<div class="potletModalContainer">
+												<div class="potletModalCheck"></div>
+												<div class="potletModalLayout"></div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn mb-1 btn-outline-dark"
+												data-dismiss="modal">닫기</button>
+											<button type="button" class="btn mb-1 btn-primary custom-btn-m">설정 정보 저장하기</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-6 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-id-card-clip fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">직책</p>
+								<h4 class="m-1">${professor.p1 }</h4>
+							</div>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-person-shelter fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">연구실번호</p>
+								<h4 class="m-1">${professor.p2 }</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-4 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-right-to-bracket fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">입사일</p>
+								<h4 class="m-1">${fn:substring(professor.p3, 0, 10)}</h4>
+							</div>
+						</div>
+					</div>
+					<div class="col-4 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-calendar fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">재직한 지</p>
+								<h4 class="m-1">${professor.p4 }일</h4>
+							</div>
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-star fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">강의총괄평점</p>
+								<c:choose>
+									<c:when test="${empty professor.p5 }">
+										<h4 class="m-1">-</h4>
+									</c:when>
+									<c:otherwise>
+										<h4 class="m-1">${professor.p5 }</h4>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-4 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-person-chalkboard fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">개설강좌</p>
+								<h4 class="m-1">${professor.p6 }</h4>
+							</div>
+						</div>
+					</div>
+					<div class="col-4 border-right">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-chalkboard-user fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">상담 대기</p>
+								<h4 class="m-1">${professor.p7 }</h4>
+							</div>
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="pt-3 pb-3 pl-0 pr-0 text-center" class="mainMyInfo">
+							<div style="display: inline-block;">
+								<i class="fa-solid fa-envelope fa-2x "></i>
+							</div>
+							<div style="display: inline-block;">
+								<p class="m-0">안 읽은 메일</p>
+								<h4 class="m-1">-</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</c:if>
+
+
+		<div class="col-lg-8">
+			<div class="card" style="height: 44%;">
+				<div class="card-body">
+					<h4 class="card-title"><i class="fa-solid fa-seedling "></i>&nbsp;학사일정</h4>
+				</div>
+			</div>
+			<div class="card" style="height: 44.5%;">
+				<div class="card-body">
+					<h4 class="card-title"><i class="fa-solid fa-seedling "></i>&nbsp;공지사항</h4>
+
+					<div class="default-tab">
+						<ul class="nav nav-tabs mb-3" role="tablist">
+							<li class="nav-item"><a class="nav-link" data-toggle="tab"
+								href="#home">&nbsp;&nbsp;&nbsp;&nbsp;전체&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+							<li class="nav-item"><a class="nav-link" data-toggle="tab"
+								href="#profile">&nbsp;&nbsp;&nbsp;&nbsp;일반&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+							<li class="nav-item"><a class="nav-link" data-toggle="tab"
+								href="#contact">&nbsp;&nbsp;&nbsp;&nbsp;채용&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+							<li class="nav-item"><a class="nav-link active show"
+								data-toggle="tab" href="#message">&nbsp;&nbsp;&nbsp;&nbsp;입찰&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+						</ul>
+						<div class="tab-content">
+							<div class="tab-pane fade" id="home" role="tabpanel">
+								<div class="p-t-15">
+									<h4>전체 공지입니다.</h4>
+									<p>전체 공지 내용입니다</p>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="profile">
+								<div class="p-t-15">
+									<h4>일반 공지입니다.</h4>
+									<p>일반 공지 내용입니다.</p>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="contact">
+								<div class="p-t-15">
+									<h4>채용 공지입니다.</h4>
+									<p>채용 공지 내용입니다.</p>
+								</div>
+							</div>
+							<div class="tab-pane fade active show" id="message">
+								<div class="p-t-15">
+									<h4>입찰 공지입니다.</h4>
+									<p>입찰 공지 내용입니다.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ■■■■■■■■■■■■■■■■■■■■■포틀릿 배열 시작■■■■■■■■■■■■■■■■■■-->		
+		<div class="col-lg-12">
+			<div style="position: relative; display: flex; flex-direction: column; min-width: 0; word-wrap: break-word;">
+			  <div class="grid-stack">
+				    <!--아이템 0 시작-->
+				    <div class="grid-stack-item portlet0" gs-w="8">
+				      <div class="grid-stack-item-content">
+						<div class="card portlet-item">
+							<div class="card-body">
+								<div style="display: flex; justify-content: space-between;">
+									<div>
+										<a href='#'><i class="fa-solid fa-school "></i></a>
+										<h4 class="card-title mb-5" style="display: inline-block;">0.일정</h4>
+									</div>
+									<div>
+										<a href='/calendar/main' class="ti-plus"></a>&nbsp;&nbsp;
+									</div>
+								</div>
+								<div class="row">
+									<div id="calendar" class="col"></div>
+									<div id="myCal" class="col-3"></div>
+								</div>
+							</div>
+						</div>
+					</div>   
+				    </div>
+				    <!--아이템 0 종료-->
+				    <!--아이템 1 시작-->
+				    <div class="grid-stack-item portlet1" gs-w="4">
+				      <div class="grid-stack-item-content">
+							<div class="card portlet-item">
+								<div class="card-body">
+									<div style="display: flex; justify-content: space-between;">
+										<div>
+											<a href='#'> <i class="fa-solid fa-note-sticky"></i>
+											</a>
+											<h4 class="card-title mb-5" style="display: inline-block;">1. 현재 학기 시간표</h4>
+										</div>
+										<div>
+											<a href='/schedule/sHome' class="ti-plus"></a>&nbsp;&nbsp;
+										</div>
+									</div>
+									<div style="text-align: center;">
+										<div style="height: 100%;"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+				    </div>
+				    <!--아이템 1 종료-->
+				    <!--아이템 2 시작-->
+				    <div class="grid-stack-item portlet2" gs-w="4">
+				      <div class="grid-stack-item-content">
+							<div class="card portlet-item">
+								<div class="card-body">
+									<div style="display: flex; justify-content: space-between;">
+										<div>
+											<a href='#'> <i class="fa-solid fa-bowl-food"></i>
+											</a>
+											<h4 class="card-title mb-5" style="display: inline-block;">2. 오늘의 식단</h4>
+										</div>
+										<div>
+											<a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+										</div>
+									</div>
+									<div style="height: 330px; background-color: #FDF5D2;">
+										<div class="bootstrap-carousel">
+											<div id="carouselExampleControls" class="carousel slide"
+												data-ride="carousel">
+												<div id="divCarousel" class="carousel-inner">
+													<div class="carousel-item" style="height: 300px;"></div>
+												</div>
+												<a class="carousel-control-prev"
+													href="#carouselExampleControls" data-slide="prev"> <span
+													class="carousel-control-prev-icon"></span> <span
+													class="sr-only">Previous</span>
+												</a> <a class="carousel-control-next"
+													href="#carouselExampleControls" data-slide="next"> <span
+													class="carousel-control-next-icon"></span> <span
+													class="sr-only">Next</span>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+				    </div>
+				    <!--아이템 2 종료-->
+				    <!--아이템 3 시작-->
+				    <div class="grid-stack-item portlet3" gs-w="4">
+				      <div class="grid-stack-item-content">
+							<div class="card portlet-item">
+								<div class="card-body" style="height: 75px;">
+									<div style="display: flex; justify-content: space-between;">
+										<div>
+											<a href='#'> <i class="fa-solid fa-calendar"></i>
+											</a>
+											<h4 class="card-title mb-5" style="display: inline-block;">3. 졸업 이수 정보</h4>
+										</div>
+										<div>
+											<a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+										</div>
+									</div>
+								</div>
+								<div class="col-12"
+									style="height: 80px; background: linear-gradient(to right, #7edd99 40%, #eaf1ec); color: #261374; font-weight: bold">
+									<label class="pt-3 ml-3">이수 학점달성</label><br> <label
+										class="custom-font-size ml-4" style="margin-top: -15px;"
+										id="processResult">92%</label>
+								</div>
+								<div class="card-body">
+									<div class="col-12 d-flex justify-content-center mt-4">
+										<table id="chartTable">
+											<thead>
+												<tr>
+													<th><span class="custom-font-dark" id="totalCredit">130</span>학점</th>
+													<th><span class="custom-font-dark" id="mcCredit">79</span>학점</th>
+													<th><span class="custom-font-dark" id="mnCredit">21</span>학점</th>
+													<th><span class="custom-font-dark" id="ccCredit">15</span>학점</th>
+													<th><span class="custom-font-dark" id="cnCredit">15</span>학점</th>
+													<th><span class="custom-font-dark">32</span>시간</th>
+													<th><span class="custom-font-dark">785</span>점</th>
+												</tr>
+											</thead>
+										</table>
+									</div>
+									<div class="mb-3">
+										<canvas id="myChart"></canvas>
+									</div>
+									<div class="col-12">
+										<label>*해당 정보는 시점에 따라 변경될 수 있습니다.</label>
+										<label>*최종 정보는 반드시 학사관리팀에 확인해주시기 바랍니다.</label>
+									</div>
+								</div>
+							</div>
+						</div>
+				    </div>
+				    <!--아이템 3 종료-->
+				    <!--아이템 4 시작-->
+				    <div class="grid-stack-item portlet4" gs-w="4">
+				      <div class="grid-stack-item-content">
+							<div class="card portlet-item">
+								<div class="card-body">
+									<div style="display: flex; justify-content: space-between;">
+										<div>
+											<a href='#'> <i class="fa-sharp fa-solid fa-comments"></i>
+											</a>
+											<h4 class="card-title mb-5" style="display: inline-block;">4.커뮤니티</h4>
+										</div>
+										<div>
+											<a href='/community' class="ti-plus"></a>&nbsp;&nbsp;
+										</div>
+									</div>
+									<h5>내가 작성한 글</h5>
+									<div id="communityPost" class="communityTable" style="height: 200px;"></div>
+									<br/>
+									<h5>내가 좋아요한 글</h5>
+									<div id="communityLike" class="communityTable" style="height: 200px;"></div>
+								</div>
+							</div>
+						</div>
+				    </div>
+				    <!--아이템 4 종료-->
+				    <!--아이템 5 시작-->
+				    <div class="grid-stack-item portlet5" gs-w="4">
+				      <div class="grid-stack-item-content">
+							<div class="card portlet-item">
+								<div class="card-body">
+									<div style="display: flex; justify-content: space-between;">
+										<div>
+											<a href='#' class="ti-calendar"></a>
+											<h4 class="card-title mb-5" style="display: inline-block;">5. 오늘의 날씨</h4>
+										</div>
+										<div>
+											<a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+
+										</div>
+									</div>
+									<div
+										style="color: white; background-color: #27DBB7; height: 50px; font-size: 1.5em;">
+										<a class="ti-calendar"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span>Weather
+											Information</span> <span>대전</span>
+									</div>
+									<div
+										style="padding: 10px; background-image: url('../resources/images/back2.JPG'); height: 350px;">
+										<div id="weather1"
+											style="padding-top: 30px; float: left; width: 220px; text-align: center;">
+											날씨아이콘</div>
+										<div id="weather2"
+											style="float: right; padding: 10px; width: 190px; height: 100px; text-align: center;">
+											<div id="weather2_1"
+												style="color: white; padding-top: 20px; font-size: 4.0em;">
+											</div>
+											<div id="weather2_2" style="color: white; font-size: 1.5em;">
+											</div>
+										</div>
+										<div id="weather3"
+											style="text-align: center; height: 50px; margin-top: 200px; padding: 15px; color: white;">
+											<div id="weather3_1"
+												style="float: left; width: 190px; margin: 5px;">
+												<span>강수량</span><br>
+											</div>
+											<div id="weather3_2"
+												style="float: left; width: 190px; margin: 5px;">
+												<span>강수확률</span><br>
+											</div>
+											<div id="weather3_3"
+												style="float: left; width: 190px; margin: 5px;">
+												<span>풍속</span><br>
+											</div>
+											<div id="weather3_4"
+												style="float: left; width: 190px; margin: 5px;">
+												<span>파고</span><br>
+											</div>
+										</div>
+									</div>
+								</div>
+								<p>데이터 출처 : 기상청, 공공 데이터 포털</p>
+							</div>
+						</div>
+				    </div>
+				    <!--아이템 5 종료-->
+				    <!--아이템 6 시작-->
+				    <div class="grid-stack-item portlet6" gs-w="4">
+				      <div class="grid-stack-item-content">
+							<div class="card portlet-item">
+								<div class="card-body">
+									<div style="display: flex; justify-content: space-between;">
+										<div>
+											<a href='#'> <i class="fa-solid fa-books"></i>
+											</a>
+											<h4 class="card-title mb-5"
+												style="display: inline-block; padding-bottom: 0px;">6. 나의 도서관</h4>
+										</div>
+									</div>
+									<div style="display: flex; justify-content: space-between;">
+										<div
+											style="display: inline-block; height: 150px; width: 230px; background-color: #B2FA5C; margin-bottom: 10%;">
+											<div id="rentBook"
+												style="margin-top: 27%; text-align: center; font-size: 1.5em; font-weight: bold; color: white;"></div>
+										</div>
+										<div
+											style="display: inline-block; height: 150px; width: 230px; background-color: #FFA8A5;"margin-bottom: 10%; >
+											<div id="overDate"
+												style="margin-top: 27%; text-align: center; font-size: 1.5em; font-weight: bold; color: white;"></div>
+										</div>
+									</div>
+									<div style="height: 300px; overflow: scroll; overflow-x: hidden">
+										<table id="bookListTable" class="table table-hover" style="table-layout: fixed;"></table>
+									</div>
+								</div>
+							</div>
+						</div>
+				    </div>
+				    <!--아이템 6 종료-->
+				    <!--아이템 7 시작-->
+				    <div class="grid-stack-item portlet7" gs-w="4">
+				      <div class="grid-stack-item-content">
+							<div class="card portlet-item">
+								<div class="card-body" style="align-content: center;">
+									<div style="display: flex; justify-content: space-between;">
+										<div>
+											<a href='#' class="ti-calendar"></a>
+											<h4 class="card-title mb-5" style="display: inline-block;">7. 나만의 상담</h4>
+										</div>
+										<div>
+											<a href='#' class="ti-plus"></a>
+
+										</div>
+									</div>
+									<div style="text-align: center;">
+										<div style="overflow: scroll; height: 420px; overflow-x: hidden;">
+											<table id="mainPageCounselapplyList"
+												class="table table-hover"></table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+				    </div>
+				    <!--아이템 7 종료-->
+				  </div>
+			</div>
+		</div>
+		<!-- ■■■■■■■■■■■■■■■■■■■■■포틀릿 배열 종료■■■■■■■■■■■■■■■■■■ -->
+		</div>
+	</div>
+<script>
+let total;
+// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 팝업시작
+	function closeSurvey(){
+		closepopSur.close();
+	}
+
+	function survRegister(q1, q2, q3){
+		var header = $("meta[name='_csrf_header']").attr('content');
+		var token = $("meta[name='_csrf']").attr('content');
+		
+		let surv_answer1 = q1;
+		let surv_answer2 = q2;
+		let surv_answer3 = q3;
+		
+		console.log(" surv_answer1 : ", surv_answer1);
+		console.log(" surv_answer2 : ", surv_answer2);
+		console.log(" surv_answer3 : ", surv_answer3);
+		
+		$.ajax({
+			type : "post",
+			url : "/common/popupSurveySubmit",
+			data : {"surv_answer1" : surv_answer1, "surv_answer2" : surv_answer2, "surv_answer3" : surv_answer3},
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				if(res == "OK"){
+					console.log("설문조사 완료");
+				}
+			},
+			dataType : "text"
+		})	
+	}
+	
+	function pop_sur_change(num){
+		var header = $("meta[name='_csrf_header']").attr('content');
+		var token = $("meta[name='_csrf']").attr('content');
+		
+		let popNum = num;
+		
+		$.ajax({
+			type : "post",
+			url : "/common/popupSurveyChange",
+			data : {"popNum" : popNum},
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				if(res != "NG"){
+// 					alert("다시보지 않기 활성화");
+				}
+			},
+			dataType : "text"
+		})		
+	}
+	
+	// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 나의 포틀릿 시작
+	function myPortlet(){		
+		  // 메뉴 미리 넣어두기(주체별로 다르게)
+		  const potletModalCheck = document.querySelector(".potletModalCheck");
+		  potletModalCheck.innerHTML = `<label><input type="checkbox" class="portletCheck form-check-input" id="portletCheck0">일정</label>
+										<label><input type="checkbox" class="portletCheck form-check-input" id="portletCheck1">현재 학기 시간표</label>
+										<label><input type="checkbox" class="portletCheck form-check-input" id="portletCheck2">오늘의 식단</label>
+										<label><input type="checkbox" class="portletCheck form-check-input" id="portletCheck3">졸업 이수 정보</label>
+										<label><input type="checkbox" class="portletCheck form-check-input" id="portletCheck4">커뮤니티</label>
+										<label><input type="checkbox" class="portletCheck form-check-input" id="portletCheck5">오늘의 날씨</label>
+										<label><input type="checkbox" class="portletCheck form-check-input" id="portletCheck6">나의 도서관</label>
+										<label><input type="checkbox" class="portletCheck form-check-input" id="portletCheck7">상담 이력</label>`;
+		
+		  // 포틀릿 테이블에서 다음과 같은 순서의 데이터베이스를 가져왔다.
+		  let databaseData = "${student.portlet }";
+		  
+		  let myportlets = databaseData.split("");
+   		  console.log(myportlets);
+		  
+		  // 12개의 체크박스 class을 읽어온다.
+		  let myportletCheckbox = document.querySelectorAll(".portletCheck");
+
+		  // 포틀릿 레이아웃 클래스를 읽어온다.
+		  let container = document.querySelector(".potletModalLayout");
+		  
+		  let str = "";
+		  for(let i = 0; i < myportlets.length; i++){
+			  switch(myportlets[i]){
+			  	case "0": potletModalCheck.children[0].children[0].checked = true; break;
+			  	case "1": potletModalCheck.children[1].children[0].checked = true; break;
+			  	case "2": potletModalCheck.children[2].children[0].checked = true; break;
+			  	case "3": potletModalCheck.children[3].children[0].checked = true; break;
+			  	case "4": potletModalCheck.children[4].children[0].checked = true; break;
+			  	case "5": potletModalCheck.children[5].children[0].checked = true; break;
+			  	case "6": potletModalCheck.children[6].children[0].checked = true; break;
+			  	case "7": potletModalCheck.children[7].children[0].checked = true; break;
+			  }
+		  }
+		  
+		  // 데이터베이스에 존재하는 번호인 경우 checkbox-checked상태로 만들어준다.
+		  for(let i = 0; i < myportlets.length; i++){
+		    let myportlet = myportlets[i];
+		    myportletCheckbox[0].checked = true;
+		    switch(myportlet){
+		      case "0": container.innerHTML += "<div class='item item0' draggable='true'>0일정</div>"; break;
+		      case "1": container.innerHTML += "<div class='item item1' draggable='true'>1현재 학기 시간표</div>"; break;
+		      case "2": container.innerHTML += "<div class='item item2' draggable='true'>2오늘의 식단</div>"; break;
+		      case "3": container.innerHTML += "<div class='item item3' draggable='true'>3졸업 이수 정보</div>"; break;
+		      case "4": container.innerHTML += "<div class='item item4' draggable='true'>4커뮤니티</div>"; break;
+		      case "5": container.innerHTML += "<div class='item item5' draggable='true'>5오늘의 날씨</div>"; break;
+		      case "6": container.innerHTML += "<div class='item item6' draggable='true'>6나의 도서관</div>"; break;
+		      case "7": container.innerHTML += "<div class='item item7' draggable='true'>7상담 이력</div>"; break;
+		    }
+		  } 
+
+		  myportletCheckbox.forEach(function(myportletCheck){
+		    myportletCheck.addEventListener("click", function(e){
+		      const target = e.target;
+		      console.log(target.checked);
+		      if(target.checked){          
+		        switch(target.id){
+		          case "portletCheck0": container.innerHTML += "<div class='item item0' draggable='true'>0일정</div>"; break;
+		          case "portletCheck1": container.innerHTML += "<div class='item item1' draggable='true'>1현재 학기 시간표</div>"; break;
+		          case "portletCheck2": container.innerHTML += "<div class='item item2' draggable='true'>2오늘의 식단</div>"; break;
+		          case "portletCheck3": container.innerHTML += "<div class='item item3' draggable='true'>3졸업 이수 정보</div>"; break;
+		          case "portletCheck4": container.innerHTML += "<div class='item item4' draggable='true'>4커뮤니티</div>"; break;
+		          case "portletCheck5": container.innerHTML += "<div class='item item5' draggable='true'>5오늘의 날씨</div>"; break;
+		          case "portletCheck6": container.innerHTML += "<div class='item item6' draggable='true'>6나의 도서관</div>"; break;
+		          case "portletCheck7": container.innerHTML += "<div class='item item7' draggable='true'>7상담 이력</div>"; break;
+		        }
+		      }else{
+		        switch(target.id){
+		          case "portletCheck0": document.querySelector(".item0").remove(); break;
+		          case "portletCheck1": document.querySelector(".item1").remove(); break;
+		          case "portletCheck2": document.querySelector(".item2").remove(); break;
+		          case "portletCheck3": document.querySelector(".item3").remove(); break;
+		          case "portletCheck4": document.querySelector(".item4").remove(); break;
+		          case "portletCheck5": document.querySelector(".item5").remove(); break;
+		          case "portletCheck6": document.querySelector(".item6").remove(); break;
+		          case "portletCheck7": document.querySelector(".item7").remove(); break;
+		        }          
+		      }
+		    })
+		  })
+
+		  //------------------------------------------------------
+		  
+		  let picked = null;
+		  let pickedIndex = null;
+
+		  // 드래그 dragstart, dragover, drop
+		  container.addEventListener("dragstart", (e)=>{
+		    // console.log(e.target);
+		    const obj = e.target;
+		    picked = obj;
+		    pickedIndex = ([...obj.parentNode.children].indexOf(obj));
+		    // console.log(pickedIndex);
+		  });
+
+		  container.addEventListener("dragover", (e)=>{
+		    e.preventDefault();
+		  });
+
+		  container.addEventListener("drop", (e)=>{
+		    const obj = e.target;
+		    console.log(pickedIndex);
+		    const index = ([...obj.parentNode.children].indexOf(obj));
+		    console.log("나는 obj");
+		    console.log(obj);
+		    console.log("나는 index");
+		    console.log(index);
+		    console.log("나는 pickedIndex");
+		    index > pickedIndex ? obj.after(picked): obj.before(picked);
+
+      console.log(index);
+		  });
+	}
+	
+	const successMessage =  document.querySelector("#successMessage");
+	const failMessage =  document.querySelector("#failMessage");
+	
+	function saveSPortlet(){
+	    let savePortlet = "";
+	    let items = document.querySelectorAll(".item");
+	    console.log(items);
+	    for(let i = 0; i < items.length; i++){
+	        let item = items[i].className;
+	        item = item.charAt(item.length-1);
+	        savePortlet += item;
+	    }
+	    console.log("최종" + savePortlet);
+	    
+	    savePortlet = {
+	    		"savePortlet" : savePortlet
+	    };
+	    
+    	let xhr = new XMLHttpRequest();
+    	xhr.open("post", "/mainPagePortlet/update", true);
+    	xhr.setRequestHeader(header, token);
+    	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    	xhr.onreadystatechange = function(){
+    		if(xhr.readyState == 4 && xhr.status == 200){
+    			console.log("성공적으로 업데이트 되었습니다.");
+    			console.log(xhr.responseText);
+    			let check = xhr.responseText;
+    			if(check == "1"){
+    				successMessage.style.display = "block";
+    				failMessage.style.display = "none";
+    			}else{
+    				failMessage.style.display = "block";
+    				successMessage.style.display = "none";
+    			}
+    			
+    			setTimeout(function() {
+    				document.querySelector(".portletCloseBtn").click();
+    				location.href = "/main/home";
+    			}, 2000);
+    		}
+    	}
+    	xhr.send(JSON.stringify(savePortlet));
+	}
+	
+	// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 로드
+	window.onload = function(){
+		var header = $("meta[name='_csrf_header']").attr('content');
+		var token = $("meta[name='_csrf']").attr('content');
+
+		// 캘린더
+		drawCalendar();
+		showCalendar(null);
+		
+		// 차트
+		showChart();
+		
+		//그리드 스택
+	    GridStack.init({
+	       cellHeight: 550
+	    });
+	    
+		// 팝업 광고, 팝업설문조사 띄우기 
+		window.closepopSur;
+
+		myPortlet(); // 포틀릿
+		getWeather(); // 날씨
+		mainMyCommunity(); // 커뮤니티
+		getFoodList(); // 식단표
+		drawCalendar(); // 캘린더
+		window.closepopSur; // 팝업 광고, 팝업설문조사 띄우기 
+		getNoticeList(); // 공지사항
+		getCounselApplyList(); // 최근 상담내역
+		getBookList();// 도서 내역
+		
+	    // ---------------------------------- 메인 페이지 (배경 사진) 적용하기
+	    // background-image: url('/resources/images/눈오는대학교.jpg'); background-size: contain; background-repeat: no-repeat
+	    /*
+	    let content_body = document.querySelector(".content-body");
+	    content_body.style.backgroundImage = "url('/resources/images/눈오는대학교.jpg')";
+	    content_body.style.backgroundSize = "contain";
+	    content_body.style.backgroundRepeat = "no-repeat";
+		*/
+		$.ajax({
+			type : "post",
+			url : "/common/popupSurveyState",
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				console.log(res);
+				
+				if(res.popup_reject != 1){
+					window.open("/common/popUp","","scrollbars=no,menubar=no,top=300px,left=400,width=570,height=600");			
+				}
+				if(res.surv_reject != 1){
+					closepopSur = window.open("/common/popSur","","scrollbars=no,menubar=no,top=300px,left=1000,width=520,height=500");			
+				}
+				
+			},
+			dataType : "json"
+		})
+	}
+	
+	// ■■■■■■■■■■■■■■■■■■■■■차트차트차트차트■■■■■■■■■■■■■■■■■■■■■■
+	function showChart(){
+		
+		let xhr = new XMLHttpRequest();
+		xhr.open('get','/main/chart', true);
+		xhr.onreadystatechange = () => {
+			if(xhr.readyState == 4 && xhr.status == 200){
+				let jsonData = JSON.parse(xhr.responseText);
+				let jsonObject={};
+				let total=0;
+				jsonData.forEach((value,i)=>{
+					jsonObject[value.LG_AREA.replace("/","")]=value.CREDIT
+					total+=value.CREDIT;
+				})
+				
+				document.querySelector("#totalCredit").innerText = total;
+				document.querySelector("#mcCredit").innerText = jsonObject.전공선택;
+				document.querySelector("#mnCredit").innerText = jsonObject.전공필수;
+				document.querySelector("#ccCredit").innerText = jsonObject.교양필수;
+				document.querySelector("#cnCredit").innerText = jsonObject.교양선택;
+				document.querySelector("#processResult").innerHTML = Math.round(total/130*100)+"<span style='font-size:20px;'>%</span>";
+				
+				const ctx = document.getElementById('myChart');
+				
+				var data = {
+					labels: [['이수학점','130학점'], ['전공/선택','79학점'], ['전공/필수','21학점'], ['교양/선택','15학점'], ['교양/필수','15학점'], ['봉사시간','72시간'], ['어학','850점']],
+					datasets: [{
+						label: '',
+						data: [total/130*100, jsonObject.전공선택/79*100, jsonObject.전공필수/21*100, jsonObject.교양필수/15*100, jsonObject.교양선택/15*100, 32/72*100, 785/850*100],
+						borderWidth:1,
+						backgroundColor:"#5a6ee5",
+					}],
+				}
+				
+				var options = {
+					
+				    type: 'bar',
+				    data: data,
+				    options: {
+						
+				        legend: {//범례 설정
+				        	display:false,
+				            labels: {
+				                fontColor: 'rgb(255, 255, 255)'
+				            }
+				        },
+				        responsive: true,
+				        scales: {
+				        	//y축 설정
+				            yAxes: [{
+				            	display:false,
+								ticks: {
+									suggestedMax:100,    // minimum will be 0, unless there is a lower value.
+									suggestedMin:0
+								}
+				            }],
+				            //x축 설정
+				            xAxes: [{
+//		 		                position:"top",
+								maxBarThickness: 20,
+								
+				                visible: false,
+								ticks:{
+									fontColor:'black',
+								},
+				                gridLines: {
+				                	display:false,
+				                    color: "black",
+				                }
+				            }]
+				        }
+				    }
+				}		
+
+				new Chart(ctx, options);
+			}
+		}
+		xhr.setRequestHeader(header, token);
+		xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+		xhr.send();
+		
+	}
+	
+	
+	// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 도서목록
+	function getBookList(){
+		// 도서 목록 & 내가 빌린 도서 목록  
+		$.ajax({
+			type : "post",
+			url : "/mainPageBook/getBookRental ",
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				console.log("도서 대출 현황 : ",res);
+				$("#rentBook").html("대출 도서 : " + res.RENT0);
+				$("#overDate").html("연체 도서 : " + res.RENT1);
+			},
+			dataType : "json"
+		})
+		
+		
+		const bookListTable = $("#bookListTable");
+		$.ajax({
+			
+			type : "post",
+			url : "/mainPageBook/getBookList",
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				console.log("도서  리스트 : ",res);
+				
+				let eHtml = `<tr>
+								<th style="width:30px;">제목</th>
+								<th style="width:30px;">저자</th>
+								<th style="width:30px;">카테고리</th>
+							</tr>`;
+				
+				for(let i=0;i<res.length;i++){
+					eHtml += `<tr>
+								<td style="text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">\${res[i].book_name}</td>
+								<td style="text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">\${res[i].book_writer}</td>
+								<td style="text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">\${res[i].book_category}</td>
+							</tr>`;							
+				}
+				
+				$(bookListTable).html(eHtml);
+				
+			},
+			
+			dataType : "json"
+		})
+	}
+	
+	// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 최근 상담 내역
+	function getCounselApplyList(){
+		const mainPageCounselapplyListObj = $("#mainPageCounselapplyList");
+		
+		$.ajax({
+			type : "post",
+			url : "/mainPageCounsel/mainPageCounselapplyList",
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				let userId = <%=userIdLength%>;
+				console.log("세션값이다  : " + userId);
+				console.log("상담신청내역 리스트 : ",res);
+				
+				let eHtml = ``;
+				
+				if(userId == 8){
+					eHtml += `<tr>
+								<th>교수이름</th>
+								<th>신청일</th>
+								<th>상태</th>
+							  </tr>`;	
+				}else{
+					eHtml += `<tr>
+								<th>학생이름</th>
+								<th>신청일</th>
+								<th>상태</th>
+							  </tr>`;
+				}
+				
+				if(res.length > 0){
+					for(let i=0;i<res.length;i++){
+						eHtml += `<tr>
+									<td>\${res[i].mem_name}</td>
+									<td>\${res[i].cnsla_date}</td>
+								  `;
+								  if(${res[i].cnsla_state == 0}){
+									  eHtml += `<td>대기</td>`;  
+								  }else if(${res[i].cnsla_state == 1}){
+									  eHtml += `<td>승인</td>`;
+								  }else if(${res[i].cnsla_state == 2}){
+									  eHtml += `<td>반려</td>`;
+								  }else{
+									  eHtml += `<td>완료</td>`;
+								  }
+						eHtml += `</tr>`;							
+					}
+				}else{
+					eHtml += `<tr>
+									<td colspan="3">상담 내역이 존재하지 않습니다</td>
+								</tr>
+							 `;	
+				}
+				
+				$(mainPageCounselapplyListObj).html(eHtml);
+				
+			},
+			dataType : "json"
+		})
+	}
+	
+	// keyEvent
+	
+	
+	// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 공지사항
+	function getNoticeList(){
+		  const noticeList = $("#noticeList");
+	   	  $.ajax({
+				type : "get",
+				url : "/notice/noticeAllList ",
+				beforeSend : function(xhr){
+		    	    xhr.setRequestHeader(header, token);
+		     	},
+				success : function(res){
+					console.log("공지사항 ",res);
+					let noticeListDrawHTML = ``;
+					noticeListDrawHTML += `<tr>
+												<td>제목</td>
+												<td>작성일</td>
+										   </tr>`;
+				
+										for(let i=0; i<res.length;i++){
+					noticeListDrawHTML +=	`<tr>
+												<td>\${res[i].notice_title}</td>
+												<td>\${res[i].notice_date}</td>
+											</tr>`;
+										}
+										
+					$(noticeList).html(noticeListDrawHTML);
+											  
+				},
+				
+				dataType : "json"
+			})	
+	}
+	
+	// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 식단표
+    
+	function getFoodList(){
+	    $.ajax({
+	        url : "/mainPageFood/getFoodList",
+	        type : "GET",
+	        success : function(res){
+	           console.log("식단표 result : ",res);
+	           
+	           var str = '';
+	           var divCarousel = $("#divCarousel");
+	           
+	           for(var i = 0; i < res.length; i++){
+	              str += '<div id="car'+i+'" class="carousel-item" style="height: 350px;">'
+	              str +=      `<div id="title1" style="border: 1px solid red; font-size:2.0em; text-align: center;"> 
+	                               \${res[i].food_date}
+	                             </div>
+	                             <div style="border: 1px solid red; font-size:1.5em; text-align: center;">
+	                                \${res[i].dayofweek}
+	                             </div>
+	                             <div id="content1" style="border: 1px solid red;">
+	                                <div style="padding: 12px;">
+	                                   <div class="input-group">
+	                                         <div class="input-group-prepend"><span class="input-group-text">조식</span>
+	                                         </div>
+	                                         <textarea class="form-control">\${res[i].breakfast}</textarea>
+	                                     </div>
+	                                     <br>
+	                                   <div class="input-group">
+	                                         <div class="input-group-prepend"><span class="input-group-text">중식</span>
+	                                         </div>
+	                                         <textarea class="form-control">\${res[i].lunch}</textarea>
+	                                     </div>
+	                                     <br>
+	                                   <div class="input-group">
+	                                         <div class="input-group-prepend"><span class="input-group-text">석식</span>
+	                                         </div>
+	                                         <textarea class="form-control">\${res[i].dinner}</textarea>
+	                                     </div>
+	                                     <br>
+	                                </div>
+	                             </div>
+	                          </div>`;
+	           }
+	           
+	           
+	           divCarousel.html(str);
+	           $("#car2").attr("class","carousel-item active");
+	           
+	        }
+	     })
+    }
+	
+	
+	
+	// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 커뮤니티
+    // 커뮤니티 게시글 목록 가져오기
+	const communityPost = document.querySelector("#communityPost");
+	const communityLike = document.querySelector("#communityLike");
+    
+	//아작스 통신을 위한 csrf 인증 토큰
+	let header = '${_csrf.headerName}';
+	let token = '${_csrf.token}';
+    
+    function mainMyCommunity(){
+    	let xhr = new XMLHttpRequest();
+    	xhr.open("get", "/mainPageCommunity", true);
+    	xhr.setRequestHeader(header, token);
+    	xhr.onreadystatechange = function(){
+    		if(xhr.readyState == 4 && xhr.status == 200){
+    			let data = JSON.parse(xhr.responseText);
+		    	
+    			let myPost = data.myPost;
+    			let myLike = data.myLike;
+
+    			let str = "";    			
+				str += '<table class="table table-hover">';
+				str += '<thead>';
+				str += '<tr>';
+				str += '<td>카테고리</td><td>느낌</td><td>제목</td>';
+				str += '</tr>';
+				str += '</thead>';
+				str += '<tbody>';
+				
+    			if(myPost.length == 0){
+    				str += "<tr><td colspan='5'>내가 작성한 게시글이 없습니다.</td></tr>";
+    			}else{
+	    			for(let i = 0; i < myPost.length; i++){
+	    				str += '<tr>';
+	    				str += '<td><span class="badge badge-dark">'+ myPost[i].cmnt_category +'</span></td>';
+	    				str += '<td><span class="badge badge-light">'+ myPost[i].cmnt_feeling +'</span></td>';
+	    				str += '<td><a href="/community/detail/'+ myPost[i].cmnt_no +'">'+ myPost[i].cmnt_title +'</a></td>';
+						str += '<tr>';
+	    			}	
+    			}
+				str +='</tbody>';
+				str +='</table><br/>';
+    			
+				communityPost.innerHTML = str;
+			
+				str = '<table class="table table-hover">';
+				str += '<thead>';
+				str += '<tr>';
+				str += '<td>카테고리</td><td>느낌</td><td>제목</td>';
+				str += '</tr>';
+				str += '</thead>';
+				str += '<tbody>';
+				
+    			if(myLike.length == 0){
+    				str += "<tr><td colspan='3'>내가 좋아요한 게시글이 없습니다.</td></tr>";
+    			}else{
+	    			for(let i = 0; i < myLike.length; i++){
+	    				str += '<tr>';
+	    				str += '<td><span class="badge badge-dark">'+ myLike[i].cmnt_category +'</span></td>';
+	    				str += '<td><span class="badge badge-light">'+ myLike[i].cmnt_feeling +'</span></td>';
+	    				str += '<td><a href="/community/detail/'+ myLike[i].cmnt_no +'">'+ myLike[i].cmnt_title +'</a></td>';
+						str += '<tr>';
+	    			}	
+    			}
+				str +='</tbody>';
+				str +='</table>';
+
+				communityLike.innerHTML = str;	
+    		}
+    	}
+    	xhr.send();
+ 
+    }	
+    
+    
+    
+ // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 날씨
+    function getWeather(){
+ 	      //날씨 api 로드하는 부분입니다!
+ 	      var weather1 = $("#weather1");
+ 	      var weather2 = $("#weather2");
+ 	      var weather2_1 = $("#weather2_1");
+ 	      var weather2_2 = $("#weather2_2");
+ 	      var weather3 = $("#weather3");
+ 	      var weather3_1 = $("#weather3_1");
+ 	      var weather3_2 = $("#weather3_2");
+ 	      var weather3_3 = $("#weather3_3");
+ 	      var weather3_4 = $("#weather3_4");
+ 	      var weather3_5 = $("#weather3_5");
+// 	       var weather3_6 = $("#weather3_6");
+ 	      
+ 	      
+ 	      $.ajax({
+ 	         url : "/api/weather",
+ 	         type : "get",
+ 	         contentType : "application/json",
+ 	         dataType: "json",
+ 	         success : function(data, status, xhr){
+ 	            let dataHeader = data.result.response.header.resultCode;
+ 	            
+ 	            if(dataHeader == "00"){
+ 	               console.log("success");
+ 	               console.log(data);
+ 	               //기온
+ 	               var temp = data.result.response.body.items.item[0].fcstValue;
+ 	               //하늘상태
+ 	               var skyState = data.result.response.body.items.item[4].fcstValue;
+ 	               //강수확률
+ 	               var percentRain = data.result.response.body.items.item[7].fcstValue;
+ 	               //풍속
+ 	               var windSpeed = data.result.response.body.items.item[4].fcstValue;
+ 	               //강수형태
+ 	               var rainForm = data.result.response.body.items.item[6].fcstValue;
+ 	               //강수량
+ 	               var rainAmount = data.result.response.body.items.item[9].fcstValue;
+ 	               //파고
+ 	               var wave = data.result.response.body.items.item[8].fcstValue;
+ 	               
+ 	               var str = "";
+ 	               
+ 	               if(skyState <= 5){
+ 	                  //맑음
+ 	                  str += '<img alt="" src="../resources/images/sunny.png" width="65%">';
+ 	                  weather2_2.html("맑음");
+ 	               }else if(skyState >= 6 && skyState <= 8){
+ 	                  //구름많음
+ 	                  if(rainForm == 3){
+ 	                     //눈
+ 	                     str += '<img alt="" src="../resources/images/snow.png">';
+ 	                     weather2_2.html("구름많고 눈");
+ 	                  }else if(rainForm == 0){
+ 	                     //흐림
+ 	                     str += '<img alt="" src="../resources/images/littleSun.png">';
+ 	                     weather2_2.html("구름많음");
+ 	                  }else{
+ 	                     str += '<img alt="" src="../resources/images/rain.png">';
+ 	                     weather2_2.html("구름많고 비");
+ 	                  }
+ 	                  
+ 	               }else{
+ 	                  //흐림
+ 	                  if(rainForm == 3){
+ 	                     //눈
+ 	                     str += '<img alt="" src="../resources/images/snow.png">';
+ 	                     weather2_2.html("흐리고 눈");
+ 	                  }else if(rainForm == 0){
+ 	                     //흐림
+ 	                     str += '<img alt="" src="../resources/images/cloud.png">';
+ 	                     weather2_2.html("흐림");
+ 	                  }else{
+ 	                     str += '<img alt="" src="../resources/images/rain.png">';
+ 	                     weather2_2.html("흐리고 비");
+ 	                  }
+ 	               }
+ 	               
+ 	               weather1.html(str); 
+ 	               weather2_1.html(temp+" ℃");                  
+ 	               weather3_1.append(rainAmount + " mm")                  
+ 	               weather3_2.append(percentRain + " %")                  
+ 	               weather3_3.append(windSpeed + " m/s")                  
+ 	               weather3_4.append(wave + " m")                  
+ 	                           
+ 	            }else{     
+ 	               console.log("fail");
+ 	               console.log(data);
+ 	            }
+ 	         },
+ 	         error : function(e, status, xhr, data){
+ 	               console.log("error~~~~~~~~~~~~");
+ 	               console.log(data);
+ 	         }
+ 	      })  
+ 	  }
+
+  
+ // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 캘린더
+    function drawCalendar(){
+    	
+    	let jsonObject = {
+    			CLDR_CATEGORY : "${userId}"
+    	}
+
+		$.ajax({
+			  url: "/calendar/showList",
+			  type: "POST",
+			  data:JSON.stringify(jsonObject),
+			  dataType: "JSON",
+			  contentType:"application/json;charset=utf-8",
+			  beforeSend : function(xhr){
+		        xhr.setRequestHeader(header, token);
+		      },
+			  success : function(data){
+				  console.log(data)
+				  // 오늘기준
+				  let date = new Date();
+				  console.log(date.getDate())
+				  console.log(date.getDate()-3)
+				  let startDay = new Date(date.setDate(date.getDate()-date.getDay()));
+				  let endDay = new Date(date.setDate(date.getDate()+(6-date.getDay())));
+					
+				  console.log(startDay, endDay)
+				  
+				  text="<span class='custom-font-dark align-center'>"+ moment(startDay).format("MM.DD") + "~" + moment(endDay).format("MM.DD")+"</span>";
+				  text+="<hr>";
+				  data.forEach((value,i)=>{
+					  text+= moment(new Date(value.start)).format("MM.DD")+"  "+ value.title+"<br>";
+				  })
+				  
+				  myCal.innerHTML = text;
+				  // 내일기준
+				  // date.getDay() = 4
+				  // startDay = 
+				  
+				  
+			  },
+			  error : function(request,status,error){
+				alert("code = "+ request.status + " message = " + request.responseText + " error = " + error); // 실패 시 처리
+				console.log("code = "+ request.status + " message = " + request.responseText + " error = " + error);
+			  }
+		});
+ 	
+    	
+     };     
+     
+     
+     function showCalendar(data){
+    	 
+    		let jsonObject = {
+    				CLDR_CATEGORY : data
+    		}
+    		
+    		var calendarEl = document.getElementById("calendar");
+    		
+    	    calendar = new FullCalendar.Calendar(calendarEl, {
+    	    	headerToolbar : {
+    	    		start : 'total university department mycalen',
+    	    		center: 'title',
+    	    		end: 'prev,today,next'
+    	    	},
+    	    	events : function(info, successCallback, failureCallback) {
+    				$.ajax({
+    					  url: "/calendar/showList",
+    					  type: "POST",
+    					  data:JSON.stringify(jsonObject),
+    					  dataType: "JSON",
+    					  contentType:"application/json;charset=utf-8",
+    					  beforeSend : function(xhr){
+    				        xhr.setRequestHeader(header, token);
+    				      },
+    					  success : function(data){
+    						 data.forEach((value,i)=>{
+    							 value.display = "background";
+    							 value.overlap= false;
+    							 value.textColor="red";
+    						 })
+    						 
+    						 console.log(data)
+    						successCallback(data);
+    					  },
+    					  error : function(request,status,error){
+    						alert("code = "+ request.status + " message = " + request.responseText + " error = " + error); // 실패 시 처리
+    						console.log("code = "+ request.status + " message = " + request.responseText + " error = " + error);
+    					  }
+    				});
+    			},
+    			editable:true,
+    			windowResize:function(res){
+    				console.log(res + "resize중입니다....")
+    			},
+    	    	customButtons : {
+    	    		total:{
+    	    			text:"전체",
+    	    			click:function(){
+    	    				showCalendar(null);
+    	    			}
+    	    		},
+    	    		today:{
+    	    			text:"toDay",
+    	    			click:function(){
+    	    				 calendar.today();
+    	    			}
+    	    		},
+    	    		university:{
+    	    			text:'학교',
+    	    			background:"red",
+    	    			click:function(){
+    	    				showCalendar("university")
+    	    			}
+    	    		},
+    	    		department : {
+    	    			text:'학과',
+    	    			click:function(){
+    	    				showCalendar("department")
+    	    			}
+    	    		},
+    	    		mycalen:{
+    	    			text:'내일정',
+    	    			click:function(info){
+    	    				showCalendar("${userId}")
+    	    			}
+    	    		}
+    	    	},
+    	      	initialView: 'dayGridMonth',
+    	      	locale : 'ko',   // 언어설정
+    	    });
+    	    
+    	    
+    	    calendar.render();
+     }
+
+</script>

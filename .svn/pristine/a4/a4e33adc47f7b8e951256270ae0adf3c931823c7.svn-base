@@ -1,0 +1,13 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>아이구... 강의평가를 먼저 하고 오셔야합니다.</h2>
+	<h1><a href="/evaluation/home">강의평가하러가기</a></h1>
+</body>
+</html>

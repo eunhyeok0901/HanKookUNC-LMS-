@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hdcd.mapper.NoticeMapper">
+
+
+	<select id = "selectAllList" resultType = "NoticeVO">
+		select * from notice
+	</select>
+	
+	<insert id = "insertNotice" parameterType = "NoticeVO">
+	
+	
+	</insert>
+
+
+
+	<insert id="insertOutVol" parameterType="VolunteerOutVO" useGeneratedKeys="true">
+		insert into volunteer_out (
+		volo_code, smem_no, volo_start, volo_end, volo_time, 
+		volo_company, volo_content, volo_state, volo_semester, volo_year
+		) 
+		values(
+		seq_volo_code.nextval, #{smem_no} , #{volo_start}, #{volo_end}, #{volo_time},
+		#{volo_company}, #{volo_content} ,0 ,1 ,2023
+		) 
+		<selectKey keyProperty="volo_code" keyColumn="volo_code" resultType="String" order="AFTER">
+			select seq_volo_code.currval from dual
+		</selectKey>
+	</insert>
+</mapper>

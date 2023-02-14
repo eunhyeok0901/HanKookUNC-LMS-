@@ -1,0 +1,259 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+		<h4 class="card-title">
+			<i class="fa-solid fa-graduation-cap"></i>상담 신청내역
+		</h4>
+		<div style="margin-left: 1200px;">
+			<span style="margin: 10px;"><input type="text" id="searchProfessorName" placeholder="교수이름검색"></span>
+			<select id="searchState" style="margin: 5px;">
+				<option value="" selected="selected">선택하세요</option>
+				<option value="0">대기</option>
+				<option value="1">승인</option>
+				<option value="2">반려</option>
+				<option value="3">완료</option>
+			</select>
+			<select id="searchType" style="margin: 5px;">
+				<option value="" selected="selected">선택하세요</option>
+				<option value="0">대면</option>
+				<option value="1">비대면</option>
+			</select>
+			<i class="mdi mdi-magnify" onclick="search()" style="margin: 5px;"></i>
+		</div>
+		<div id="page">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card" style="height: 750px; overflow: scroll; overflow-x:hidden;">
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table">
+								<thead>
+									<tr style="text-align: center;">
+										<th>No</th>
+										<th>상담 교수</th>
+										<th>상담 주제</th>
+										<th>상담 신청날짜</th>
+										<th>상담 날짜</th>
+										<th>상담 시간</th>
+										<th>삼당 신청 상태</th>
+										<th>상담 유형</th>
+										<th>상담 내용</th>
+										<th>반려 사유</th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:if test="${empty counselApplyList}">
+										<tr>
+											<td colspan="10">상담신청 내역이 존재하지 않습니다</td>
+										</tr>
+									</c:if>
+									<c:set value="${proffsorNameList}" var="proffsorName"></c:set>
+									<c:if test="${not empty counselApplyList}">
+										<c:forEach items="${counselApplyList}" var="counselApply"
+											varStatus="sts">
+
+											<tr style="text-align: center;">
+												<td>${sts.index + 1}</td>
+												<td>${proffsorName[sts.index].mem_name}</td>
+												<td>${counselApply.cnsla_sub}</td>
+												<td>${counselApply.cnsla_date}</td>
+												<td>${counselApply.cnsl_date}</td>
+												<td>${counselApply.cnsla_time}</td>
+												<c:choose>
+													<c:when test="${counselApply.cnsla_state == 1}">
+														<td>승인</td>
+													</c:when>
+													<c:when test="${counselApply.cnsla_state == 2}">
+														<td>반려</td>
+													</c:when>
+													<c:when test="${counselApply.cnsla_state == 3}">
+														<td>완료</td>
+													</c:when>
+													<c:otherwise>
+														<td>대기</td>
+													</c:otherwise>
+												</c:choose>
+												<c:if test="${counselApply.cnsla_type == 0}">
+													<td>대면</td>
+												</c:if>
+												<c:if test="${counselApply.cnsla_type == 1}">
+													<td>비대면</td>
+												</c:if>
+												<td>${counselApply.cnsla_content}</td>
+												<c:if test="${counselApply.cnsla_reject == null}">
+													<td>
+														<form class="form-valide" id="frm${sts.index}">
+															<input type="hidden" id="cnsla_code" name="cnsla_code" value="${counselApply.cnsla_code}">
+																<c:if test="${counselApply.cnsla_state == 0}">
+																	<span class="label label-pill label-primary" onclick="proc(this)">상담취소</span>
+																</c:if>
+														</form>
+													</td>
+												</c:if>
+												<c:if test="${counselApply.cnsla_reject != null}">
+													<td>${counselApply.cnsla_reject}</td>
+												</c:if>
+											</tr>
+										</c:forEach>
+									</c:if>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript">
+function proc(btn){ 
+	
+	if(confirm("취소하시겠습니까?")){
+		var header = $("meta[name='_csrf_header']").attr('content');
+		var token = $("meta[name='_csrf']").attr('content');
+		
+		let cnsla_code = $(btn).parent().find("#cnsla_code").val();
+		
+		console.log(cnsla_code);
+
+		$.ajax({
+			url : "/student/counsel/return",
+			type : "post",
+			data : {"cnsla_code" : cnsla_code},
+			success : function(res){
+				if(res == "OK"){
+					console.log("전송 성공");
+					alert("상담이 취소되었습니다");
+					location.href = "/student/counselList.do"
+				}
+			},
+			beforeSend : function(xhr){
+		    	    xhr.setRequestHeader(header, token);
+		    },
+			dataType : "text"
+			
+		})
+		
+	}
+	
+	
+}
+
+function search(){
+	var header = $("meta[name='_csrf_header']").attr('content');
+	var token = $("meta[name='_csrf']").attr('content');
+	
+	let searchProfessorName = $("#searchProfessorName").val();
+	let searchState = $("#searchState").val();
+	let searchType = $("#searchType").val();
+	
+	console.log(searchProfessorName);
+	console.log(searchState);
+	console.log(searchType);
+	
+	$.ajax({
+		url : "/student/counselApplyListSearch",
+    	type : "post",
+    	data : {"searchProfessorName" : searchProfessorName, "searchState" : searchState,
+    			"searchType" : searchType
+    		},
+    	success : function(result){
+    		console.log(result);
+    		loadPage(result);
+        },
+        beforeSend : function(xhr){
+    	    xhr.setRequestHeader(header, token);
+        },
+        dataType : "json"
+	})
+}
+
+function loadPage(result){
+	let page = $("#page").empty();
+	let str = ``;
+		str = `
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="card" style="height: 750px; overflow: scroll; overflow-x:hidden;">
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table">
+							<thead>
+								<tr style="text-align: center;">
+									<th>No</th>
+									<th>상담 교수</th>
+									<th>상담 주제</th>
+									<th>상담 신청날짜</th>
+									<th>상담 날짜</th>
+									<th>상담 시간</th>
+									<th>삼당 신청 상태</th>
+									<th>상담 유형</th>
+									<th>상담 내용</th>
+									<th>반려 사유</th>
+								</tr>
+							</thead>
+							<tbody>`;
+									if(result.length <= 0){
+										str += `<tr>
+													<td colspan="10">상담신청 내역이 존재하지 않습니다</td>
+												</tr>`;
+									}
+									
+									for(let i=0;i<result.length;i++){
+										str += `<tr style="text-align: center;">
+											<td>\${i + 1}</td>
+											<td>\${result[i].mem_name}</td>
+											<td>\${result[i].cnsla_sub}</td>
+											<td>\${result[i].cnsla_date}</td>
+											<td>\${result[i].cnsl_date}</td>
+											<td>\${result[i].cnsla_time}</td>
+											`;
+
+											if(result[i].cnsla_state == 1){
+												str += `<td>승인</td>`;
+											}else if(result[i].cnsla_state == 2){
+												str += `<td>반려</td>`;
+											}else if(result[i].cnsla_state == 3){
+												str += `<td>완료</td>`;
+											}else {
+												str += `<td>대기</td>`;
+											}
+
+											if(result[i].cnsla_type == 0){
+												str += `<td>대면</td>`;
+											}else{
+												str += `<td>비대면</td>`;
+											}
+											
+											str += `<td>\${result[i].cnsla_content}</td>`;
+
+											if(result[i].cnsla_reject == null){
+												str += `<td>
+															<form class="form-valide" id="frm\${i+ 1}">
+																<input type="hidden" id="cnsla_code" name="cnsla_code" value="\${result[i].cnsla_code}">`;
+
+																if(result[i].cnsla_state == 0){
+																	str += `<span class="label label-pill label-primary" onclick="proc(this)">상담취소</span>`;
+																}
+																		
+												str += `	</form>
+														</td>`;	
+											}
+
+											if(result[i].cnsla_reject != null){
+												str += `<td>\${result[i].cnsla_reject}</td>`;
+											}
+												
+										str += `</tr>`;
+									}
+
+										
+						str +=`</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>`;
+	$(page).html(str);
+}
+</script>

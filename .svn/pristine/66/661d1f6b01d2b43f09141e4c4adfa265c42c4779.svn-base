@@ -1,0 +1,40 @@
+package org.hdcd.controller.common;
+
+import javax.inject.Inject;
+
+import org.hdcd.mapper.LoginMapper;
+import org.hdcd.vo.MemberVO;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+public class CustomUserDetailsService implements UserDetailsService{
+	
+	@Inject
+	private LoginMapper mapper;
+	
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		// TODO Auto-generated method stub
+		
+		try {
+			
+			MemberVO memVO = mapper.selectAuth(username);
+			
+			log.info("CustomUserDetailsService============================");
+			return memVO == null ? null : new CustomUser(memVO);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+}
+
+
+

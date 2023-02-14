@@ -1,0 +1,62 @@
+package org.hdcd.service.manager.enrollFee;
+
+import java.util.List;
+import java.util.Map;
+
+import org.hdcd.mapper.EnrollFeeMapper;
+import org.hdcd.vo.EnrollFeeVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+public class EnrollFeeServiceImpl implements IEnrollFeeService{
+
+	@Autowired
+	EnrollFeeMapper mapper;
+
+	@Override
+	public int checkTuiOpen(Map<String, String> map) {
+		return mapper.checkTuiOpen(map);
+	}
+
+	@Override
+	public int notifyTuiEnrolled(Map<String, String> map) {
+		int enrl_year = Integer.parseInt(map.get("enrl_year"));
+		int enrl_semester = Integer.parseInt(map.get("enrl_semester"));
+		
+		int totalCnt = 0;
+		
+		List<Map<String, Object>> studentList = mapper.getEnrolledStudents(map); // 등록금 고지 대상인 재학생의 리스트를 조회한다.
+		for (Map<String, Object> student : studentList) {
+			log.debug("학생 정보 : " + student.toString());
+
+			int enrl_fee = Integer.parseInt(String.valueOf(student.get("DEP_FEE")));
+			// 오라클 데이터타입이 number인 경우, 형변환시 java.math.BigDecimal cannot be cast to java.lang.Integer 에러 발생
+			// 고로 String valueof로 형변환 후 사용
+			String smem_no = (String) student.get("SMEM_NO");
+			int scholarship = 0;
+			List<Map<String, Object>> scholarInfoList = mapper.getScholarUnpaidInfo(smem_no);
+			if(scholarInfoList.size() != 0) {			
+				for (Map<String, Object> unpaid : scholarInfoList) {
+					int unpaidScholar = Integer.parseInt(String.valueOf(unpaid.get("SCHL_PRICE")));
+					scholarship +=  unpaidScholar; // 장학금 정보를 더함
+				}	
+				log.debug("학생 " + smem_no + "의 누적 장학금은" + scholarship + "원입니다.");
+			}
+			int enrl_total = enrl_fee - scholarship;
+			if(enrl_total < 0) {
+				enrl_total = 0;
+			}
+			EnrollFeeVO enrollFeeVO = new EnrollFeeVO(smem_no, enrl_year, enrl_semester, enrl_fee, scholarship, enrl_total);
+			int cnt = mapper.registerEnrollfee(enrollFeeVO);
+			totalCnt += cnt;
+			log.debug("totalCnt는 " + totalCnt );
+		}
+		return totalCnt;
+	}
+	
+
+}

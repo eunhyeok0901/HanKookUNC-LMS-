@@ -1,0 +1,38 @@
+package org.hdcd.mapper;
+
+import java.util.List;
+
+import org.hdcd.vo.ScholarApplyVO;
+import org.hdcd.vo.ScholarFileVO;
+import org.hdcd.vo.ScholarListVO;
+
+import egovframework.rte.psl.dataaccess.mapper.Mapper;
+
+@Mapper
+public interface ScholarMapper {
+	// 학생
+	List<ScholarListVO> getScholarList();
+
+	List<ScholarApplyVO> getScholarApplyList(String userId);
+
+	int insertScholarApply(ScholarApplyVO scholarApplyVO);
+
+	int insertScholarApplyFile(ScholarFileVO scholarFileVO);
+
+	int scholarApplyFileDelete(String scha_no);
+	
+	int scholarApplyDelete(String scha_no);
+
+	// 관리자 scholar_apply
+	List<ScholarListVO> getScholarTotalList();
+
+	int approveScholarship(ScholarApplyVO scholarApplyVO);
+
+	String getApproveScholar(String scha_no);
+	
+	// 관리자 scholar_list
+	int scholarListManageRegister(ScholarListVO scholarListVO);
+
+	List<ScholarListVO> getTotalScholarList();
+
+}

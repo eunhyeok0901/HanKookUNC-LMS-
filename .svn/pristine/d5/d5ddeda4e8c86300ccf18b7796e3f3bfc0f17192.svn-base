@@ -1,0 +1,14 @@
+package org.hdcd.vo;
+
+import lombok.Data;
+
+@Data
+public class NoticeFileVO {
+	private String ntcfile_code;
+	private String file_name;
+	private String file_path;
+	private String notice_no;
+	private String file_originnm;
+	private int file_size;
+	private String file_typ;
+}

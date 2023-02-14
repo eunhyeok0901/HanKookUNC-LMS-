@@ -1,0 +1,172 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Insert title here</title>
+</head>
+<style>
+.fade{
+	display:none;
+}
+</style>
+<body>
+    <div class="container-fluid" id="noticedataList">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">공지사항</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered zero-configuration">
+                                        <thead>
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>제목</th>
+                                                <th>작성자</th>
+                                                <th>작성일</th>
+                                                <th>조회수</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class = "n_list">
+                                          
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class = "buttongroup">
+                                <button type="button" class="btn btn-primary" id = "onotice" style = "margin-top:10px; float:right;" onclick = "rnotice()">등록</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+	    <div class="container-fluid fade" id="noticeregisterForm">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                       		 <h3>공지사항작성</h3>
+                       		 <div id = "write_notice">
+                       		 <form id = "notregisterForm" class = "form-valide" method = "post" enctype="multipart/form-data">
+                       		    <div class="form-group">
+                                  <input type="text" class="form-control input-flat" placeholder="제목작성" style="border: 1px solid gray;" id = "n_title" >
+                                </div>
+                                <div class="summernote" id = "summernote" id = "n_content">
+                                </div><br>
+                                <div>
+                                	<input type = "file"  class = "form-control-file" id = "n_file" name = "n_file" aria-required="true" multiple="multiple">
+                                </div>
+                                <button type="button" class="btn btn-primary" id = "ncancel" style = "margin-top:10px; float:right; margin:10px;" onclick = "noticeFormcancel()">취소</button>
+                                <button type="button" id = "notregist" class="btn btn-primary" style = "margin-top:10px; float:right;" onclick = "noticeReg()">등록</button>
+                       			 </form>
+                       			 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<script type="text/javascript">
+	function rnotice(){
+		var noticeregisterForm = document.querySelector("#noticeregisterForm");
+		noticeregisterForm.classList.remove("fade");
+	
+		var noticedataList = document.querySelector("#noticedataList");
+		noticedataList.classList.add("fade");
+	}
+	
+	function noticeFormcancel(){
+		var noticeregisterForm = document.querySelector("#noticeregisterForm");
+		noticeregisterForm.classList.add("fade");
+	
+		var noticedataList = document.querySelector("#noticedataList");
+		noticedataList.classList.remove("fade");
+	}
+	
+	
+	function requestList() {
+		$.ajax({
+			url: "/noticeAllList",
+			type: "get",
+			contentType: "application/json",
+			dataType: "json",
+			success: function(data){
+				var html = "";
+				console.log(data);
+				data.forEach(function(obj, idx){
+					html += "<tr>";
+					html += "<td>"+obj.notice_no+"</td>";
+					html += "<td>"+obj.mmem_no+"</td>";
+					html += "<td>"+obj.notice_title+"</td>";
+					html += "<td>"+obj.notice_date+"</td>";
+					html += "<td>"+obj.notice_count+"</td>";
+					html += "</tr>";
+				});
+				$(".n_list").html(html);
+			}
+		});
+		
+	}
+	function responseNotice(xhr,msg) {
+			console.log(xhr);
+			if(typeof xhr != 'undefined' || xhr != null){
+				console.log(Object.values(xhr.list[0].notice_no));
+				console.log(Object.values(xhr.list[0].notice_title));
+				for (var i = 0; i < xhr.list.length; i++) {
+					html += "<td>"+xhr.list[i].notice_no+"</td>";
+					html += "<td>"+xhr.list[i].mmem_no+"</td>";
+					html += "<td>"+xhr.list[i].notice_title+"</td>";
+					html += "<td>"+xhr.list[i].notice_date+"</td>";
+					html += "<td>"+xhr.list[i].notice_count+"</td>";
+				}
+				document.getElementById('.n_list').innerHTML=html;
+			}else{
+				console.log("continue");	
+			}
+	}
+	 window.onload = function() {
+		requestList(); 
+	}; 
+
+	
+	const notregisterForm = document.querySelector("#notregisterForm");
+	const n_file = document.querySelector("#n_file");
+	const notregist = document.querySelector("#notregist");
+	
+	function noticeReg(){
+		let files = n_file.files;
+		
+		var formData = new FormData(notregisterForm);
+		for(let i = 0; i < files.length; i++){
+			formData.append("n_file",files[i]);
+		}
+		
+		console.log(formData);
+		
+		var token = $("meta[name='_csrf']").attr('content');
+		
+		$.ajax({
+			type : "POST",
+			url : "	/notRegister",
+			data : formData,
+			contentType : false,
+			processData : false,
+			headers : {
+				"X-CSRF-TOKEN" : token
+			},
+			success : function(data){
+				registerForm.reset();
+				alert(data);
+				$("#noticedataList").load("/notice/noticeAllList #noticedataList");
+			}
+		})
+		
+		
+	}
+	
+	
+	
+</script>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script type="text/javascript">
+	function register(){
+		location.href = "/volunteer/registerForm";
+	}
+</script>
+<body>
+	<h4 class="card-title">
+		<i class="fa-solid fa-graduation-cap"></i>봉사내역
+	</h4>
+	<div class="row">
+		<div class="col-lg-10" style="margin: auto;">
+			<div class="card">
+				<div class="card-body">
+					<div class="alert alert-success">나의 누적 봉사시간   ${time}   / 72  시간</div>
+					<div class="table-responsive">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>No</th>
+									<td>년도</td>
+									<td>학기</td>
+									<td>시작일자</td>
+									<td>종료일자</td>
+									<td>기관명</td>
+									<td>취득시간</td>
+									<td>신청상태</td>
+									<td>취득날짜</td>
+									<td>반려사유</td>
+								</tr>
+							</thead>
+							<tbody>
+								<c:set value="${list }" var="volList"></c:set>
+								<c:choose>
+									<c:when test="${empty volList }">
+										<tr>
+											<td>봉사내역이 존재하지 않습니다</td>
+										</tr>
+									</c:when>
+									<c:otherwise>
+										<c:forEach items="${volList }" var="vol" varStatus="status">
+											<tr>
+												<th>${status.index + 1 }</th>
+												<td>${vol.volo_year }</td>
+												<td>${vol.volo_semester }</td>
+												<td>${vol.volo_start }</td>
+												<td>${vol.volo_end }</td>
+												<td>${vol.volo_company }</td>
+												<td>${vol.volo_time }</td>
+												<c:choose>
+													<c:when test="${vol.volo_state == 1 }">
+														<td>승인완료</td>
+													</c:when>
+													<c:when test="${vol.volo_state == 0 }">
+														<td>승인대기</td>
+													</c:when>
+													<c:otherwise>
+														<td>반려</td>
+													</c:otherwise>
+												</c:choose>
+												<td>${vol.volo_date }</td>
+												<td>${vol.volo_reject }</td>
+											</tr>
+										</c:forEach>
+									</c:otherwise>
+								</c:choose>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<button type="button" class="btn mb-1 btn-success" style="float: right;" onclick="register()" >신청하기</button>
+		</div>
+	</div>
+</body>
+</html>
+

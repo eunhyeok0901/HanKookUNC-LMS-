@@ -1,0 +1,9 @@
+package org.hdcd.mapper;
+
+import java.util.Map;
+
+public interface MainPageInfoMapper {
+
+	Map<String, Object> getMemberInfo(String sessionId);
+
+}

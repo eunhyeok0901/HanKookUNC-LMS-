@@ -1,0 +1,253 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<script type="text/javascript">
+	// 시큐리티용 토큰
+	let header = '${_csrf.headerName}';
+	 let token =  '${_csrf.token}';
+</script>
+
+<style>
+.lecListTableBorder{
+	border : 1px solid gray;
+	padding: 20px;
+	
+/* 	background-clip: padding-box; 원하는 영역에만 컬러 지정 가능*/ 
+	
+}
+</style>
+
+<!-- 승인완료된 신청 목록 중에서 강의 개설하기 -->
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col">
+			<div class="card">
+				<div class="card-body">
+					 <div class="card-title">
+                                    <h4>승인교과목목록</h4>
+                                </div>
+                                <div class="lecListTableBorder flex-fill"> <!-- 여기 안에 패딩주고 컬러줄 것 -->
+                                
+                                <div class="table-responsive" style="height:250px; overflow:auto">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>번호</th>
+                                                <th>전공</th>			<!-- 교수 전공 -->
+                                                <th>과목번호</th>
+                                                <th>교과목명</th>
+                                                <th>이수구분</th>
+                                            </tr>
+                                        </thead>
+                               
+                                        <tbody id="lecSuccessRegisterList">
+                                            <!-- 리스트 뽑기. 교수 전공 가져와야함.. -->
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                                </div>
+					
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card">
+				<div class="card-body">
+					 <div class="card-title">
+                                    <h4>개설강좌목록</h4>
+                                </div>
+                                 <div class="lecListTableBorder flex-fill"> <!-- 여기 안에 패딩주고 컬러줄 것 -->
+                                 
+                                <div class="table-responsive" style="height:250px; overflow:auto">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>번호</th>
+                                                <th>전공</th>
+                                                <th>강의번호</th>
+                                                <th>교과목명</th>
+                                                <th>이수구분</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="lecSuccessMyOpenList">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                 </div>
+                                 
+					
+				</div>
+			</div>
+		</div>
+
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<div class="card-title">
+						<h4>유의사항</h4>
+						<hr>
+					</div>
+					<div style="border: 1;">
+						<p>가. 승인완료 된 과목에 한해 개설신청 가능</p>
+						<p>나. 개설신청시 선택 더블클릭</p>
+						<p>다. 신청 취소 가능</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<script>
+
+window.onload = function() {
+	getlolList();
+}
+
+function getlolList(){
+	
+	$.ajax({
+		  
+        method : "GET",
+        url: "/lol/selectMySuccessLecuture",
+        dataType : "json",
+        success: function(result){
+           console.log("승인 리스트 성공!");
+           console.log("결과확인:",result);
+           
+//            for(let i = 0; i< result.length; i++){
+//         	   console.log(result[i].LOL_CODE, result[i].DEP_NAME, result[i].LOL_NAME)
+//            }
+
+            $("#lecSuccessRegisterList").html(lecTemplate(result));
+            $("#lecSuccessMyOpenList").html(lecMyOpenTemplate(result));
+        },error: function(){
+           console.log("실패");
+        }
+        
+    })
+}
+
+//개강상태가 0인걸 가져와야해
+const lecTemplate = function(lolList){
+    let code = "";
+    
+	let cnt = 1;
+
+    if(lolList.length == 0){
+        code = "<tr><td colspan='5'>승인완료 목록이 없습니다.</td><tr>"
+    }else{
+	    for(let i = 0; i< lolList.length; i++){
+	    	if(lolList[i].LEC_STATE == 0){
+	        	code += `
+	        			<tr ondblclick="lecUpdate('\${lolList[i].LEC_CODE}')">
+	        				<th>\${cnt}</th> //수정해야함
+	        				<td>\${lolList[i].DEP_NAME}</td>
+	        				<td>\${lolList[i].LOL_CODE}</td>
+	        				<td>\${lolList[i].LOL_NAME}</td>
+	        				<td>\${lolList[i].MAJOR_CULTURAL}/\${lolList[i].CHOICE_REQUIRE}</td>
+	        			</tr>`  
+	    		cnt++;
+	    	}
+        }
+    	
+    }
+      
+    return code;  
+}
+
+// 개강 상태가 1인걸 가져와야해
+const lecMyOpenTemplate = lolList => {
+	console.log("일단 찍히는지 확인")
+	let code = "";
+	
+	let cnt = 1;
+	    if(lolList.length == 0){
+	        code = "<tr><td colspan='5'>승인완료 목록이 없습니다.</td><tr>"
+	    }else{
+		    for(let i = 0; i< lolList.length; i++){
+		    	if(lolList[i].LEC_STATE == 1){
+		    		code += `
+	        			<tr">
+	        				<th>\${cnt}</th> 
+	        				<td>\${lolList[i].DEP_NAME}</td>
+	        				<td>\${lolList[i].LEC_CODE}</td>
+	        				<td>\${lolList[i].LOL_NAME}</td>
+	        				<td>\${lolList[i].MAJOR_CULTURAL}/\${lolList[i].CHOICE_REQUIRE}</td>
+	        				<td><button type="button" class="btn btn-primary btn-sm" onclick="lecUpdateZero('\${lolList[i].LEC_CODE}')">취소</button></td>
+	        			</tr>
+	        			`;
+	        	 cnt++;
+		    	}
+		    }
+
+	    }
+	    
+	    return code;
+
+}
+
+function lecUpdate(lecCode){
+	console.log(lecCode);
+
+	let data = {
+		lec_code : lecCode
+	}
+	
+	$.ajax({
+		method : "post",
+		url : "/lol/professorlecUpdate",
+		data : JSON.stringify(data),
+		contentType : "application/json; charset=UTF-8",
+		dataType : "text",
+		beforeSend : function(xhr){
+ 		        xhr.setRequestHeader(header, token);
+ 		   },
+		success : function(result){
+			console.log("성공!", result);
+			alert("내강좌 등록 완료");
+			getlolList();
+		}, error : function(){
+			console.log("실패!");
+		}
+		
+	})
+	
+	
+}
+
+function lecUpdateZero(lecCode){
+	console.log(lecCode);
+	
+	let data = {
+			lec_code : lecCode
+	}
+	
+	$.ajax({
+		method : "post",
+		url : "/lol/professorlecUpdateZero",
+		data : JSON.stringify(data),
+		contentType : "application/json; charset=UTF-8",
+		dataType : "text",
+		beforeSend : function(xhr){
+ 		        xhr.setRequestHeader(header, token);
+ 		   },
+		success : function(result){
+			console.log("성공!", result);
+			alert("개설 취소되었습니다.");
+			getlolList();
+		}, error : function(){
+			console.log("실패!");
+		}
+		
+	})
+	
+}
+
+</script>

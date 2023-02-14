@@ -1,0 +1,10 @@
+package org.hdcd.mapper;
+
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface SeatMapper {
+
+	public String selectMemName(String smem_no);
+
+}

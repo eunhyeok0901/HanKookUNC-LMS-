@@ -1,0 +1,24 @@
+package org.hdcd.service.student.record;
+
+import java.util.List;
+
+import org.hdcd.mapper.SRecordApplyMapper;
+import org.hdcd.vo.RecordApplyVO;
+import org.springframework.stereotype.Service;
+
+@Service
+public class RecordApplyServiceImpl implements IRecordApplyService {
+
+	private SRecordApplyMapper srecordapplymapper;
+	
+	@Override
+	public int recordapply(RecordApplyVO recordVO) throws Exception {
+		return srecordapplymapper.recordapply(recordVO) ;
+	}
+
+	@Override
+	public List<RecordApplyVO> selectrecordapply(RecordApplyVO recordVO) throws Exception {
+		return srecordapplymapper.selectrecordList(recordVO);
+	}
+
+}

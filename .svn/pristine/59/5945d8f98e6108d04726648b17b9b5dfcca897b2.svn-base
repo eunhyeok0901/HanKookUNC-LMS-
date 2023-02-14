@@ -1,0 +1,23 @@
+package org.hdcd.service.common.mainPageInfo;
+
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import org.hdcd.mapper.MainPageInfoMapper;
+import org.hdcd.vo.MemberVO;
+import org.springframework.stereotype.Service;
+
+@Service
+public class MainPageServiceImpl implements MainPageService{
+
+	@Inject
+	MainPageInfoMapper mainPageInfoMapper; 
+	
+	@Override
+	public Map<String, Object> getMemberInfo(String sessionId) {
+		// TODO Auto-generated method stub
+		return mainPageInfoMapper.getMemberInfo(sessionId);
+	}
+
+}

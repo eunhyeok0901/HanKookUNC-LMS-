@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hdcd.mapper.CounselMapper">
+<!-- 학생파트 -->
+	<select id="counselApplyList" resultType="org.hdcd.vo.CounselApplyVO" parameterType="string">
+		SELECT * FROM COUNSEL_APPLY
+		 WHERE SMEM_NO = #{userId}
+	</select>
+
+	<select id="getCounselList" resultType="org.hdcd.vo.CounselVO">
+		 SELECT * FROM COUNSEL
+ 		  WHERE CNSL_STATE = 0
+	</select>
+	
+	<select id="counselNameList" resultType="org.hdcd.vo.MemberVO" parameterType="string">
+		SELECT A.MEM_NO, A.MEM_NAME
+		FROM MEMBER A, COUNSEL B 
+		WHERE A.MEM_NO=B.PMEM_NO 
+		  AND B.PMEM_NO = #{pmem_no}
+	</select>
+	
+	<insert id="apply" parameterType="org.hdcd.vo.CounselApplyVO">
+		INSERT INTO COUNSEL_APPLY(
+		    CNSLA_CODE, SMEM_NO, CNSL_CODE, CNSLA_DATE, CNSL_DATE, CNSLA_TIME, CNSLA_SUB, CNSLA_STATE, 
+		    CNSLA_TYPE, CNSLA_CONTENT, CNSLA_REJECT
+		)VALUES(
+		    SEQ_CNSLA_CODE.nextval, #{smem_no}, #{cnsl_code} , SYSDATE, #{cnsl_date}, #{cnsla_time}, #{cnsla_sub}, 0, #{cnsla_type}, #{cnsla_content}, null
+		) 
+	</insert>
+	
+	<select id="proffsorNameList" resultType="org.hdcd.vo.MemberVO" parameterType="string">
+		SELECT C.MEM_NAME
+		FROM COUNSEL_APPLY A, COUNSEL B, MEMBER C
+		WHERE A.CNSL_CODE=B.CNSL_CODE
+		  AND B.PMEM_NO=C.MEM_NO
+		  AND A.CNSL_CODE=#{cnsl_code}
+	</select>
+	
+	<update id="updateState" parameterType="string">
+		UPDATE COUNSEL
+		SET CNSL_STATE = 1
+		WHERE CNSL_CODE = #{cnsl_code}
+	</update>
+	
+<!-- 교수파트 -->
+	
+	<select id="professorCounsel" parameterType="string" resultType="org.hdcd.vo.CounselApplyVO">
+		
+	</select>
+	
+</mapper>

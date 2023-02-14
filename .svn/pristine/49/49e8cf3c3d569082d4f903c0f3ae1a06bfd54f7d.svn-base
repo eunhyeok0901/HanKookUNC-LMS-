@@ -1,0 +1,5 @@
+package org.hdcd.service.common.notice;
+
+public interface NoticeService {
+
+}

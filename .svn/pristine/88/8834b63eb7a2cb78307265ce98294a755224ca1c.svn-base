@@ -1,0 +1,130 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<h3>[관리자] 등록금 관리</h3>
+<blockquote>
+	<ul class="list-icons">
+		<li><i class="ti-angle-right"></i> (내가 참고하기 위한 메모)</li>
+		<li><i class="ti-angle-right"></i> 1학기 등록금 고지서는 1월 중, 2학기 등록금 고지서는 8월 중 오픈한다.</li>
+		<li><i class="ti-angle-right"></i> 1학기 등록금 납부기간은 1월~2월 사이, 2학기 등록금 납부기간은 8월~9월 사이로 한다.</li>
+		<li><i class="ti-angle-right"></i> 관리자는 등록 기간을 설정하고 등록금을 고지한다(재학생 전체 알림(웹소켓) [이메일 전송])</li>
+		<li><i class="ti-angle-right"></i> 등록금납부내역코드 구성: ENRL20220100001 (ENRL + 올해년도 + 학기(3~6월인 경우 01 /9~12월인 경우 02 + 순번 ) </li>
+	</ul>
+</blockquote>
+
+<div class="row">
+	<div class="col-lg-6 col-sm-12">
+		<div class="card gradient-4">
+			<div class="card-body">
+				<h3 class="card-title text-white" id="firstTuiTitle">년 학기</h3>
+				<div style="display: flex;">				
+					<div>
+						<div style="display: inline-block; justify-content:space-between;">
+							<h2 class="text-white" style="display: inline-block;">등록금 납부현황</h2>
+							<button type="button" class="btn mb-1 btn-flat btn-success" id="firstTuiBtn" disabled="disabled" onclick="">등록금 납부기간이 아닙니다</button>
+						</div>
+						<p class="text-white mb-0">납부인원 / 고지인원</p>
+					</div>
+				</div>
+				<h5 class="text-white mb-0">
+					11/105
+					<span class="float-right">85%</span>
+				</h5>
+				<div class="progress" style="height: 9px">
+					<div class="progress-bar bg-success wow  progress-"
+						style="width: 85%;" role="progressbar">
+						<span class="sr-only">85% Complete</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-6 col-sm-12">
+		<div class="card gradient-3">
+			<div class="card-body">
+				<h3 class="card-title text-white" id="secondTuiTitle">년 학기</h3>
+				<div style="display: flex;">				
+					<div>
+						<div style="display: inline-block; justify-content:space-between;">
+							<h2 class="text-white" style="display: inline-block;">등록금 납부현황</h2>
+							<button type="button" class="btn mb-1 btn-flat btn-danger" id="secondTuiBtn" disabled="disabled" onclick="">등록금 납부기간이 아닙니다</button>
+						</div>
+						<p class="text-white mb-0">납부인원 / 고지인원</p>
+					</div>
+				</div>
+				<h5 class="text-white mb-0">
+					0 / 0
+					<span class="float-right">0%</span>
+				</h5>
+				<div class="progress" style="height: 9px">
+					<div class="progress-bar bg-danger wow  progress-"
+						style="width: 0%;" role="progressbar">
+						<span class="sr-only">0% Complete</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+// 스프링 인증 토큰
+var header = '${_csrf.headerName}';
+var token = '${_csrf.token}';
+
+// 1학기/2학기 대제목
+const firstTuiTitle = document.querySelector("#firstTuiTitle");
+const secondTuiTitle = document.querySelector("#secondTuiTitle");
+
+// 1학기/2학기 등록금 납부기간 오픈 버튼
+const firstTuiBtn = document.querySelector("#firstTuiBtn");
+const secondTuiBtn = document.querySelector("#secondTuiBtn");
+
+window.onload = function(){
+	let today = new Date();
+	let year = today.getFullYear();
+	let month = today.getMonth() + 1;
+
+	firstTuiTitle.textContent = year + "년 1학기";
+	secondTuiTitle.textContent = year + "년 2학기";
+
+	openTuition(year, month);
+}
+
+// 1학기/2학기 등록금 납부 오픈 가능 여부를 판단하는 함수
+// 예를 들어 
+function openTuition(year, month){	
+	if(month == 1 || month == 2){       // 현재 1,2월인 경우
+		checkTuiOpen(year, 1);              // 1학기 등록금 납부 데이터 생성 가능 여부를 판단한다.
+	}else if(month == 8 || month == 9){ // 현재 8,9월인 경우
+		checkTuiOpen(year, 2);              // 2학기 등록금 납부 데이터 생성 가능 여부를 판단한다.
+	}
+}
+
+function checkTuiOpen(year, semester){
+	const enrl_year = year; // 2022 (4자리 년도)
+	const enrl_semester = semester; // 1 혹은 2 (1학기/2학기)
+	
+	let xhr = new XMLHttpRequest();
+	let url = "/tuition/manage/check/" + enrl_year + "/" + enrl_semester;
+	xhr.open("get", url, true);
+	xhr.setRequestHeader(header, token);
+	xhr.onreadystatechange = function(){
+		if(xhr.readyState == 4 && xhr.status == 200){
+			let cnt = xhr.responseText;
+	
+			if(cnt==0 && semester==1){
+				firstTuiBtn.disabled = false;
+				firstTuiBtn.textContent = "1학기 등록금 납부 관리를 시작하세요";
+			}
+			if(cnt==0 && semester==2){
+				secondTuiBtn.disabled = false;
+				secondTuiBtn.textContent = "2학기 등록금 납부 관리를 시작하세요";
+			}
+		}
+	}
+	xhr.send();
+}
+
+
+
+</script>

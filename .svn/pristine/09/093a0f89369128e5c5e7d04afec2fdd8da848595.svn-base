@@ -1,0 +1,11 @@
+package org.hdcd.service.student.scholar;
+
+import java.util.List;
+
+import org.hdcd.vo.ScholarListVO;
+
+public interface IScholarService {
+
+	List<ScholarListVO> getscholarList();
+
+}

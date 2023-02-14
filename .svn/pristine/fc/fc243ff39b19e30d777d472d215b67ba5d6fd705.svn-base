@@ -1,0 +1,14 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>※ 성적조회 2023.02.10.(10시부터) ~ 2023.2.15.(17시까지) <br>※ 강의평가 :  2023.02.10.(10시부터) ~ 2023.2.15.(17시까지) 성적조회는 강의평가 실시 후 가능합니다.</h2>
+	
+	<h1><a href="/evaluation/home">강의평가하러가기</a></h1>
+</body>
+</html>

@@ -1,0 +1,151 @@
+package org.hdcd.service.student.certificate;
+
+import java.io.FileOutputStream;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import org.hdcd.mapper.CertificateMapper;
+import org.hdcd.vo.CertificateHisVO;
+import org.hdcd.vo.CertificateVO;
+import org.springframework.stereotype.Service;
+
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+public class CertificateServiceImpl implements CertificateService{
+	
+	@Inject
+	CertificateMapper certificateMapper;
+
+	@Override
+	public List<CertificateVO> getCertificateList() {
+		// TODO Auto-generated method stub
+		return certificateMapper.getCertificateList();
+	}
+
+	@Override
+	public Map<String, Object> memberInfo(String userSession) {
+		// TODO Auto-generated method stub
+		return certificateMapper.memberInfo(userSession);
+	}
+
+	@Override
+	public String certificateApply(CertificateHisVO certificateHisVO, HttpServletRequest req) {
+//		certificateMapper.certificateApply(certificateHisVO);
+		
+//		String crtfh_code = certificateHisVO.getCrtfh_code();
+//		log.info("==================== insert후 Certificate PK ====================: {}", crtfh_code);
+		
+//		CertificateHisVO selectOnecertificateHisVO = certificateMapper.getCertificateHis(crtfh_code);
+		
+		log.info("인서트 후 가져온 certificateHisVO : {}", selectOnecertificateHisVO);
+		
+		createPdf(selectOnecertificateHisVO, req);
+		return "OK";
+	}
+
+	private void createPdf(CertificateHisVO selectOnecertificateHisVO, HttpServletRequest req) {
+		String result = ""; // 초기값이 null이 들어가면 오류가 발생될수 있기 때문에 공백을 지정
+		
+		 String path = req.getSession().getServletContext().getRealPath("resources/pdf/sample.pdf");
+		 System.out.println("real Path : " + path);
+		 
+	        try {
+	            Document document = new Document(); // pdf문서를 처리하는 객체
+	            Rectangle one = new Rectangle(850,320);
+	            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
+	            // pdf파일의 저장경로를 d드라이브의 sample.pdf로 한다는 뜻
+	            
+	            // pdf크기를 먼저 설정한후 open합니다~
+	            document.setPageSize(one);
+	            document.setMargins(20, 20, 20, 20);
+	            document.open(); // 웹페이지에 접근하는 객체를 연다
+	            
+	            // pdf가 기본적으로 한글처리가 안되기 때문에 한글폰트 처리를 따로 해주어야 한다.
+	            // createFont메소드에 사용할 폰트의 경로 (malgun.ttf)파일의 경로를 지정해준다.
+	            // 만약에 이 경로에 없을 경우엔 java파일로 만들어서 집어넣어야 한다.
+	            BaseFont baseFont = BaseFont.createFont("c:/windows/fonts/malgun.ttf", BaseFont.IDENTITY_H,
+	                    BaseFont.EMBEDDED);
+	            Font font;
+	            font = new Font(baseFont, 12); // 폰트의 사이즈를 12픽셀로 한다.
+	            
+	            PdfPTable table = new PdfPTable(1); // 3개의 셀을 가진 테이블 객체를 생성 (pdf파일에 나타날 테이블)
+	         // 타이틀 객체를 생성 (타이틀의 이름을 등록금고지서로 하고 위에 있는 font를 사용)
+	            String title = "";
+	            if(selectOnecertificateHisVO.getCrtf_code().equals("5")) {
+	            	title = "재 학 증 명 서";
+	            }else if(selectOnecertificateHisVO.getCrtf_code().equals("6")){
+	            	title = "졸 업 증 명 서";
+	            }
+	            Chunk chunk = new Chunk(title, font); 
+	            Paragraph ph = new Paragraph(chunk);
+	            ph.setAlignment(Element.ALIGN_LEFT);
+	            document.add(ph); // 문단을 만들어서 가운데 정렬 (타이틀의 이름을 가운데 정렬한다는 뜻)
+	            document.add(Chunk.NEWLINE); // 줄바꿈 (왜냐하면 타이틀에서 두줄을 내린후에 셀(테이블)이 나오기 때문)
+	            
+	            String crtfh_code = selectOnecertificateHisVO.getCrtfh_code();
+	            
+	            PdfPCell title1 = new PdfPCell(new Phrase("발급번호 : " + crtfh_code, font)); // 셀의 이름과 폰트를 지정해서 셀을 생성한다.
+	            title1.setHorizontalAlignment(Element.ALIGN_LEFT); // 셀의 정렬방식을 지정한다. (왼쪽정렬)
+	 
+	            PdfPCell title2 = new PdfPCell(new Phrase("성명", font));
+	            title2.setHorizontalAlignment(Element.ALIGN_CENTER);
+	 
+	            PdfPCell title3 = new PdfPCell(new Phrase("금액", font));
+	            title3.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+	            title1.setBackgroundColor(BaseColor.GRAY);
+	            title2.setBackgroundColor(BaseColor.GRAY);
+	            title3.setBackgroundColor(BaseColor.GRAY);
+	            
+	            
+	            table.addCell(title1); // 그리고 테이블에 위에서 생성시킨 셀을 넣는다.
+	            table.addCell(title2);
+	            table.addCell(title3);
+	            
+	            PdfPTable table2 = new PdfPTable(4);
+	            
+//	             PdfPCell cellProductName = new PdfPCell (new Phrase(String.valueOf(student.getStdNo()), font));
+//	             PdfPCell cellPrice = new PdfPCell (new Phrase(student.getStdName(), font));
+//	             PdfPCell cellAmount = new PdfPCell (new Phrase(String.valueOf(student.getTotal())+ "원", font));
+//	             cellAmount.setHorizontalAlignment(Element.ALIGN_RIGHT);
+//	             PdfPCell cellAmount2 = new PdfPCell (new Phrase(String.valueOf(student.getTotal())+ "원", font));
+	             
+//	             table2.addCell(cellProductName);
+//	             table2.addCell(cellPrice);
+//	             table2.addCell(cellAmount);
+//	             table2.addCell(cellAmount2);
+
+	            document.add(table); // 웹접근 객체에 table를 저장한다.
+	            document.add(table2); // 웹접근 객체에 table를 저장한다.
+	            
+	            document.close(); // 저장이 끝났으면 document객체를 닫는다.
+	            result = "success";
+	 
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            result = "fail";
+	        }
+//	        return result;
+		
+	}
+
+	
+}

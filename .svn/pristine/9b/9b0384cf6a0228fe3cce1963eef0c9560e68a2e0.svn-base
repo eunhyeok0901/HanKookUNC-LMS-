@@ -1,0 +1,27 @@
+package org.hdcd.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.hdcd.vo.EnrollFeeVO;
+
+import android.R.integer;
+
+@Mapper
+public interface EnrollFeeMapper {
+
+	// 관리자 
+	int checkTuiOpen(Map<String, String> map);
+
+	List<Map<String, Object>> getEnrolledStudents(Map<String, String> nMap);
+
+	List<Map<String, Object>> getScholarUnpaidInfo(String smem_no);
+
+	int registerEnrollfee(EnrollFeeVO enrollFeeVO);
+
+	List<EnrollFeeVO> getAnnouncedTui(Map<String, String> map);
+	
+	int checkUnannouncedTui(EnrollFeeVO enrollFeeVO);
+	
+}

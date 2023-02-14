@@ -1,0 +1,302 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+	<!-- Ajax CSRF 404error발생 방지 위한 토큰 추가 -->
+    <meta name="_csrf" content="${_csrf.token}">
+   	<meta name="_csrf_header" content="${_csrf.headerName}">
+    <title>index</title>
+    <!-- toastr -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/bootstrap/plugins/toastr/css/toastr.min.css">
+    <!-- 파비콘 -->
+    <link rel="icon" type="image/png" sizes="16x16" href="${pageContext.request.contextPath }/resources/bootstrap/images/favicon.png">
+    <!-- 피그노즈캘린더 -->
+	<link href="${pageContext.request.contextPath }/resources/bootstrap/plugins/pg-calendar/css/pignose.calendar.min.css" rel="stylesheet">
+    <!-- 차트 -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/bootstrap/plugins/chartist/css/chartist.min.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/bootstrap/plugins/chartist-plugin-tooltips/css/chartist-plugin-tooltip.css">
+    <!-- 커스텀 스타일시트 -->
+    <link href="${pageContext.request.contextPath }/resources/bootstrap/css/style.css" rel="stylesheet">
+    <!-- 데이터 테이블 css -->
+	<link href="${pageContext.request.contextPath }/resources/bootstrap/plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
+	<!-- 데이트피커 -->
+	<link href="${pageContext.request.contextPath }/resources/bootstrap/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath }/resources/bootstrap/plugins/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath }/resources/bootstrap/plugins/bootstrap4-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath }/resources/bootstrap/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath }/resources/bootstrap/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath }/resources/bootstrap/plugins/clockpicker/dist/jquery-clockpicker.min.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath }/resources/bootstrap/plugins/jquery-asColorPicker/css/asColorPicker.min.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath }/resources/bootstrap/plugins/jquery-asColorPicker-master/css/asColorPicker.css" rel="stylesheet">
+	<!-- 썸머노트 -->
+	<link href="${pageContext.request.contextPath }/resources/bootstrap/plugins/summernote/dist/summernote.css" rel="stylesheet">
+    <!-- 아이콘 && 폰트 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- 개인CSS -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/customcss.css">
+    <!-- 풀캘린더 -->
+    <link rel="stylesheet" href="${pageCOntext.request.contextPath }/resources/bootstrap/plugins/fullcalendar/css/fullcalendar.min.css">
+</head>
+<body>
+
+	<tiles:insertAttribute name="preloader"/>
+    <div id="main-wrapper" class="show menu-toggle">
+      
+      <tiles:insertAttribute name="header"/>
+      <tiles:insertAttribute name="sidebar"/>
+      
+      <div class="content-body" style="display: flex; flex-direction: row; flex-flow: nowrap;">
+         <div class="container-fluid" style="margin-right: 85px; margin-left: 10px;">
+            <tiles:insertAttribute name="content"/>
+         </div>
+            <tiles:insertAttribute name="quickSidebar"/>
+      </div>
+      
+      <tiles:insertAttribute name="footer"/>
+      
+    </div>
+    <!-- 풀캘린더 -->
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/fullcalendar/js/index.global.js"></script>
+	<!-- 제이쿼리 -->
+	<script src="${pageContext.request.contextPath }/resources/js/jquery-3.6.3.min.js"></script>
+<%-- 	<script src="${pageContext.request.contextPath }/resources/js/Ajax.js"></script> --%>
+	<!-- 폰트어썸 -->
+	<script src="https://kit.fontawesome.com/957fb022c5.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/common/common.min.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/js/custom.min.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/js/settings.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/js/gleek.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/js/styleSwitcher.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/moment/moment.js"></script>
+    <!-- 8개의 차트 유형을 지원하는 Chartjs -->
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/chart.js/Chart.bundle.min.js"></script>
+    <!-- 원형 차트를 그리는 Circle progress -->
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/circle-progress/circle-progress.min.js"></script>
+    <!-- 데이터맵 -->
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/d3v3/index.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/topojson/topojson.min.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/datamaps/datamaps.world.min.js"></script>
+    <!-- 모리스 차트 Morrisjs -->
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/raphael/raphael.min.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/morris/morris.min.js"></script>
+    <!-- 피그노즈 캘린더 js -->
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/moment/moment.min.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/pg-calendar/js/pignose.calendar.min.js"></script>
+    <!-- 차트 ChartistJS -->
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/chartist/js/chartist.min.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/chartist-plugin-tooltips/js/chartist-plugin-tooltip.min.js"></script>
+	<!-- 데이터 테이블 js -->
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/js/dashboard/dashboard-1.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/tables/js/jquery.dataTables.min.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
+	<!-- 데이트피커 -->
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/bootstrap4-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/js/plugins-init/form-pickers-init.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/clockpicker/dist/jquery-clockpicker.min.js" ></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/jquery-asColorPicker/js/jquery-asColorPicker.min.js" ></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/jquery-asColorPicker-master/libs/jquery-asColor.js" ></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/jquery-asColorPicker-master/libs/jquery-asGradient.js" ></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/jquery-asColorPicker-master/dist/jquery-asColorPicker.min.js" ></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/js/plugins-init/bs-daterange-picker-init.js" ></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/js/plugins-init/bs-date-picker-init.js" ></script>
+	<!-- 썸머노트 -->
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/summernote/dist/summernote.min.js" ></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/summernote/dist/summernote-init.js" ></script>
+	<!-- aggrid -->
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/toastr/js/toastr.min.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/toastr/js/toastr.init.js"></script>
+<script>
+// 헤더 색상 세팅
+(function($) {
+    "use strict"
+
+    new quixSettings({
+        version: "light", //2 options "light" and "dark"
+        layout: "vertical", //2 options, "vertical" and "horizontal"
+
+        <%
+    	String userId = (String)request.getSession().getAttribute("userId");
+    	int userIdLength = userId.length(); 
+    	if(userId.equals("20170003")){ // 관리자인 경우
+	    
+    		
+	    %>
+	        navheaderBg: "color_8", 
+	        headerBg: "color_8", 
+		<%	
+	    	}else if(userIdLength == 8){ // 학생인 경우
+	    %>
+		    navheaderBg: "color_9", 
+	        headerBg: "color_9", 
+	    <%		
+	    	}else if(userIdLength == 6){ // 교수인 경우
+	    %>
+		    navheaderBg: "color_10",
+	        headerBg: "color_10",
+	    <%		
+	    	}
+	    %>        
+
+        sidebarStyle: "vertical", //defines how sidebar should look like, options are: "full", "compact", "mini" and "overlay". If layout is "horizontal", sidebarStyle won't take "overlay" argument anymore, this will turn into "full" automatically!
+        sidebarBg: "color_1", //have 10 options, "color_1" to "color_10"
+        sidebarPosition: "static", //have two options, "static" and "fixed"
+        headerPosition: "static", //have two options, "static" and "fixed"
+        containerLayout: "wide",  //"boxed" and  "wide". If layout "vertical" and containerLayout "boxed", sidebarStyle will automatically turn into "overlay".
+        direction: "ltr" //"ltr" = Left to Right; "rtl" = Right to Left
+    });
+
+})(jQuery);
+
+
+// window.addEventListener("click", function(e){
+// 	var div = document.createElement("div");
+// 	div.setAttribute("class","click-wave")
+// 	div.style.top = e.pageY+ "px";
+// 	div.style.left = e.pageX + "px";
+// 	body.append(div);
+	
+// 	setTimeout(function(){
+// 		div.remove();
+// 	},350)
+// })
+
+// 웹 소켓
+var wsUri = "ws://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/websocket/main";
+// var wsUri = "wss://${pageContext.request.serverName}${pageContext.request.contextPath}/websocket/main";
+
+//웹 소켓
+// 소켓 객체 생성
+var websocketMain = new WebSocket(wsUri);
+
+console.log("mainOn")
+// window.onload = function(){
+connect();
+// }
+
+
+window.onbeforeunload = function(){
+	onClose();
+}
+
+function connect(){
+	websocketMain.onopen = onOpen;
+	websocketMain.onmessage = onMessage;
+	websocketMain.onclose = onClose;
+}
+
+function onOpen(){
+	let jsonObject = {
+         state : "0",
+         userId : "${userId}",
+         msg : "hihi"
+	}
+	
+	websocketMain.send(JSON.stringify(jsonObject));
+}
+function sendMessage(content){
+	console.log(content)
+	websocketMain.send(content);
+}
+
+// toastr.success('<h6 class="notification-heading">한상훈님이  친구요청하셨습니다.</h6>', '친구요청');
+const alramBox = document.querySelector("#alramBox");
+const alramCount = document.querySelector("#alramCount");
+
+
+function onMessage(msg){
+	let data = msg.data;
+	let jsonData = JSON.parse(data);
+
+	console.log(jsonData)
+	
+	if(jsonData.state == "0"){
+		console.log(jsonData.userId+"님이 입장하셨습니다.")
+		return;
+	}
+	
+	if(jsonData.state == "1"){
+		
+		// 친구요청
+		if(jsonData.purpose=="0"){
+			
+			let text = createRequest(jsonData);
+			alramBox.innerHTML += text;
+		}
+		
+		// 화상회의 URL전송
+		if(jsonData.purpose=="1"){
+		   toastr.success("ZOOM 비대면 상담 링크가 도착했습니다 !");
+		   let text = "<a href='" +jsonData.msg+ "'>ZOOM 비대면 상담 링크 바로가기</a>";
+		   
+		   alramBox.innerHTML += text;
+		   
+		}
+				
+	}
+	
+	if(jsonData.state == "2"){
+		console.log(jsonData.userId+"님이 퇴장하셨습니다..")
+		return;
+	}
+	
+	
+}
+
+function onClose(){
+	let jsonObject = {
+			state:"2",
+	         userId:"${userId}",
+	         msg : "byebye"
+	}
+	
+	websocketMain.send(JSON.stringify(jsonObject));
+}
+
+function createRequest(jsonData){
+	// 알림띄우기
+	toastr.success('<h6 class="notification-heading">'+jsonData.sender+'님이  친구요청하셨습니다.</h6>', '친구요청');
+	
+	// 카운트 올리기
+	alramCount.innerText = alramCount.innerText*(1) + 1;
+	
+	let tmpJson = jsonData;
+	jsonData.SMEM_NO = tmpJson.sender;
+	delete jsonData.sender;
+	let jsonArray = [];
+	jsonArray.push(jsonData);
+
+	if(selectListBox.value=="request"){
+		text = createFriendRequest(jsonArray);
+		if(friendWait.innerHTML == "친구요청 목록이 없습니다."){
+			friendWait.innerHTML = text;
+		}else{
+			friendWait.innerHTML += text;
+		}
+	}
+	
+	// div박스 만들기
+	text = '<li><a href="javascript:void()"><span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>';
+	text+= '<div class="notification-content">';
+	text+= '<h6 class="notification-heading">'+jsonData.SMEM_NO+'님이  친구요청하셨습니다.</h6>';
+	text+= '</div>';
+	text+= '</a></li>';
+	
+	return text;
+}
+
+</script>
+   
+</body>
+</html>

@@ -1,0 +1,19 @@
+package org.hdcd.controller.manager.scholar_manage;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+@RequestMapping("/scholarManage")
+public class ScholarshipManageController {
+
+	@GetMapping("/list")
+	public String scholarManagementList() {
+		log.info("▶manger scholarManagementList 실행");
+		return "manager/scholarManagementList";
+	}
+}

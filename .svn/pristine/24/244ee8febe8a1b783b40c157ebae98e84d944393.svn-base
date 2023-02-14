@@ -1,0 +1,190 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<h1 class="text-center">시간표</h1>
+<div class="container-fluid">
+	<div class="container">
+		<div class="col-12">
+			<label class="custom-font-dark" for="semester">학기</label>
+			<select id="semester">
+				<option>1학기</option>
+				<option>2학기</option>
+				<option>3학기</option>
+				<option>4학기</option>
+			</select>
+		</div>
+		<table border="1" class="custom-table" id="timeTable" >
+			<thead style="height:30px;" class="text-center">
+				<tr>
+					<th style="width:10%;">시간/요일</th>
+					<th>월</th>
+					<th>화</th>
+					<th>수</th>
+					<th>목</th>
+					<th>금</th>
+				</tr>
+			</thead>
+			<tbody class="text-center custom-font-dark" id="timeTableList">
+				<tr>
+					<td>09:00</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>10:00</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>11:00</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>12:00</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>13:00</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>14:00</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>15:00</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>16:00</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>17:00</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>18:00</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<script>
+var timeTable = Array.from({length:10},() =>  Array(5).fill(0))
+var color = ["#7ab2fa","#bd80e6","#80e6d7","#a1f290","#f2cd90","#abcff9","#abf9ab","#dbefbe"];
+var colorCount=0;
+
+window.onload = function(){
+	
+    var header = $("meta[name='_csrf_header']").attr('content');
+    var token = $("meta[name='_csrf']").attr('content');
+	console.log(timeTable)
+	
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", "/schedule/showList", true);
+	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	xhr.onreadystatechange  = () => {
+		if(xhr.readyState == 4 && xhr.status == 200){
+			console.log(xhr.response);
+			var jsonObject = JSON.parse(xhr.response)
+			jsonObject.forEach((data, i) => {
+				timeTableInsert(data);
+				colorCount++;
+			})
+			
+			console.log(timeTable)
+			
+		}
+	};
+	xhr.setRequestHeader(header, token);
+	
+	var test = "sdfdsf";
+	xhr.send(test);
+}
+
+
+
+
+function timeTableInsert(data) {
+	   
+    var timeTableList = document.querySelector("#timeTableList");
+    var dayArray = ["월", "화", "수", "목", "금"];
+    var timeArray = ['9','10','11','12','13','14','15','16','17','18'];
+
+//     var color = getRandomColor();
+
+    if(data.ST_DAY1 != null){
+          var dayPosition = dayArray.indexOf(data.ST_DAY1) + 1;
+          var timeStart = timeArray.indexOf(data.ST_STARTTIME1);
+          var timeEnd = timeArray.indexOf(data.ST_ENDTIME1);
+          
+          for(let i=timeStart; i<=timeEnd; i++){
+            timeTableList.children[i].children[dayPosition].innerHTML = data.LOL_NAME +"<br>-"+ data.LEC_CODE+"-";
+            timeTableList.children[i].children[dayPosition].style.backgroundColor = color[colorCount];
+            timeTable[i][dayPosition-1] = 1;
+          }
+    }
+    
+//     color = getRandomColor();
+    if(data.ST_DAY2 != null){
+          var dayPosition = dayArray.indexOf(data.ST_DAY2) + 1;
+          var timeStart = timeArray.indexOf(data.ST_STARTTIME2);
+          var timeEnd = timeArray.indexOf(data.ST_ENDTIME2);
+          console.log(data.LOL_NAME)
+          
+          for(let i=timeStart; i<=timeEnd; i++){
+        	  console.log(timeTableList.children[1].children)
+        	  timeTableList.children[i].children[dayPosition].innerHTML = data.LOL_NAME +"<br>-"+ data.LEC_CODE+"-";
+            timeTableList.children[i].children[dayPosition].style.backgroundColor = color[colorCount];
+            timeTable[i][dayPosition-1] = 1;
+          }
+    }
+}
+
+
+
+
+
+
+
+
+</script>

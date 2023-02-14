@@ -1,0 +1,151 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<style>
+
+.custom-div-radius{
+	border-radius : 10px;
+}
+
+.bg-gray{
+	background-color : #d8e3f2;
+}
+
+.custom-font-dark {
+   color : #0a3875;
+   font-weight : bold;
+}
+
+.table-spacing {
+	border-collapse: separate;
+	border-spacing: 0 10px;
+}
+
+
+</style>
+<body>
+	<div class="container-fluid bg-white p-5 custom-div-radius">
+		<div class="container-sm" style="height:850px;">
+			<h2>전체성적조회</h2>
+			<div class="col-sm-12 bg-gray mb-5 p-5 custom-div-radius">
+				<div class="row">
+					<div class="col-3">
+						<label for="year"><i class="fa-sharp fa-solid fa-circle-down mr-2"></i><span class="custom-font-dark">년도</span></label><br>
+						<input class="form-control" type="text" id="year" value="2022">
+					</div>
+					<div class="col-3">
+						<label for="semester"><i class="fa-sharp fa-solid fa-circle-down mr-2"></i><span class="custom-font-dark">학기</span></label><br>
+						<input class="form-control" type="text" id="semester" value="1학기">
+					</div>
+					<div class="col-6">
+						<label class="custom-font-dark" for="allGrade">전체</label><br>
+						<input type="checkBox" id="allGrade" value="all">
+					</div>
+				</div>
+			</div>
+			
+			<h2>전체성적리스트</h2>
+			<div class="col-sm-12 bg-gray p-5 custom-div-radius">
+				<div class="row">
+					<div class="col-12">
+						<table class="table table-md table-spacing" >
+							<thead>
+								<tr class="custom-font-dark">
+									<th>년도</th>
+									<th>학기</th>
+									<th>학기종류</th>
+									<th>과목</th>
+									<th>이수구분</th>
+									<th>학점</th>
+									<th>등급</th>
+									<th>평점</th>
+									<th>취득여부</th>
+									<th>학점포기</th>
+									<th>재수강</th>
+								</tr>
+							</thead>
+							<tbody id="myLecGrade">
+								<tr class="custom-font-dark bg-white">
+									<th>년도</th>
+									<th>학기</th>
+									<th>학기종류</th>
+									<th>과목</th>
+									<th>이수구분</th>
+									<th>학점</th>
+									<th>등급</th>
+									<th>평점</th>
+									<th>취득여부</th>
+									<th>학점포기</th>
+									<th>재수강</th>
+								</tr>
+							</tbody>
+						</table>			
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+
+
+
+window.onload = function(){
+	
+	var myLecGrade = document.querySelector("#myLecGrade");
+	
+	$.ajax({
+		url:"/student/myGradeList",
+		type:"get",
+		success:function(res){
+			console.log(res)
+			
+			text = '';
+			res.forEach((data,i)=>{
+				text += '<tr class="bg-white custom-font-dark">';
+				text += '<td>'+data.lg_year+'</td>';
+				text += '<td>'+data.lg_semester+'</td>';
+				text += '<td>정규</td>';
+				text += '<td>'+data.lg_name+'</td>';
+				text += '<td>'+data.lg_area+'</td>';
+				text += '<td>'+data.lg_acq_credit+'</td>';
+				text += '<td>'+data.lg_grade+'</td>';
+				text += '<td>'+data.lg_rating+'</td>';
+				text += '<td>취득</td>';
+				if(data.lg_giveup == 0){
+					text += '<td>X</td>';
+				}else{
+					text += '<td>O</td>';
+				}
+				text += '<td>X</td>'; 						// 재수강여부
+				text += '</tr>';
+			})
+			
+			myLecGrade.innerHTML += text;
+			
+		},
+		error:function(xhr){
+			console.log(xhr.status)
+			text = "";
+			text += '<tr>';
+			text += '<td colspan="11" class="text-center"> 데이터가 없습니다.~~</td>';
+			text += '</tr>';
+			myLecGrade.innerHTML = text;
+		}
+		
+	})
+	
+	
+	
+}
+
+
+</script>
+
+
+</html>

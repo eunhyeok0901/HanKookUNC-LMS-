@@ -1,0 +1,19 @@
+package org.hdcd.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import org.hdcd.vo.BookVO;
+import org.hdcd.vo.CounselApplyVO;
+
+public interface MainPageInfoMapper {
+
+	Map<String, Object> getMemberInfo(String sessionId);
+
+	Map<String, Object> getBookRental(String userId);
+
+	List<BookVO> getBookList();
+
+	List<CounselApplyVO> mainPageCounselapplyList(String userId);
+
+}

@@ -1,0 +1,19 @@
+package org.hdcd.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.hdcd.vo.VolunteerOutVO;
+
+
+public interface SVolunteerMapper {
+
+	public List<VolunteerOutVO> selectOutList(String id);
+
+	public int selectMyTime(String id);
+
+	public int insertOutVol(VolunteerOutVO vo);
+
+	public void deleteOutRegister(String volo_code);
+
+}

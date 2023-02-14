@@ -1,0 +1,17 @@
+package org.hdcd.vo;
+
+import lombok.Data;
+
+@Data
+public class LecHistoryVO {
+	private String lh_code;
+	private int lh_semester;
+	private int lh_year;
+	private String lh_lecname;
+	private String lh_professor;
+	private int lh_credit;
+	private String lh_grade;
+	private int lh_retake_lec;
+	private String lol_code;
+	private int lh_acquire;
+}

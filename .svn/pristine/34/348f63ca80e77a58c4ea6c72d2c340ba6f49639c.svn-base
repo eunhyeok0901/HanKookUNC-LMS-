@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hdcd.mapper.NoticeMapper">
+
+
+	<select id = "selectAllList" resultType = "NoticeVO">
+		select * from notice order by 5
+	</select>
+	
+	 <insert id = "insertNotice" parameterType = "NoticeVO" useGeneratedKeys="true">
+		insert into notice(notice_no, mmem_no, notice_title, notice_content, notice_date, notice_count) 
+		values(seq_notice_no.nextval, #{mmem_no}, #{notice_title}, #{notice_content}, sysdate, 0)
+		<selectKey keyProperty="notice_no" keyColumn="notice_no" resultType="String" order="AFTER">
+			select seq_notice_no.currval from dual
+		</selectKey>
+	</insert>
+
+	<insert id="insertFiles" parameterType="NoticeFileVO" >
+		insert into notice_file values (seq_ntcfilecode.nextval, #{file_name},#{file_path},#{notice_no}, #{file_originnm},#{file_size},#{file_type})
+	</insert>
+
+	<delete id="modeifyNotice" parameterType = "String">
+	delete from notice where notice_no = #{notice_no}
+	
+	</delete>
+
+	
+</mapper>

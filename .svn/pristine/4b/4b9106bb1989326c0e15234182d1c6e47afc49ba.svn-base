@@ -1,0 +1,121 @@
+package org.hdcd.service.common.mainPageInfo;
+
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import org.hdcd.mapper.MainPageInfoMapper;
+import org.hdcd.vo.BookVO;
+import org.hdcd.vo.CounselApplyVO;
+import org.hdcd.vo.FoodCalendarVO;
+import org.hdcd.vo.MemberVO;
+import org.hdcd.vo.StudentVO;
+import org.springframework.stereotype.Service;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+public class MainPageServiceImpl implements MainPageService{
+
+	@Inject
+	MainPageInfoMapper mainPageInfoMapper; 
+	
+	@Override
+	public Map<String, Object> getBookRental(String userId) {
+		return mainPageInfoMapper.getBookRental(userId);
+	}
+
+	@Override
+	public List<BookVO> getBookList() {
+		return mainPageInfoMapper.getBookList();
+	}
+
+	@Override
+	public List<CounselApplyVO> mainPageCounselapplyList(String userId) {
+		
+		if(userId.length() == 6) {
+			List<CounselApplyVO> professorMainPageCounselapplyList = mainPageInfoMapper.professorMainPageCounselapplyList(userId);
+			return professorMainPageCounselapplyList;
+		}else {
+			List<CounselApplyVO> mainPageCounselapplyList = mainPageInfoMapper.mainPageCounselapplyList(userId);
+			return mainPageCounselapplyList;
+		}
+		
+	}
+	
+   //메인페이지 식단표
+   @Override
+   public List<FoodCalendarVO> getAllFoodList() {
+      return mainPageInfoMapper.getAllFoodList();
+   }
+
+   // [학생] 메인 페이지 정보: 사진, 이름, 학과, 단과대학, 학적상태, 이수학점, 교내봉사시간, 교외봉사시간, 자격증승인이력, 도서반납일, 커뮤니티 내글, 최근 완료 상담
+	@Override
+	public Map<String, String> getMainStudentInfo(String userId) {
+		MemberVO memberVO = mainPageInfoMapper.getName(userId);
+		StudentVO student = mainPageInfoMapper.getStdentInfo(userId);
+		String department = student.getStu_dep();
+		String college = mainPageInfoMapper.getCollege(department);
+		String stuRecord = mainPageInfoMapper.getStuRecord(userId);
+		String lhCredit = mainPageInfoMapper.getLhCredit(userId);
+		String insideVolh = mainPageInfoMapper.getInsideVolh(userId);
+		String suburbVolh = mainPageInfoMapper.getSuburbVolh(userId);
+		String license = mainPageInfoMapper.getLicenseEnroll(userId);
+		String bookRentEnd = mainPageInfoMapper.getBookRentEnd(userId);
+		String myCommunity = mainPageInfoMapper.getMyCommunity(userId);
+		String cnslDate = mainPageInfoMapper.getCnslDate(userId);
+		
+		Map<String, String> info = new HashMap<String, String>();
+		info.put("photo", memberVO.getMem_photopath());
+		info.put("name", memberVO.getMem_name());
+		info.put("portlet", memberVO.getMem_portlet());
+		info.put("department", department);
+		info.put("college", college);
+		info.put("s1", stuRecord);
+		info.put("s2", lhCredit);
+		info.put("s3", insideVolh);
+		info.put("s4", suburbVolh);
+		info.put("s5", license);
+		info.put("s6", bookRentEnd);
+		info.put("s7", myCommunity);
+		info.put("s8", cnslDate);
+		
+		return info;
+	}
+
+	// [관리자] 메인 페이지 정보: 학적변동 신청 / 개설과목 신청 / 등록금 / 등록금 납부율 / 자격증 신청 / 봉사 신청 / 장학금 신청 / 커뮤니티 신고 
+	@Override
+	public Map<String, String> getMainAdminInfo(String userId) {
+		Calendar cal = Calendar.getInstance();
+		int month = cal.get(Calendar.MONTH) + 1;
+		int semester = (month < 7) ? 1 : 2;
+
+		String record = mainPageInfoMapper.getRecordApply();
+		String lec= mainPageInfoMapper.getLecOpen();		
+		String announced = mainPageInfoMapper.getAnnouncedFee(semester);
+		String paid = mainPageInfoMapper.getPaidFee(semester);
+		
+		String license = mainPageInfoMapper.getLicense();
+		String volunteer = mainPageInfoMapper.getVolunteer();
+		String scholar = mainPageInfoMapper.getScholar();
+		String cReport = mainPageInfoMapper.getCReport();
+		
+		Map<String, String> info = new HashMap<String, String>();
+		info.put("a1", record);
+		info.put("a2", lec);
+		info.put("a3", announced);
+		info.put("a4", paid);
+		info.put("a5", license);
+		info.put("a6", volunteer);
+		info.put("a7", scholar);
+		info.put("a8", cReport);
+		
+		log.debug("관리자의 정보 " + info.toString());
+		return info;
+	}
+
+}

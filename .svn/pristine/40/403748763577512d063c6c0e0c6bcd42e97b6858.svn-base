@@ -1,0 +1,113 @@
+package org.hdcd.controller.manager.volunteer_manage;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import org.hdcd.service.manager.volunteer.MVolunteerManageService;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+@RequestMapping("/volunteer/manage")
+public class VolunteerManage {
+	
+	@Inject
+	private MVolunteerManageService service;
+	
+	@GetMapping("/inVolPage")
+	public String volunteerManagePage() {
+		
+		return "manager/volunteerManageList";
+	}
+	
+	
+	@ResponseBody
+	@GetMapping(value = "/registerList", produces = "application/json;charset=UTF-8")
+	public List<Map<String, Object>> selectVolunteerList()throws Exception {
+		log.debug("selectVolunteerList 시작 ~");
+		
+		List<Map<String, Object>> volList = service.selectRegisterList();
+//		log.info("volList : "+ volList);
+		
+		for (Map<String, Object> map : volList) {
+			Date volo_regidate = (Date)map.get("VOLO_REGIDATE");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+			map.put("VOLO_REGIDATE", sdf.format(volo_regidate));
+		}
+		
+		for (Map<String, Object> map : volList) {
+			Date volo_start = (Date)map.get("VOLO_START");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+			map.put("VOLO_START", sdf.format(volo_start));
+		}
+		
+		for (Map<String, Object> map : volList) {
+			Date volo_end = (Date)map.get("VOLO_END");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+			map.put("VOLO_END", sdf.format(volo_end));
+		}
+		
+		return volList;
+	}
+	
+	
+	@ResponseBody
+	@GetMapping(value = "/getDetail",produces = "application/json;charset=UTF-8")
+	public Map<String, Object> selectVolunteerDetail(String volo_code)throws Exception{
+		log.debug("selectVolunteerDetail 시작 ~");
+		log.debug("volo_code 값 확인 : {}",volo_code);
+
+		Map<String, Object> detailMap = service.selectDetail(volo_code);
+		
+		log.debug("detailMap 값 확인 : {}",detailMap);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		
+		Date volo_regidate = (Date)detailMap.get("VOLO_REGIDATE");
+		detailMap.put("VOLO_REGIDATE", sdf.format(volo_regidate));
+		
+		Date volo_start = (Date)detailMap.get("VOLO_START");
+		detailMap.put("VOLO_REGIDATE", sdf.format(volo_start));
+		
+		Date volo_end = (Date)detailMap.get("VOLO_END");
+		detailMap.put("VOLO_REGIDATE", sdf.format(volo_end));
+		
+		
+		return detailMap;
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}
+
+
+
+
+
+
+
+
+
+

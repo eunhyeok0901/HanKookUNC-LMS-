@@ -1,0 +1,50 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<meta charset="UTF-8">
+<style>
+#calendar {
+	width:900px;
+}
+</style>
+<div id="calendar">
+
+</div>
+
+<script>
+window.onload = function(){
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+    	headerToolbar : {
+    		start : 'university,department,mycalen',
+    		center: 'title',
+    		end: 'prevYear,prev,today,next,nextYear'
+    	},
+    	customButtons : {
+    		university:{
+    			text:'학교',
+    			click:function(){
+    				console.log("university")
+    			}
+    		},
+    		department : {
+    			text:'학과',
+    			click:function(){
+    				console.log("department")
+    			}
+    		},
+    		mycalen:{
+    			text:'내일정',
+    			click:function(){
+    				console.log("mycalen")
+    			}
+    		}
+    	},
+      	initialView: 'dayGridMonth',
+      	locale : 'ko'
+    });
+    
+    
+    
+    calendar.render();
+}
+</script>

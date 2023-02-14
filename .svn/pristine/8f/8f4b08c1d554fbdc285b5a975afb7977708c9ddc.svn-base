@@ -1,0 +1,395 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<style>
+.lecOpenApplyHeader {
+	display: flex;
+	justify-content: space-between;
+}
+
+.lecOpenHeaderMenu {
+	display: flex;
+	justify-content: space-between;
+	text-align: center;
+}
+
+#basicRegister {
+	background-color: black;
+	color: white;
+}
+
+
+</style>
+<div class="row justify-content-center">
+	<div class="col-lg-11">
+		<div class="card">
+			<div class="card-body">
+				<div class="lecOpenApplyHeader">
+					<h4 class="card-title">강의개설신청</h4>
+					<div>
+						<button type="button" class="btn btn-dark" id="">임시저장</button>
+						<button type="button" class="btn btn-dark" id="lecOpenApply">개설신청</button>
+					</div>
+				</div>
+				<br>
+
+				<ul class="nav nav-pills">
+					<li class="nav-item col-md-6">
+						<a href="#navpills-1" class="nav-link active show" data-toggle="tab" aria-expanded="false">기본 사항 작성</a>
+					</li>
+					<li class="nav-item col-md-6">
+						<a href="#navpills-2" class="nav-link" data-toggle="tab" aria-expanded="false">강의	계획서 작성</a>
+					</li>
+				</ul>
+				<br>
+
+			<div class="tab-content br-n pn col-lg-11">
+				<div id="navpills-1" class="tab-pane active show">
+				<div class="col-md-10">
+							<div class="row align-items-center">
+							
+								<form method="post" id="basicRegiForm">
+									<div class="basic-form">
+										<div class="form-row">
+											<div class="form-group col-md-6">
+												<label>강의명</label> <input type="text" class="form-control"
+													id="lol_name" name="lol_name" placeholder="강의명입력">
+											</div>
+											<div class="form-group col-md-2">
+												<label>년도</label> <input type="text" class="form-control"
+													id="lol_year" name="lol_year" value="2023">
+											</div>
+											<div class="form-group col-md-2">
+												<label>학기</label> <select id="lol_semester" name="lol_semester"
+													class="form-control">
+													<option selected="selected">1</option>
+													<option>2</option>
+												</select>
+											</div>
+											<div class="form-group col-md-2">
+												<label>정원</label> 
+												<input type="text" class="form-control"	id="lol_limit" name="lol_limit" placeholder="정원입력">
+											</div>
+										</div>
+										<div class="form-row">
+											<div class="form-group col-md-2">
+												<label>학점</label> 
+												<select class="form-control" id="lol_credit" name="lol_credit">
+													<option>1</option>
+													<option selected="selected">2</option>
+													<option>3</option>
+												</select>
+											</div>
+											<div class="form-group col-md-3">
+												<label>학년</label> <select class="form-control" name="lol_schyear"
+													id="lol_schyear">
+													<option>1</option>
+													<option>2</option>
+													<option>3</option>
+													<option>4</option>
+												</select>
+											</div>
+											<div class="form-group col-md-2">
+												<label>전공과목/교양과목</label> <select class="form-control" name="major_cultural"
+													id="major_cultural">
+													<option>전공</option>
+													<option>교양</option>
+												</select>
+											</div>
+											<div class="form-group col-md-2">
+												<label>필수과목/선택과목</label> <select class="form-control" name="choice_require"
+													id="choice_require">
+													<option selected="selected">필수</option>
+													<option>선택</option>
+												</select>
+											</div>
+											<div class="form-group col-md-3">
+												<label>수업일수</label> <input type="text" class="form-control" name="lol_daycount"
+													id="lol_daycount">
+											</div>
+										</div>
+										<div class="form-row">
+											<div class="form-group col-md-2">
+												<label>요일1</label> <select class="form-control" name="lol_day1"
+													id="lol_day1">
+													<option>월</option>
+													<option>화</option>
+													<option>수</option>
+													<option>목</option>
+													<option>금</option>
+												</select>
+											</div>
+											<div class="form-group col-md-2">
+												<label>수업 시작 시간</label> <select class="form-control" name="lol_startime1"
+													id="lol_startime1">
+													<option>09:00</option>
+													<option>10:00</option>
+													<option>11:00</option>
+													<option>12:00</option>
+													<option>13:00</option>
+													<option>14:00</option>
+													<option>15:00</option>
+													<option>16:00</option>
+													<option>17:00</option>
+													<option>18:00</option>
+													<option>19:00</option>
+													<option>20:00</option>
+													<option>21:00</option>
+												</select>
+											</div>
+											<div class="form-group col-md-2">
+												<label>수업 종료 시간</label> <select class="form-control" name="lol_endtime1"
+													id="lol_endtime1">
+													<option>09:50</option>
+													<option>10:50</option>
+													<option>11:50</option>
+													<option>12:50</option>
+													<option>13:50</option>
+													<option>14:50</option>
+													<option>15:50</option>
+													<option>16:50</option>
+													<option>17:50</option>
+													<option>18:50</option>
+													<option>19:50</option>
+													<option>20:50</option>
+													<option>21:50</option>
+												</select>
+											</div>
+											<div class="form-group col-md-2">
+												<label>요일2</label> <select class="form-control" name="lol_day2"
+													id="lol_day2">
+													<option>월</option>
+													<option>화</option>
+													<option>수</option>
+													<option>목</option>
+													<option>금</option>
+												</select>
+											</div>
+											<div class="form-group col-md-2">
+												<label>수업 시작 시간</label> <select class="form-control" name="lol_startime2"
+													id="lol_startime2">
+													<option>09:00</option>
+													<option>10:00</option>
+													<option>11:00</option>
+													<option>12:00</option>
+													<option>13:00</option>
+													<option>14:00</option>
+													<option>15:00</option>
+													<option>16:00</option>
+													<option>17:00</option>
+													<option>18:00</option>
+													<option>19:00</option>
+													<option>20:00</option>
+													<option>21:00</option>
+												</select>
+											</div>
+											<div class="form-group col-md-2">
+												<label>수업 종료 시간</label> <select class="form-control" name="lol_endtime2"
+													id="lol_endtime2">
+													<option>09:50</option>
+													<option>10:50</option>
+													<option>11:50</option>
+													<option>12:50</option>
+													<option>13:50</option>
+													<option>14:50</option>
+													<option>15:50</option>
+													<option>16:50</option>
+													<option>17:50</option>
+													<option>18:50</option>
+													<option>19:50</option>
+													<option>20:50</option>
+													<option>21:50</option>
+												</select>
+											</div>
+										</div>
+									</div>
+
+								</form>
+
+							</div>
+						</div>
+						</div>
+						
+						<div id="navpills-2" class="tab-pane">
+						<div class="col-md-10">
+							<div class="row align-items-center">
+
+								<form method="post" class="hide" id="lecPlanRegiForm">
+									<div class="basic-form">
+										<div class="form-row">
+											<div class="form-group col-md-12">
+												<label>강의 개요</label> <input type="text" id="lp_content" name="lp_content">
+											</div>
+											<div class="form-group col-md-12">
+												<label>교재 및 참고문헌</label><input type="text" id="lp_book" name="lp_book">
+											</div>
+											<div class="form-group col-md-4">
+												<label>출석반영비율</label> <input type="text" id="lp_attend_ref" name="lp_attend_ref"  style="width:80px;">%
+											</div>
+											<div class="form-group col-md-4">
+												<label>시험반영비율</label> <input type="text" id="lp_test_ref" name="lp_test_ref" style="width:80px;">%
+											</div>
+											<div class="form-group col-md-4">
+												<label>과제반영비율</label> <input type="text" id="lp_tesk_ref" name="lp_tesk_ref" style="width:80px;">%
+											</div>
+											<div class="form-group col-md-12">
+												<label>비고</label> <input type="text" id="lp_note" name="lp_note">
+											</div>
+
+											<h5>주차별 강의 계획</h5>
+											<div class="form-group col-md-12">
+												<label>1주차</label> <input type="text" id="lp_week1" name="lp_week1">
+											</div>
+											<div class="form-group col-md-12">
+												<label>2주차</label> <input type="text" id="lp_week2" name="lp_week2">
+											</div>
+											<div class="form-group col-md-12">
+												<label>3주차</label> <input type="text" id="lp_week3" name="lp_week3">
+											</div>
+											<div class="form-group col-md-12">
+												<label>4주차</label> <input type="text" id="lp_week4" name="lp_week4">
+											</div>
+											<div class="form-group col-md-12">
+												<label>5주차</label> <input type="text" id="lp_week5" name="lp_week5">
+											</div>
+											<div class="form-group col-md-12">
+												<label>6주차</label> <input type="text" id="lp_week6" name="lp_week6">
+											</div>
+											<div class="form-group col-md-12">
+												<label>7주차</label> <input type="text" id="lp_week7" name="lp_week7">
+											</div>
+											<div class="form-group col-md-12">
+												<label>8주차</label> <input type="text" id="lp_week8" name="lp_week8">
+											</div>
+											<div class="form-group col-md-12">
+												<label>9주차</label> <input type="text" id="lp_week9" name="lp_week9">
+											</div>
+											<div class="form-group col-md-12">
+												<label>10주차</label> <input type="text" id="lp_week10" name="lp_week10">
+											</div>
+											<div class="form-group col-md-12">
+												<label>11주차</label> <input type="text" id="lp_week11" name="lp_week11">
+											</div>
+											<div class="form-group col-md-12">
+												<label>12주차</label> <input type="text" id="lp_week12" name="lp_week12">
+											</div>
+											<div class="form-group col-md-12">
+												<label>13주차</label> <input type="text" id="lp_week13" name="lp_week13">
+											</div>
+											<div class="form-group col-md-12">
+												<label>14주차</label> <input type="text" id="lp_week14" name="lp_week14">
+											</div>
+											<div class="form-group col-md-12">
+												<label>15주차</label> <input type="text" id="lp_week15" name="lp_week15">
+											</div>
+
+										</div>
+
+
+									</div>
+								</form>
+							
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+window.onload=function(){
+
+	
+	var lecOpenApply = $('#lecOpenApply');
+	
+	lecOpenApply.on("click",function(){
+		
+        // var lol_name = document.querySelector("#lol_name");             // 강의명
+
+// 		var lolName = $("#lol_name").val();
+// 		var lolYear = $("#lol_year").val();
+// 		var lolSemester = $("#lol_semester").val();
+// 		var lolLimit = $("#lol_limit").val();
+// 		var lolCredit = $("#lol_credit").val();
+// 		var lolSchyear = $("#lol_schyear").val();
+// 		var majorCultural = $("#major_cultural").val();
+// 		var choiceRequire = $("#choice_require").val();
+// 		var lolDaycount = $("#lol_daycount").val();
+// 		var lolDay1 = $("#lol_day1").val();
+// 		var lolStartime1 = $("#lol_startime1").val();
+// 		var lolEndtime1 = $("#lol_endtime1").val();
+// 		var lolDay2 = $("#lol_day2").val();
+// 		var lolStartime2 = $("#lol_startime2").val();
+// 		var lolEndtime2 = $("#lol_endtime2").val();
+
+// 		console.log(lolName, lolYear);
+		
+// 		var lecOpenList = {
+// 			pmem_no : "p920506",		// 여기는 나중에 세션 아이디 넣을거예요.		
+//             lol_name : lolName,
+// 		    lol_year : lolYear,
+// 		    lol_semester : lolSemester,
+// 		    lol_limit : lolLimit,
+// 		    lol_credit : lolCredit,
+// 		    lol_schyear : lolSchyear,
+// 		    major_cultural : majorCultural,
+// 		    choice_require : choiceRequire,
+// 		    lol_daycount : lolDaycount,
+// 		    lol_day1 : lolDay1,
+// 		    lol_startime1 : lolStartime1,
+// 		    lol_endtime1 : lolEndtime1,
+// 		    lol_day2 : lolDay2,
+// 		    lol_startime2 : lolStartime2,
+// 		    lol_endtime2 : lolEndtime2
+// 			}
+		
+		var header = $("meta[name='_csrf_header']").attr('content');
+	    var token = $("meta[name='_csrf']").attr('content');
+		
+	    var data =  $('form').serialize();
+	    	
+	    console.log(data)
+	    
+		$.ajax({
+			type : "POST",
+			url : "/lol/insertLectureOpen",
+			data : data,
+			dataType : "text",
+		    beforeSend : function(xhr){
+		        xhr.setRequestHeader(header, token);
+		    },
+			success : function(result){
+				console.log('민지insert : ', result)
+				
+			},
+			error : function(request,status,error){
+				console.log('실패 : ', status, " , ",error)
+			}
+				
+		})  // ajax 끝
+		
+// 		$.ajax({
+// 			type : "POST",
+// 			url : "/lol/insertLectureOpen",
+// 			data : JSON.stringify(lecOpenList),
+// 			contentType : "application/json",
+// 			dataType : "text",
+// 	        beforeSend : function(xhr){
+// 	            xhr.setRequestHeader(header, token);
+// 	        },
+// 			success : function(result){
+// 				console.log('민지insert : ', result)
+// 			},
+// 			error : function(request,status,error){
+// 				console.log('실패 : ', status, " , ",error)
+// 			}
+			
+// 		})  // ajax 끝
+	})
+
+}
+
+</script>

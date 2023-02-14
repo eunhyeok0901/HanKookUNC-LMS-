@@ -1,0 +1,86 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    
+    <title>index</title>
+    
+    <!-- Ajax CSRF 404error발생 방지 위한 토큰 추가 -->
+    <meta name="_csrf_header" content="${_csrf.headerName}">
+    <meta name="_csrf" content="${_csrf.token}">
+    <!-- 파비콘 -->
+    <link rel="icon" type="image/png" sizes="16x16" href="${pageContext.request.contextPath }/resources/bootstrap/images/favicon.png">
+    <!-- 피그노즈캘린더 -->
+	<link href="${pageContext.request.contextPath }/resources/bootstrap/plugins/pg-calendar/css/pignose.calendar.min.css" rel="stylesheet">
+    <!-- 차트 -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/bootstrap/plugins/chartist/css/chartist.min.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/bootstrap/plugins/chartist-plugin-tooltips/css/chartist-plugin-tooltip.css">
+    <!-- 커스텀 스타일시트 -->
+    <link href="${pageContext.request.contextPath }/resources/bootstrap/css/style.css" rel="stylesheet">
+    <!-- 데이터 테이블 css -->
+	<link href="${pageContext.request.contextPath }/resources/bootstrap/plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+	<tiles:insertAttribute name="preloader"/>
+    <div id="main-wrapper" class="show menu-toggle">
+		
+		<tiles:insertAttribute name="navHeader"/>
+		<tiles:insertAttribute name="header"/>
+		<tiles:insertAttribute name="sidebar"/>
+		
+		<div class="content-body" style="display: flex; flex-direction: row; flex-flow: nowrap;">
+			<div class="container-fluid">
+				<tiles:insertAttribute name="content"/>
+			</div>
+				<tiles:insertAttribute name="quickSidebar"/>
+		</div>
+		
+		<tiles:insertAttribute name="footer"/>
+		
+    </div>
+
+
+	<!-- 제이쿼리 -->
+	<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>	
+	<!-- 폰트어썸 -->
+	<script src="https://kit.fontawesome.com/957fb022c5.js"></script>
+	<!-- ---------------------일단 플러그인 폴더는 추가하지 않았습니다. src만 남겨둘게요---------------------------------- -->
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/common/common.min.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/js/custom.min.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/js/settings.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/js/gleek.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/js/styleSwitcher.js"></script>
+    <!-- 8개의 차트 유형을 지원하는 Chartjs -->
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/chart.js/Chart.bundle.min.js"></script>
+    <!-- 원형 차트를 그리는 Circle progress -->
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/circle-progress/circle-progress.min.js"></script>
+    <!-- 데이터맵 -->
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/d3v3/index.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/topojson/topojson.min.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/datamaps/datamaps.world.min.js"></script>
+    <!-- 모리스 차트 Morrisjs -->
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/raphael/raphael.min.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/morris/morris.min.js"></script>
+    <!-- 피그노즈 캘린더 js -->
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/moment/moment.min.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/pg-calendar/js/pignose.calendar.min.js"></script>
+    <!-- 차트 ChartistJS -->
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/chartist/js/chartist.min.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/chartist-plugin-tooltips/js/chartist-plugin-tooltip.min.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/bootstrap/js/dashboard/dashboard-1.js"></script>
+	<!-- 데이터 테이블 js -->
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/js/dashboard/dashboard-1.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/tables/js/jquery.dataTables.min.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
+	<!-- aggrid -->
+	<script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hdcd.mapper.CalendarMapper">
+
+
+
+	<resultMap id="mapping" type="map">
+		<id property="groupId" column="CLDR_CODE" />
+		<result property="title" column="CLDR_TITLE" />
+		<result property="memo" column="CLDR_MEMO" />
+		<result property="start" column="CLDR_START" />
+		<result property="end" column="CLDR_END" />
+		<result property="allDay" column="CLDR_ALLDAY" />
+		<result property="color" column="CLDR_COLOR" />
+		<result property="memNo" column="MEM_NO" />
+		<result property="category" column="CLDR_CATEGORY" />
+	</resultMap>
+
+	<select id="getCalendarList" parameterType="map" resultMap="mapping">
+		select * from calendar where 1=1
+		<if test="CLDR_CATEGORY != null">
+			and cldr_category = #{CLDR_CATEGORY}
+		</if>
+		order by CLDR_START
+	</select>
+	
+</mapper>

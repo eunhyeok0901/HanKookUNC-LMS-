@@ -1,0 +1,37 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<style type="text/css">
+.sidebarContainer{
+	height:auto;
+	background-color: rgb(255, 235, 205);
+}
+.sidebar{
+	top: 150px;
+	height: 300px;
+	position: sticky;
+}
+
+.quickItemTop{
+	-moz-border-radius : 37px 37px 0 0;
+	-webkit-border-radius: 37px 37px 0 0;
+	border-radius: 37px 37px 0 0;
+}
+
+.quickItemDown{
+	-moz-border-radius : 0 0 37px 37px;
+	-webkit-border-radius: 0 0 37px 37px;
+	border-radius: 0 0 37px 37px;	
+}
+</style>
+<div class="sidebarContainer">
+	<div class="sidebar btn-group-vertical">
+		<a href="#"><button class="btn btn-flat btn btn-light quickItemTop" type="button" disabled="disabled">Button</button></a>
+		<a href="#"><button class="btn btn-flat btn-primary" type="button">메뉴1</button></a>
+		<a href="#"><button class="btn btn-flat btn-success" type="button">메뉴2</button></a>
+		<a href="#"><button class="btn btn-flat btn-danger" type="button">메뉴3</button></a>
+		<a href="#"><button class="btn btn-flat btn-warning" type="button">메뉴4</button></a>
+		<a href="#"><button class="btn btn-flat btn-info" type="button">메뉴5</button></a>
+		<a href="#"><button class="btn btn-flat btn-dark" type="button">메뉴6</button></a>
+		<a href="#"><button class="btn btn-flat btn btn-light quickItemDown" type="button" disabled="disabled">Button</button></a>
+	</div>
+</div>

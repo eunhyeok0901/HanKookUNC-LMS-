@@ -1,0 +1,68 @@
+@charset "UTF-8";
+/*
+	0 - 600: 휴대폰
+	600 - 900: 작은 태블릿
+	900 - 1200: 큰 태블릿
+	1200 - 1800: 일반
+	1800+ : 빅 데스크톱
+	1em = 16px
+	작은 장치 규칙은 항상 큰 장치 규칙 아래에 써야 합니다
+	순서 고정 => 베이스 + 타이포그래피 >> 일반 레이아웃 + 그리드 >> 페이지 레이아웃 + 구성요소
+*/
+
+/*■ 변수 설정 */
+:root {
+  --white: #fff;
+  --light: #f8f9fa;
+  --gray: #f7fafc;
+  --secondary: #9097c4;
+  --gray-dark: #333333;
+  --dark: #333333;
+
+
+  --cyan: #11cdef;
+  --info: #4d7cff;
+  --blue: #324cdd;
+
+
+  --indigo: #6610f2;
+  --purple: #6f42c1;
+  --primary: #7571f9;
+
+
+  --success: #6fd96f;
+  --green: #2dce89;
+  --teal: #00A9A2;
+  
+  
+  --warning: #f29d56;
+  --orange: #fd7e14;
+  --pink: #e83e8c;
+  --danger: #ff5e5e;
+  --red: #ec0c38;
+  --yellow: #fa3a0e;
+
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-xxl: 1400;
+  --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/*■ 구글폰트 cdn*/
+@import url();
+
+/*■ 폰트 적용 */
+body, h1, h2, h3, h4, h5, h6, p, span{
+	/*폰트 패밀리 뒤에 !important; 를 붙이면 우선 적용*/
+}
+
+/*■ page css파일 import */
+/* 사용 예: community css를 위해 css-page 폴더에 community.css를 생성하고
+            아래에 @import "./page/community.css"; 와 같이 작성하여 import 
+   ※ 우선 순위가 높은 것을 가장 상단에 두세요 */
+   
+/*@import "./page/community.css"*/

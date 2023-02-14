@@ -1,0 +1,48 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<meta charset="UTF-8">
+<h1>학교 일정 입니다.</h1>
+
+
+<table id="example" class="table">
+	<thead>
+		<tr>
+			<th>name</th>
+			<th>position</th>
+			<th>salary</th>
+			<th>start_date</th>
+			<th>office</th>
+			<th>extn</th>
+		</tr>	
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+<script>
+window.onload = function(){
+	var table = $('#example').DataTable({
+	    destroy:true,
+    	//표시 건수기능 숨기기
+		lengthChange: false,
+		// 정보 표시 숨기기
+ 		info: false,
+ 		// 페이징 기능 숨기기
+    	paging: false,
+   	  "scrollY": "200px",
+   	  "scrollCollapse": true,
+   	  "paging": false
+	});
+	
+	for(let i=0;i<10;i++){
+		console.log(table)
+		table.row.add( {
+		        "0":       "Tiger Nixon",
+		        "1":   "System Architect",
+		        "2":     "$3,120",
+		        "3": "2011/04/25",
+		        "4":     "Edinburgh",
+		        "5":       "5421"
+		    } ).draw();
+	}
+}
+</script>

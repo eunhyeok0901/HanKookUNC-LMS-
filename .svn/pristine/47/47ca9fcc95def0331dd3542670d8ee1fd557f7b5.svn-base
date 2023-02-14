@@ -1,0 +1,13 @@
+package org.hdcd.vo;
+
+import lombok.Data;
+
+@Data
+public class ProfessorVO {
+	private String pmem_no;
+	private String dep_code;
+	private String join_date;
+	private String leave_date;
+	private String position;
+	private int roomnum;
+}

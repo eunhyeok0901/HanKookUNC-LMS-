@@ -1,0 +1,271 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<div class="container-fluid bg-white custom-div-radius">
+	<div class="container">
+		<div class="row">
+			<div class="col-4 height-300 border-1px-solid bg-gray">
+				<h2>친구등록창</h2>
+				<div class="col-12">
+					<input type="text" placeholder="학번입력" class="mb-3">
+					<input type="button" class="btn btn-Info btn-sm" value="검색">
+				</div>
+				<div class="col-12" id="friendWait">
+					<table class="custom-table-sm" border='1'>
+						<thead>
+							<tr>
+								<th>학번</th>
+								<th>비고</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>1234</td>
+								<td><input type="button" class="btn btn-danger btn-sm" value="삭제"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="col-8 height-300 border-1px-solid bg-gray">
+				<div class="row">
+					<h2>친구창 </h2><span class="text-danger"> ※현재학기 시간표만 가능합니다.</span>
+				</div>
+				<table class="custom-table-sm" border=1>
+					<thead>
+						<tr>
+							<th>학번</th>
+							<th>이름</th>
+							<th>학년</th>
+							<th>이메일</th>
+							<th>전화번호</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="draggable" draggable="true">
+							<td>12345</td>
+							<td>홍길동</td>
+							<td>1</td>
+							<td>asb@dasdad.com</td>
+							<td>010-1234-1234</td>
+						</tr>
+						<tr class="draggable" draggable="true">
+							<td>75345</td>
+							<td>홍길은</td>
+							<td>2</td>
+							<td>azxcsb@dasdad.com</td>
+							<td>010-1234-1234</td>
+						</tr>
+						<tr class="draggable" draggable="true">
+							<td>46445</td>
+							<td>홍길금</td>
+							<td>2</td>
+							<td>bgasb@dasdad.com</td>
+							<td>010-1234-1234</td>
+						</tr>
+						<tr class="draggable" draggable="true">
+							<td>99345</td>
+							<td>홍상동</td>
+							<td>1</td>
+							<td>gasb@dasdad.com</td>
+							<td>010-1234-1234</td>
+						</tr>
+						<tr class="draggable" draggable="true">
+							<td>65345</td>
+							<td>홍상길</td>
+							<td>1</td>
+							<td>masb@dasdad.com</td>
+							<td>010-1234-1234</td>
+						</tr>
+					</tbody>
+				</table>
+				
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-12">
+				
+				<div class="row" >
+					<div class="col-8">
+					
+						<div class="row" id="timeTableContainer">
+							<div class="col height-600 border-1px-solid bg-gray scheduleBox" data-no="1">
+
+							</div>
+						</div>
+						
+					</div>
+					<div class="col-4">
+						<div class="row">
+							<div class="col-12 height-600 border-1px-solid bg-gray">
+								<h2>결과값</h2>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</div>    
+<script>
+// 키이벤트 담을 요소들
+let scheduleBoxs = document.querySelectorAll(".scheduleBox:not(.notEmpty)");
+scheduleBoxs.forEach((scheduleBox, i)=>{
+	scheduleBox.addEventListener("drop", function(e){
+		e.preventDefault();
+		let tagInfo =JSON.parse(e.dataTransfer.getData("tagData"));
+		
+		dragTimetable(this);
+	})
+})
+
+// 개개인 시간표 담을 배열
+let allTimeTable = [];
+// div 갯수
+let divlength = 1;
+let scheduleBox;
+let notEmptys;
+
+
+// 테이블위 데이터 드래그 했을때
+let draggables = document.querySelectorAll(".draggable");
+draggables.forEach((draggable, i) =>{
+
+	draggable.addEventListener("dragstart", function(e){
+		
+		let jsonObject = {
+			"smem_no" : this.children[0].innerText,
+			"mem_name" : this.children[1].innerText
+		}
+		
+		e.dataTransfer.setData("tagData", JSON.stringify(jsonObject));
+		
+	})
+	
+	draggable.addEventListener("dragend", function(){
+	})
+	
+})
+
+// 드래그한 요소가 안으로 들어 왔을때
+let timeTableContainer = document.querySelector("#timeTableContainer");
+timeTableContainer.addEventListener("dragover", function(e){
+	e.preventDefault();
+})
+
+timeTableContainer.addEventListener("dragenter", function(e){
+	e.preventDefault();
+	
+	let divide = timeTableContainer.getBoundingClientRect().width/5;
+	let divright = timeTableContainer.getBoundingClientRect().right;
+	
+	let addBlockPosition = divright-divide;
+	console.log(addBlockPosition)
+	if(addBlockPosition < e.clientX && e.clientX < divright){
+		
+		if(allTimeTable.length == divlength && allTimeTable.length >= 1){
+			divlength++;		
+			checkArrayLength();
+			
+			scheduleBox = document.querySelector(".scheduleBox:not(.notEmpty)");
+			notEmptys = document.querySelectorAll(".notEmpty");
+			console.log(scheduleBox)
+			
+			scheduleBox.addEventListener("drop", function(){
+				dragTimetable(this);
+			})
+		}
+	}
+	
+})
+
+
+timeTableContainer.addEventListener("dragleave", function(e){
+	e.preventDefault();
+	console.log("true or false")
+	console.log(allTimeTable.length <= divlength)
+	
+	if(allTimeTable.length <= divlength){
+		divlength--;
+		console.log("divlength(leave) : " + divlength)
+		console.log("allTimeTable(leave) : " + allTimeTable.length)
+	
+		console.log(scheduleBox)
+		scheduleBox.remove();
+	}
+})
+
+timeTableContainer.addEventListener("drop", function(e){
+	e.preventDefault();
+})
+
+// 배열길이 확인해서 디브 만들기
+function checkArrayLength(){
+	
+	text = ''
+	text += '<div class="col height-600 border-1px-solid bg-gray scheduleBox" data-no="'+(allTimeTable.length+1)+'">'
+	text += '</div>'
+	
+	timeTableContainer.innerHTML += text;
+}
+
+function dragTimetable(table){
+	
+	let myTimeTable = Array.from({length:10}, () => Array(5).fill(0))
+	// 시간표가 들어간 시간표박스에 무언가 넣어주어야함
+	text ='<div class="timeTableBox">'
+	text+='<h2>'+(allTimeTable.length+1)+'번째</h2>';
+	text+='<table class="custom-table-sm timetable" border=1 >'
+	text+='<thead>';
+	text+='<tr>';
+	text+='<th>비고</th>';
+	text+='<th>월</th>';
+	text+='<th>화</th>';
+	text+='<th>수</th>';
+	text+='<th>목</th>';
+	text+='<th>금</th>';
+	text+='</tr>';
+	text+='</thead>';
+	text+='<tbody>';
+	for(let i=0;i<10;i++){
+		
+		text+='<tr>';
+		for(let j=0; j<6;j++){
+			if(j==0){
+				text+='<td>'+(9+i)+'</td>';
+			}else{
+				text+='<td></td>';
+			}
+		}
+		text+='</tr>';
+	}
+	text+='</tbody>';
+	text+='</table>';
+	text+='<input type="button" class="btn btn-primary" value="취소" onclick="delTime(this);">';
+	text+='</div>';
+	table.innerHTML=text;
+	
+	table.classList.add('notEmpty')
+	
+	allTimeTable[table.dataset.no-1] = myTimeTable
+}
+
+function delTime(table){
+	
+	if(table.parentElement.parentElement.dataset.no == 1){
+		allTimeTable = allTimeTable.splice((table.parentElement.parentElement.dataset.no*(1)-1),0);
+		table.parentElement.remove();
+		return;
+	}else{
+		allTimeTable.splice((table.parentElement.parentElement.dataset.no*(1)-1),0);
+		divlength--;
+		table.parentElement.parentElement.remove();
+	}
+	
+}
+
+
+
+
+</script>

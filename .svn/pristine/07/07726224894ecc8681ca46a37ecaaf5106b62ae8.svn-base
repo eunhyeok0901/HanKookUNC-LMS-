@@ -1,0 +1,196 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<link href="${pageContext.request.contextPath }/resources/bootstrap/css/style.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>	
+<script src="${pageContext.request.contextPath }/resources/bootstrap/plugins/common/common.min.js"></script>
+
+<input type="hidden" value="${lecCode }" id="lecCode">
+<input type="hidden" value="${cnt }" id="lecCnt">
+<title>출결 처리</title>
+<div class="container-fluid justify-content-center">
+	<div class="row">
+		<div class="col-lg-11">
+		<br>
+		<h4>출결 처리 팝업</h4>
+			<div class="card">
+				<div class="card-body">
+					<div class="d-flex justify-content-between">
+						<div>
+							<input type="radio" name="check_attend" value="0">일괄출석 
+							<input type="radio" name="check_attend" value="2">일괄결석 
+							<button type="button" class="btn mb-1 btn-light btn-sm" id="changeAttendChk">선택 변경</button> 
+						</div>
+						<div>
+							<button type="button" class="btn mb-1 btn-dark btn-sm" onclick="">출결완료</button> 
+						</div>
+					</div>
+					<hr>
+					<div class="table-responsive">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>No</th>
+									<th>이름</th>
+									<th>소속</th>
+									<th>학번</th>
+									<th>출결구분</th>
+									<th>사유</th>
+									<th>처리</th>
+								</tr>
+							</thead>
+							<tbody id="attendStuList">
+								<tr>
+									<td>1</td>
+									<td>손승완</td>
+									<td>20130001</td>
+									<td>출석</td>
+									<td></td>
+									<td>
+									<button type="button" onclick="">출석</button>
+									<button type="button" onclick="">지각</button>
+									<button type="button" onclick="">결석</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+let header = '${_csrf.headerName}';
+let token =  '${_csrf.token}';
+
+window.onload = function(){
+	
+	getStudentList();
+}
+
+function getStudentList(){
+	
+	let lecCode = document.getElementById("lecCode").value;
+
+	let data = {
+		lecCode : lecCode
+	}
+	
+	$.ajax({
+		method : "post",
+		url : "/lad/getLecAttendStudentList",
+		data : JSON.stringify(data),
+		contentType : "application/json; charset=utf-8",
+		dataType : "json",
+		beforeSend : function(xhr) {
+			xhr.setRequestHeader(header, token);
+		},
+		success : function(result){
+			console.log("list 불러오기 : ", result);
+			document.getElementById("attendStuList").innerHTML = studentListTemplate(result);
+		},
+		error : function(){
+
+		}
+		
+	})
+};
+
+const studentListTemplate = (stuList) =>{
+	let code = "";
+	console.log(stuList[0].MEM_NAME);
+	let cnt = 1;
+
+	let lecCode = document.getElementById("lecCode").value;
+
+	for(let i = 0; i < stuList.length; i++){
+		code += `
+				<tr>
+					<td>\${cnt}</td>	
+					<td>\${stuList[i].MEM_NAME}</td>	
+					<td>\${stuList[i].COL_NAME} \${stuList[i].STU_DEP}</td>
+					<td>\${stuList[i].SMEM_NO}</td>
+					<td></td>
+					<td></td>
+					<td>
+						<button type="button" class="btn mb-1 btn-success btn-sm" onclick="attendBtnFn('0', '\${lecCode}', '\${stuList[i].SMEM_NO}')">출석</button>
+						<button type="button" class="btn mb-1 btn-primary btn-sm" onclick="attendBtnFn('1', '\${lecCode}', '\${stuList[i].SMEM_NO}')">지각</button>
+						<button type="button" class="btn mb-1 btn-danger btn-sm" onclick="attendBtnFn('2', '\${lecCode}', '\${stuList[i].SMEM_NO}')">결석</button>
+					</td>
+				</tr>
+		`;
+		cnt++;
+	}
+
+	return code;
+}
+
+function attendBtnFn(state, lecCode, smemNo){
+
+	let lecCnt = document.getElementById("lecCnt").value;
+
+	let lecWeek = Math.ceil(lecCnt / 2);
+	let lecCount = (lecCnt % 2 == 0 ? 2 : 1);
+	
+// 	console.log($(this).closest("tr").children('td:eq(1)').text());
+	console.log($(this).closest('tr').find('td:eq(4)').text());
+
+	console.log("lecCode : ",lecCode);
+	console.log('lecCnt : ',lecCnt);
+	console.log('state : ',state);
+	console.log('주차 : ',lecWeek , "주차");
+	console.log('회차 : ',lecCount, "회차");
+	
+	let data = {
+		smem_no : smemNo,
+		attend_state : state,
+		lec_code : lecCode,
+		attend_week : lecWeek,
+		attend_day :lecCount
+	}
+
+// 	$.ajax({
+// 		method : "POST",
+// 		url : "/lad/insertAttentance",
+// 		data : JSON.stringify(data),
+// 		contentType : "application/json; charset=utf-8",
+// 		dataType : "text",
+// 		beforeSend : function(xhr){
+// 			xhr.setRequestHeader(header, token);
+// 		},
+// 		success : function(result){
+// 			console.log("성공이다ㅜ : ", result);
+// // 			attendTdtext(state);
+// 		},
+// 		error : function(){
+
+// 		}
+// 	})
+}
+
+// function attendTdtext(state){
+// 	let text = "";
+// 	if(state == '0'){ 
+// 		text = "출석";
+// 	}else if(state == 1){
+// 		text = "지각";
+// 	}else{
+// 		text = "결석";
+// 	}
+	
+
+// }
+
+$("#changeAttendChk").on("click", function(){
+	console.log("이것부터 찍자");
+	
+	console.log($('input[name="check_attend"]:checked').val());
+	
+	
+	
+})
+
+
+</script>

@@ -1,0 +1,10 @@
+package org.hdcd.mapper;
+
+import java.util.List;
+import org.hdcd.vo.ScholarListVO;
+
+public interface SScholarMapper {
+
+	List<ScholarListVO> getScholarList();
+
+}

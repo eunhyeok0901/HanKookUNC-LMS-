@@ -1,0 +1,343 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>  
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+.chartdiv{
+	display: inline-block;
+	width: 50%; 
+	height: 30%;
+}
+.alertInElement{
+	display: inline-block;
+}
+</style>
+</head>
+<body>
+
+<h4 class="card-title">
+		<i class="fa-solid fa-graduation-cap"></i>&nbsp;&nbsp; 차트 확인
+</h4>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body" id="cardBody">
+                	<div class="alert alert-warning">
+                		<div id="alertBox" class="alertInElement">
+	                		<select class="form-control-sm input-default" onchange="createOption(this)" id="chartType">
+	                			<option value="" selected="selected">옵션선택</option>
+	                			<option value="year_stu">연도별 학생 수</option>
+	                			<option value="coll_avg_price">단과대학별 평균 등록금</option>
+	                			<option value="dep_price">학과별 등록금</option>
+	                			<option value="sur_stat">설문조사 만족도 통계</option>
+	                		</select>
+                		</div>
+                		<div class="alertInElement">
+                			<button type="button" onclick="createChart()">차트 생성</button>
+                		</div>
+                	</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.36.0/apexcharts.min.js"></script>
+<script>
+
+// const myChart_obj = document.getElementById('myChart').getContext("2d");
+
+// window.c_obj = new Chart(myChart_obj, createChartSetObj());
+
+window.cnt = 0;
+
+function createOption(selBox){
+	alert(selBox.value);
+
+	switch (selBox.value) {
+		case "year_stu":
+			createInputSelBox();
+			break;
+	
+		default:
+			break;
+	}
+
+}
+
+function createInputSelBox(){
+	let alertBox = document.querySelector("#alertBox");
+
+	// ---------------------학년 선택 selectBox 생성---------------------
+	let schyear_select_obj = document.createElement("select");
+	schyear_select_obj.setAttribute("id", "stu_schyear");
+	schyear_select_obj.setAttribute("class", "form-control-sm input-default")
+	
+	let schyear_option_obj0 = document.createElement("option");
+	schyear_option_obj0.innerText = "학년선택";
+	schyear_option_obj0.setAttribute("value", "");
+	schyear_option_obj0.setAttribute("selected", true);
+
+	let schyear_option_obj1 = document.createElement("option");
+	schyear_option_obj1.innerText = "1";
+	schyear_option_obj1.setAttribute("value", "1");
+
+	let schyear_option_obj2 = document.createElement("option");
+	schyear_option_obj2.innerText = "2";
+	schyear_option_obj2.setAttribute("value", "2");
+
+	let schyear_option_obj3 = document.createElement("option");
+	schyear_option_obj3.innerText = "3";
+	schyear_option_obj3.setAttribute("value", "3");
+
+	let schyear_option_obj4 = document.createElement("option");
+	schyear_option_obj4.innerText = "4";
+	schyear_option_obj4.setAttribute("value", "4");
+
+	schyear_select_obj.append(schyear_option_obj0);
+	schyear_select_obj.append(schyear_option_obj1);
+	schyear_select_obj.append(schyear_option_obj2);
+	schyear_select_obj.append(schyear_option_obj3);
+	schyear_select_obj.append(schyear_option_obj4);
+	
+	// ---------------------학년 선택 selectBox 끝---------------------
+	
+	// ---------------------성별 선택 selectBox생성---------------------
+	let gender_select_obj = document.createElement("select");
+	gender_select_obj.setAttribute("id", "stu_gender");
+	gender_select_obj.setAttribute("class", "form-control-sm input-default")
+	
+	let gender_option_obj0 = document.createElement("option");
+	gender_option_obj0.innerText = "성별선택";
+	gender_option_obj0.setAttribute("value", "");
+	gender_option_obj0.setAttribute("selected", true);
+	
+	let gender_option_obj1 = document.createElement("option");
+	gender_option_obj1.innerText = "남자";
+	gender_option_obj1.setAttribute("value", "남자");
+
+	let gender_option_obj2 = document.createElement("option");
+	gender_option_obj2.innerText = "여자";
+	gender_option_obj2.setAttribute("value", "여자");
+
+	gender_select_obj.append(gender_option_obj0);
+	gender_select_obj.append(gender_option_obj1);
+	gender_select_obj.append(gender_option_obj2);
+
+	// ---------------------성별 선택 selectBox끝---------------------
+
+	// ---------------------학과 선택 selectBox생성---------------------
+	let department_select_obj = document.createElement("select");
+	department_select_obj.setAttribute("id", "stu_dep");
+	department_select_obj.setAttribute("class", "form-control-sm input-default")
+
+	let res = cus_ajax("post", "/chartManage/getDepartmentInfo");
+	
+	console.log("리턴값 : ", res);
+	// for(let i=0;i<)
+
+	// for (let dep of dep_list) {
+	// 	let dep_option_obj = document.createElement("option");
+	// 	dep_option_obj.setAttribute("value", dep.dep_code);
+	// 	dep_option_obj.innerText = dep_name;
+	// 	department_select_obj.append(dep_option_obj);
+	// }
+	
+
+	// ---------------------학과 선택 selectBox끝---------------------
+
+
+	alertBox.append(schyear_select_obj);
+	alertBox.append(gender_select_obj);
+
+}
+
+function cus_ajax(type, url){
+	let header = document.querySelector("meta[name='_csrf_header']").getAttribute('content');
+	let token = document.querySelector("meta[name='_csrf']").getAttribute("content");
+	
+// 	console.log(type);
+// 	console.log(url);
+
+	console.log(header);
+	console.log(token);
+
+	let xhr = new XMLHttpRequest();
+	xhr.open(type, url, true);
+	xhr.onreadystatechange = function(){
+		if(xhr.readyState == 4 && xhr.status == 200){
+
+			console.log("잘 갔다옴");
+			let res = JSON.parse(xhr.responseText);
+			
+			console.log("응답", res);
+			console.log("응답값 길이", res.length);
+			
+			return res;
+			
+		}
+	}
+	xhr.setRequestHeader(header, token);
+	
+	xhr.send();
+	
+}
+
+function createChartSetObj(chartType, labelsData, labelData, chartData, backgroundColorData, chartColor, comData){
+	
+	// --------------------------------------------- chart js ---------------------------------------------
+	/*
+	let obj = {
+			type: 'bar', // 차트의 형태
+			data: { // 차트에 들어갈 데이터
+			    labels: [
+			        //x 축
+			        '1','2','3','4','5','6','7'
+//		 	        {'영문','국문','프랑스','일문','중문','사학','교육'}
+			    ],
+			    datasets: [
+			       	{ //데이터
+			            label: 'test1', //차트 제목
+			            fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
+			            data: [
+			                21,19,25,20,23,26,25 //x축 label에 대응되는 데이터 값
+			            ],
+			            backgroundColor: [
+			                //색상
+			                'rgba(255, 99, 132, 0.2)',
+			                'rgba(54, 162, 235, 0.2)',
+			                'rgba(255, 206, 86, 0.2)',
+			                'rgba(75, 192, 192, 0.2)',
+			                'rgba(153, 102, 255, 0.2)',
+			                'rgba(255, 159, 64, 0.2)'
+			            ],
+			            borderColor: [
+			                //경계선 색상
+			                'rgba(255, 99, 132, 1)',
+			                'rgba(54, 162, 235, 1)',
+			                'rgba(255, 206, 86, 1)',
+			                'rgba(75, 192, 192, 1)',
+			                'rgba(153, 102, 255, 1)',
+			                'rgba(255, 159, 64, 1)'
+			            ],
+			            borderWidth: 1 //경계선 굵기
+			        } ,
+			        
+			        {
+			            label: 'test2',
+			            fill: false,
+			            data: [
+			                8, 34, 12, 24
+			            ],
+			            backgroundColor: 'rgb(157, 109, 12)',
+			            borderColor: 'rgb(157, 109, 12)'
+			        } 
+			        
+			    ]
+			},
+			options: {
+			    scales: {
+			        y: 
+		            {
+		               beginAtZero: true
+		            }
+			        
+			    },
+				
+			}	
+	};
+	
+	if(chartType != null){
+		obj.type = chartType;
+	}
+	
+	return obj;
+	*/
+	// --------------------------------------------- chart js 끝 ---------------------------------------------
+	
+	 var options = {
+			 series: [{
+                 name: "Desktops",
+                 data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+               }],
+               chart: {
+                 height: 350,
+                 type: 'line',
+                 zoom: {
+                   enabled: false
+                 }
+               },
+               dataLabels: {
+                 enabled: false
+               },
+               stroke: {
+                 curve: 'straight'
+               },
+               grid: {
+                 row: {
+                   colors: ['#f3f3f3', 'transparent'],
+                   opacity: 0.5
+                 },
+               },
+               xaxis: {
+                 categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+               }
+	        };
+			
+			console.log(document.querySelector(`#myChart\${cnt}`));
+	
+// 	        var chart = new ApexCharts(document.querySelector(`#myChart\${cnt}`), options);
+	        
+// 	        chart.render();
+	        
+	        return options;
+	        
+	
+}
+
+function createElement(){
+	
+	let cardBody = document.querySelector("#cardBody");
+	
+	let newDiv = document.createElement("div");
+	
+	newDiv.setAttribute("class", "chartdiv");
+	newDiv.setAttribute("id", `myChart\${++cnt}`);
+	
+// 	let newCanvas = document.createElement("div");
+// 	newCanvas.setAttribute("id", `myChart\${++cnt}`);
+
+// 	newDiv.append(newCanvas);
+	
+	cardBody.append(newDiv);
+	
+	return true;
+}
+
+function createChart(){
+
+	if(createElement()){
+		let chartType = document.querySelector("#chartType").value;
+		let element = document.querySelector(`#myChart\${cnt}`);
+		new ApexCharts(element, createChartSetObj()).render();
+	}
+	
+//	if(createElement()){
+// 		let chartType = document.querySelector("#chartType").value;
+// 		let element = document.querySelector(`#myChart\${cnt}`);
+// 		let bb = new ApexCharts(element, createChartSetObj(chartType)).render();
+// 		bb.render();
+//	}
+	
+}
+	
+
+</script>
+</html>

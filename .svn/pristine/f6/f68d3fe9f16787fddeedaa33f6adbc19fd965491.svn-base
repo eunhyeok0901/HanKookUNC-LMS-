@@ -1,0 +1,11 @@
+package org.hdcd.vo;
+
+import lombok.Data;
+
+@Data
+public class AdminVO {
+	private String mmem_no;
+	private String join_date;
+	private String leave_date;
+	
+}

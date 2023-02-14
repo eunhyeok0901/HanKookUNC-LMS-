@@ -1,0 +1,106 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div class="container-fluid"> 
+
+		<div class="row mb-5"
+			style="border: 1px solid black; padding: 10px; background-color: #d4e4f8;">
+			<div class="col-md-3">
+				<span class="col-3">소속</span> <input class="col-9" type="text"
+					value="공과대학 컴퓨터공학과">
+			</div>
+			<div class="col-md-3">
+				<span class="col-6">기준학점</span> <input class="col-6" type="text"
+					value="18">
+			</div>
+			<div class="col-md-3">
+				<span class="col-6">신청가능학점</span> <input class="col-6" type="text"
+					value="18">
+			</div>
+			<div class="col-md-3">
+				<span class="col-3">학년</span> <input class="col-9" type="text"
+					value="2학년(4학기)">
+			</div>
+		</div>
+		
+		<div class="row mt-5" style="border: 1px solid black; padding: 10px; background-color: #d4e4f8;">
+			<div class="col-12 mb-3">
+				<div class="row ">
+					<div class="col-4">
+						<div class="row">
+							<div class="col-3">
+								<span class="col-12">년도</span>
+							</div> 
+							<div class="col-9">
+								<input class="col-12" type="text" value="공과대학 컴퓨터공학과">
+							</div>
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="row">
+							<div class="col-3">
+								<span class="col-12">년도</span>
+							</div> 
+							<div class="col-9">
+								<input class="col-12" type="text" value="공과대학 컴퓨터공학과">
+							</div>
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="row">
+							<div class="col-3">
+								<span class="col-12">년도</span>
+							</div> 
+							<div class="col-9">
+								<input class="col-12" type="text" value="공과대학 컴퓨터공학과">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-12">
+				<div class="row ">
+					<div class="col-4">
+						<div class="row">
+							<div class="col-3">
+								<span class="col-12">년도</span>
+							</div> 
+							<div class="col-9">
+								<input class="col-12" type="text" value="공과대학 컴퓨터공학과">
+							</div>
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="row">
+							<div class="col-3">
+								<span class="col-12">년도</span>
+							</div> 
+							<div class="col-9">
+								<input class="col-12" type="text" value="공과대학 컴퓨터공학과">
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			
+		</div>
+
+
+
+
+
+
+
+
+
+	</div>
+</body>
+</html>

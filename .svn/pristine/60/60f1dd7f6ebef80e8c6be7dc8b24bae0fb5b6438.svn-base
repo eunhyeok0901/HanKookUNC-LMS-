@@ -1,0 +1,18 @@
+package org.hdcd.vo;
+
+import lombok.Data;
+
+@Data
+public class RecordApplyVO {
+	private String rcrda_code;
+	private String smem_no;
+	private String rcrda_date;
+	private int rcrda_state;
+	private String rcrda_reason;
+	private int rcrda_year;
+	private int rcrda_semester;
+	private int rcrda_record;
+	private String rcrda_start;
+	private String rcrda_end;
+	private String rcrda_reject;
+}

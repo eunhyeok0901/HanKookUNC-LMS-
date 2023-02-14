@@ -1,0 +1,10 @@
+package org.hdcd.service.manager.enrollFee;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public interface IEnrollFeeService {
+
+	int checkTuiOpen(Map<String, String> map);
+	
+}

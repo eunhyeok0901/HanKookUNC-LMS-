@@ -1,0 +1,124 @@
+package org.hdcd.controller.student.lecture;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.hdcd.service.student.lecture.StudentLectureService;
+import org.hdcd.vo.LecApplyVO;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+@RequestMapping("/lecture")
+public class LectureController {
+	
+	@Inject
+	StudentLectureService service;
+	
+	
+	@GetMapping("/home")
+	public String mainLecture() {
+		return "member/student/lectureHome";
+	}
+	
+	
+	@PostMapping("/insertLec/{urlCode}")
+	public ResponseEntity<Map<String, Object>> insertLec(@PathVariable String urlCode, String code
+					, HttpServletRequest request) {
+		
+		ResponseEntity<Map<String, Object>> entity = null;
+		
+		// 수강바구니에 있는 상태면 상태 == 0
+		// 일반적인 상황에서는 상태 == 1
+		
+		
+		
+		LecApplyVO tmpLecApply = new LecApplyVO();
+		
+		Map<String,Object> dataMap = new HashMap<String, Object>();
+		if(urlCode.equals("laCode")) {
+			// 수강바구니에 있는 상태임
+			
+			tmpLecApply.setLa_state(1);
+			tmpLecApply.setLa_code(code);
+			
+			// la_state = 1, smem_no = 내학번
+			dataMap = service.insertHis(tmpLecApply, request);
+			
+			if(dataMap != null) {
+				entity = new ResponseEntity<Map<String,Object>>(dataMap, HttpStatus.OK);
+				return entity;
+			}else {
+				entity = new ResponseEntity<Map<String,Object>>(dataMap, HttpStatus.BAD_REQUEST);
+				return entity;
+			}
+		}
+		
+		if(urlCode.equals("lecCode")) {
+			
+			HttpSession session = request.getSession();
+			String userId = (String)session.getAttribute("userId");
+			tmpLecApply.setSmem_no(userId);
+			tmpLecApply.setLec_code(code);
+			
+			boolean flag = checkLec(tmpLecApply);
+			  
+			if(flag) {
+				entity = new ResponseEntity<Map<String,Object>>(dataMap, HttpStatus.BAD_REQUEST);
+				return entity;
+			}
+
+			dataMap = service.insertHis(tmpLecApply, request);
+			
+			if(dataMap != null) {
+				entity = new ResponseEntity<Map<String,Object>>(dataMap, HttpStatus.OK);
+				return entity;
+			}else {
+				entity = new ResponseEntity<Map<String,Object>>(dataMap, HttpStatus.BAD_REQUEST);
+				return entity;
+			}
+		}
+
+		entity = new ResponseEntity<Map<String,Object>>(dataMap, HttpStatus.BAD_REQUEST);
+		
+		return entity;
+		
+	}
+	
+	
+	   private boolean checkLec(LecApplyVO lecApply) {
+		   
+		   // 없으면 등록 가능
+		   LecApplyVO myLecApply = service.selectLecApplyOne(lecApply);
+		   if(myLecApply == null) {
+			   return false;
+		   }
+		   
+		   return true;
+	   }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+}

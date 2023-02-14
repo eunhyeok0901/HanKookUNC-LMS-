@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hdcd.mapper.LecOpenListMapper">
+
+	
+	<insert id="insertLecList" parameterType="LecOpenListVO" useGeneratedKeys="true">
+		<selectKey order="BEFORE" resultType="string" keyProperty="lol_code">
+			select 'LO' || LPAD(seq_lol_code.nextval, 5, '0') from dual
+		</selectKey>
+		insert into lec_open_list (
+			lol_code, pmem_no, lol_name, lol_date, lol_state, lol_limit, lol_credit, lol_schyear, major_cultural, choice_require
+			, lol_year, lol_semester, lol_saved, lol_daycount, lol_day1, lol_startime1, lol_endtime1
+			, lol_day2, lol_startime2, lol_endtime2
+		) values (
+			#{lol_code}, #{pmem_no}, #{lol_name}, sysdate, 0, #{lol_limit}, #{lol_credit}, #{lol_schyear}, #{major_cultural}, #{choice_require}
+			, #{lol_year}, #{lol_semester}, #{lol_saved}, #{lol_daycount}, #{lol_day1}, #{lol_startime1}, #{lol_endtime1}
+			, #{lol_day2}, #{lol_startime2}, #{lol_endtime2}
+		)
+	</insert>
+
+	<insert id="insertLecPlan" parameterType="LecturePlanVO">
+		insert into lecture_plan (
+			lp_code, lol_code, lp_week1, lp_week2, lp_week3, lp_week4, lp_week5, lp_week6
+			, lp_week7, lp_week8, lp_week9, lp_week10, lp_week11, lp_week12, lp_week13
+			, lp_week14, lp_week15, lp_content, lp_attend_ref, lp_test_ref, lp_task_ref
+			, lp_note, lp_score, lp_book
+		) values (
+			'lp' || LPAD(seq_lp_code.nextval, 4, '0'), #{lol_code}, #{lp_week1}, #{lp_week2}, #{lp_week3}
+			, #{lp_week4}, #{lp_week5}, #{lp_week6}, #{lp_week7}, #{lp_week8}, #{lp_week9}, #{lp_week10}
+			, #{lp_week11}, #{lp_week12}, #{lp_week13}, #{lp_week14}, #{lp_week15}
+			, #{lp_content}, #{lp_attend_ref}, #{lp_test_ref}, #{lp_task_ref}, #{lp_note}, 0, #{lp_book}
+		)
+	
+	</insert>
+
+	<select id="selectList" parameterType="string" resultType="LecOpenListVO">
+		select * from lec_open_list where pmem_no = #{userId} order by lol_date desc
+	</select>
+
+	
+	<delete id="deleteLecList" parameterType="string">
+		delete from lec_open_list where lol_code = #{lol_code}
+	</delete>
+
+
+	<select id="selectOneLol" parameterType="string" resultType="LecOpenListVO">
+		select * from lec_open_list where lol_code = #{lolCode}
+	</select>
+
+	<select id="selectOneLp" parameterType="string" resultType="LecturePlanVO">
+		select * from lecture_plan where lol_code = #{lolCode}
+	</select>
+
+	
+	<update id="updateLecOpenList" parameterType="LecOpenListVO">
+		update lec_open_list
+		set
+			 lol_name = #{lol_name}, lol_date = sysdate, lol_limit = #{lol_limit}, lol_credit = #{lol_credit}
+			, lol_schyear = #{lol_schyear}, major_cultural = #{major_cultural}, choice_require = #{choice_require}, lol_year = #{lol_year}
+			, lol_semester = #{lol_semester}, lol_saved = #{lol_saved}, lol_daycount = #{lol_daycount}, lol_day1 = #{lol_day1}
+			, lol_startime1 = #{lol_startime1}, lol_endtime1 = #{lol_endtime1}, lol_day2 = #{lol_day2}, lol_startime2 = #{lol_startime2}
+			, lol_endtime2 = #{lol_endtime2}
+		where lol_code = #{lol_code}
+	</update>
+
+	<update id="updateLecPlan" parameterType="LecturePlanVO">
+		update lecture_plan
+		set 
+			lp_week1 = #{lp_week1}, lp_week2 = #{lp_week2}, lp_week3 = #{lp_week3}, lp_week4 = #{lp_week4}
+			, lp_week5 = #{lp_week5}, lp_week6 = #{lp_week6}, lp_week7 = #{lp_week7}, lp_week8 = #{lp_week8}
+			, lp_week9 = #{lp_week9}, lp_week10 = #{lp_week10}, lp_week11 = #{lp_week11}, lp_week12 = #{lp_week12}
+			, lp_week13 = #{lp_week13}, lp_week14 = #{lp_week14}, lp_week15 = #{lp_week15}, lp_content = #{lp_content}
+			, lp_attend_ref = #{lp_attend_ref}, lp_test_ref = #{lp_test_ref}, lp_task_ref = #{lp_task_ref}
+			, lp_note = #{lp_note}, lp_book = #{lp_book}
+		where lol_code = #{lol_code}
+	</update>
+
+	
+
+
+
+
+
+
+
+
+
+
+</mapper>

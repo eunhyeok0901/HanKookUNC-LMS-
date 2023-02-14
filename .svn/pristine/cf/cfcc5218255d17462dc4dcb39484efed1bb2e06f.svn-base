@@ -1,0 +1,20 @@
+package org.hdcd.mapper;
+
+import java.util.List;
+
+import org.hdcd.vo.LecOpenListVO;
+import org.hdcd.vo.LecturePlanVO;
+
+public interface LecOpenListMapper {
+
+	public int insertLecList(LecOpenListVO lecOpenListVO) throws Exception;
+
+	public void insertLecPlan(LecturePlanVO lecturePlanVO) throws Exception;
+
+	public List<LecOpenListVO> selectList(String userId) throws Exception;
+
+	public int deleteLecList(String lolCode);
+	
+	
+
+}

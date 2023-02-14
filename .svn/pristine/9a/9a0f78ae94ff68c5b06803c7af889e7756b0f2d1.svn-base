@@ -1,0 +1,309 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+
+<body>
+<div id="newWay">
+	<h4 class="card-title">
+		<i class="fa-solid fa-graduation-cap " style="padding-left: 200px;"></i>교외 봉사내역
+	</h4>
+	<div class="row">
+		<div class="col-lg-10" style="margin: auto;">
+			<div class="card">
+				<div class="card-body">
+					<div class="alert alert-primary">
+						 전체 누적 봉사시간&nbsp;&nbsp;  ${totalTime }   / 72  시간&nbsp;&nbsp;&nbsp;&nbsp;
+					</div>
+					<div class="alert alert-success">
+						 교외 누적 봉사시간&nbsp;&nbsp;  ${time}   / 36  시간&nbsp;&nbsp;&nbsp;&nbsp;
+					</div>
+					<div class="table-responsive">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>No</th>
+									<td>년도</td>
+									<td>학기</td>
+									<td>시작일자</td>
+									<td>종료일자</td>
+									<td>기관명</td>
+									<td>취득시간</td>
+									<td>신청상태</td>
+									<td>신청일자</td>
+									<td>취득일자</td>
+									<td>활동내용</td>
+									<td>반려사유</td>
+								</tr>
+							</thead>
+							<tbody>
+								<c:set value="${list }" var="volList"></c:set>
+								<c:choose>
+									<c:when test="${empty volList }">
+										<tr>
+											<td>봉사내역이 존재하지 않습니다</td>
+										</tr>
+									</c:when>
+									<c:otherwise>
+										<c:forEach items="${volList }" var="vol" varStatus="status">
+											<tr>
+												<th>${status.index + 1 }</th>
+												<td>${vol.volo_year }</td>
+												<td>${vol.volo_semester }</td>
+												<td><fmt:formatDate value="${vol.volo_start }" pattern="yyyy/MM/dd"/>&nbsp;&nbsp;&nbsp;~</td>
+												<td><fmt:formatDate value="${vol.volo_end }" pattern="yyyy/MM/dd"/></td>
+												<td>${vol.volo_company }</td>
+												<td>${vol.volo_time }  시간</td>
+												<c:choose>
+													<c:when test="${vol.volo_state == 1 }">
+														<td>승인완료</td>
+													</c:when>
+													<c:when test="${vol.volo_state == 0 }">
+														<td>승인대기</td>
+													</c:when>
+													<c:otherwise>
+														<td>반려</td>
+													</c:otherwise>
+												</c:choose>
+												<td><fmt:formatDate value="${vol.volo_regidate }" pattern="yyyy/MM/dd"/></td>
+												<td><fmt:formatDate value="${vol.volo_date }" pattern="yyyy/MM/dd"/></td>
+												<td> 
+<!-- 												활동내용 모달파트 -->
+													<div class="bootstrap-modal">
+												        <!-- Button trigger modal -->
+												        <span class="badge badge-light" style="cursor: pointer;"  data-toggle="modal" data-target="#basicModal${status.index}">활동내용</span>
+												        <!-- Modal -->
+												        <div class="modal fade" id="basicModal${status.index}" style="display: none;" aria-hidden="true">
+												            <div class="modal-dialog" role="document">
+												                <div class="modal-content">
+												                    <div class="modal-header">
+												                        <h5 class="modal-title">활동내용</h5>
+												                        <button type="button" class="close" data-dismiss="modal"><span>×</span>
+												                        </button>
+												                    </div>
+												                    <div class="modal-body">${vol.volo_content}</div>
+												                    <div class="modal-footer">
+												                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+												                    </div>
+												                </div>
+												            </div>
+												        </div>
+												    </div>
+												</td>
+												<c:choose>
+													<c:when test="${vol.volo_state == 0 }">
+<%-- 														<td> <a href="" class="label label-danger" onclick="outDelete(${vol.volo_code})">취소하기</a> </td> --%>
+														<td> 
+															<span class="label label-danger" id="cancle" onclick="deleteRegister(${vol.volo_code})" style="cursor: pointer;">취소하기</span> 
+														</td>
+													</c:when>
+													<c:otherwise>
+														<td>${vol.volo_reject }</td>
+													</c:otherwise>
+												</c:choose>
+											</tr>
+										</c:forEach>
+									</c:otherwise>
+								</c:choose>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="bootstrap-modal">
+                 <!-- Button trigger modal -->
+                 <button type="button" class="btn mb-1 btn-success" style="float: right;" data-toggle="modal" data-target="#modalGrid">신청하기</button>
+                 <!-- Modal -->
+                 <div class="modal fade" id="modalGrid" style="display: none;" >
+                     <div class="modal-dialog" role="document">
+                         <div class="modal-content" style="width: 200%;">
+                             <div class="modal-header">
+                                 <h5 class="modal-title">Modal title</h5>
+                                 <button type="button" class="close" data-dismiss="modal"><span>×</span>
+                                 </button>
+                             </div>
+                             <div class="modal-body">
+				               <div class="card-body">
+				                   <div class="form-validation">
+				                       <form id="volRegisterForm" class="form-valide" method="post" enctype="multipart/form-data" >
+				                           <div class="form-group row is-invalid">
+				                               <label class="col-lg-4 col-form-label" for="val-username">학번 <span class="text-danger">*</span>
+				                               </label>
+				                               <div class="col-lg-6">
+				                                   <input type="text" class="form-control" id="smem_no" readonly="readonly" name="smem_no" aria-required="true" aria-describedby="val-username-error" value="${id }">
+				                               </div>
+				                           </div>
+				                           <div class="form-group row is-invalid">
+				                               <label class="col-lg-4 col-form-label">시작일자 <span class="text-danger">*</span>
+				                               </label>
+				                               <div class="col-lg-6">
+				                                   <input type="date" class="form-control" id="volo_start" name="volo_start" placeholder="yyyy/mm/dd" aria-required="true" >
+				<!--                                <div id="val-email-error" class="invalid-feedback animated fadeInDown" style="display: block;">시작일자를 등록해주세요!</div> -->
+				                               </div>
+				                           </div>
+				                           <div class="form-group row is-invalid">
+				                               <label class="col-lg-4 col-form-label">종료일자 <span class="text-danger">*</span>
+				                               </label>
+				                               <div class="col-lg-6">
+				                                   <input type="date" class="form-control" id="volo_end" name="volo_end" placeholder="yyyy/mm/dd" aria-required="true" >
+				<!--                                <div id="val-password-error" class="invalid-feedback animated fadeInDown" style="display: block;">종료일자를 등록해주세요!</div> -->
+				                               </div>
+				                           </div>
+				                           <div class="form-group row is-invalid">
+				                               <label class="col-lg-4 col-form-label" >총 활동 시간 <span class="text-danger">*</span>
+				                               </label>
+				                               <div class="col-lg-6">
+				                                   <input type="text" class="form-control" id="volo_time" name="volo_time" placeholder="0" aria-required="true" aria-describedby="val-confirm-password-error">
+				<!--                                <div id="val-confirm-password-error" class="invalid-feedback animated fadeInDown" style="display: block;">활동시간을 입력해주세요!</div> -->
+				                               </div>
+				                           </div>
+				                           <div class="form-group row is-invalid">
+				                               <label class="col-lg-4 col-form-label" >기관명 <span class="text-danger">*</span>
+				                               </label>
+				                               <div class="col-lg-6">
+				                                   <input type="text" class="form-control" id="volo_company" name="volo_company" placeholder="" aria-required="true" aria-describedby="val-confirm-password-error">
+				<!--                                <div id="val-confirm-password-error" class="invalid-feedback animated fadeInDown" style="display: block;">Please provide a password</div> -->
+				                               </div>
+				                           </div>
+				                           <div class="form-group row is-invalid">
+				                               <label class="col-lg-4 col-form-label" for="val-suggestions">활동내용 <span class="text-danger">*</span>
+				                               </label>
+				                               <div class="col-lg-6">
+				                                   <textarea class="form-control" id="volo_content" name="volo_content" rows="10" placeholder="활동내용을 기입해주세요" aria-required="true" aria-describedby="val-suggestions-error"></textarea>
+				<!--                                <div id="val-suggestions-error" class="invalid-feedback animated fadeInDown" style="display: block;">활동내용을 기입해주세요</div> -->
+				                               </div>
+				                           </div>
+				                           <div class="form-group row is-invalid">
+				                               <label class="col-lg-4 col-form-label" >첨부파일 <span class="text-danger">*</span>
+				                               </label>
+				                               <div class="col-lg-6">
+				                                   <input type="file" id="volo_files" name="volo_files" aria-required="true" multiple aria-describedby="val-confirm-password-error">
+				<!--                                <div id="val-confirm-password-error" class="invalid-feedback animated fadeInDown" style="display: block;">Please provide a password</div> -->
+				                               </div>
+				                           </div>
+<!-- 							                           <div class="form-group row"> -->
+<!-- 							                               <div class="col-lg-8 ml-auto"> -->
+<!-- 							                                   <button type="button" class="btn btn-primary btn sweet-success" onclick="forAlert()">신청하기</button> -->
+<!-- 							                               </div> -->
+<!-- 							                           </div> -->
+				                             <div class="modal-footer">
+				                                 <button type="button" class="btn btn-secondary" onclick="closeModal()" data-dismiss="modal">닫기</button>
+				                                 <button type="button" id="register" class="btn btn-primary btn sweet-success" onclick="registerModal()">신청하기</button>
+				                             </div>
+				                       </form>
+				                   </div>
+				               </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+		</div>
+	</div>
+</div>
+</div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+<script type="text/javascript">
+	
+	
+		
+		
+		const registerForm = document.getElementById("volRegisterForm");
+		const volo_file = document.querySelector("#volo_files");
+		const register = document.querySelector("#register");
+		const cancle = document.querySelector("#cancle");
+		
+		function closeModal(){
+			registerForm.reset();
+		}
+		
+		function registerModal(){
+// 			console.log($(pthis).parent().parent().attr("id"));
+// 			var thisBtn = $(pthis).parent().parent().attr("id")
+			
+			
+			let files = volo_file.files;
+// 			var files = file[0];
+			console.log("파일사이즈 : " + files.length);
+// 			if(files.length == 0){
+// 				alert("파일이 첨부되지 않았습니다. 다시 시도해주세요!");
+// 				return false;
+// 			}
+			let formData = new FormData(registerForm);
+
+			for(let i = 0; i < files.length; i++){
+				formData.append("volo_rfiles",files[i]);
+			}
+			
+			var token = $("meta[name='_csrf']").attr('content');
+			var modalGrid = $("#modalGrid")
+			$.ajax({
+				type : "POST",
+				url : "/volunteer/outRegister",
+				data : formData,
+				contentType : false,
+				processData : false,
+				headers : {
+					"X-CSRF-TOKEN" : token
+				},
+				success : function(data){
+					modalGrid.modal('hide');
+					alert(data);
+// 					$("#newWay").load("/volunteer/outList #newWay");
+					location.href = "/volunteer/outList";
+					registerForm.reset();
+				}
+			})
+			
+			
+		}
+	
+
+	function deleteRegister(aa){
+		
+		if(!confirm("취소하시겠습니까?")){
+			return false;
+		}	
+			
+		console.log(aa);
+		var volo_code = {"volo_code" : aa};
+		console.log(volo_code);
+		$.ajax({
+			url : "/volunteer/outDelete",
+			type : "get",	
+			data : volo_code,
+			success : function(data){
+				alert("취소되었습니다!")
+// 				console.log(cancle.parent().parent().find("tr"));
+				$("#newWay").load("/volunteer/outList #newWay");  //load 쓰지 않습니다.
+				// 절대 서버사이드에서 html 만들어가지고 오지 않습니당, 오직 데이타만 (raw 데이타)
+			}
+		})
+	}
+
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+
+	
+</script>
+</html>
+

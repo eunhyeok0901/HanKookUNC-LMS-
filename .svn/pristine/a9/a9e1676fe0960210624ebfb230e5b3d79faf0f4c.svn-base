@@ -1,0 +1,53 @@
+package org.hdcd.service.common.mainPageInfo;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import org.hdcd.mapper.MainPageInfoMapper;
+import org.hdcd.vo.BookVO;
+import org.hdcd.vo.CounselApplyVO;
+import org.hdcd.vo.FoodCalendarVO;
+import org.springframework.stereotype.Service;
+
+@Service
+public class MainPageServiceImpl implements MainPageService{
+
+	@Inject
+	MainPageInfoMapper mainPageInfoMapper; 
+	
+	@Override
+	public Map<String, Object> getBookRental(String userId) {
+		// TODO Auto-generated method stub
+		return mainPageInfoMapper.getBookRental(userId);
+	}
+
+	@Override
+	public List<BookVO> getBookList() {
+		// TODO Auto-generated method stub
+		return mainPageInfoMapper.getBookList();
+	}
+
+	@Override
+	public List<CounselApplyVO> mainPageCounselapplyList(String userId) {
+		// TODO Auto-generated method stub
+		
+		if(userId.length() == 6) {
+			List<CounselApplyVO> professorMainPageCounselapplyList = mainPageInfoMapper.professorMainPageCounselapplyList(userId);
+			return professorMainPageCounselapplyList;
+		}else {
+			List<CounselApplyVO> mainPageCounselapplyList = mainPageInfoMapper.mainPageCounselapplyList(userId);
+			return mainPageCounselapplyList;
+		}
+		
+	}
+	
+   //메인페이지 식단표
+   @Override
+   public List<FoodCalendarVO> getAllFoodList() {
+      // TODO Auto-generated method stub
+      return mainPageInfoMapper.getAllFoodList();
+   }
+
+}

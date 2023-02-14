@@ -1,0 +1,13 @@
+package org.hdcd.vo;
+
+import lombok.Data;
+
+@Data
+public class ScholarApplyVO {
+	private String scha_no;
+	private String smem_no;
+	private String schl_code;
+	private String scha_date;
+	private int scha_state;
+	private String scha_reject;
+}

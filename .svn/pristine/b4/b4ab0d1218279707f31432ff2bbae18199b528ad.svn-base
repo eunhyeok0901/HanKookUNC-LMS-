@@ -1,0 +1,27 @@
+package org.hdcd.service.manager.enrollFee;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.hdcd.mapper.EnrollFeeMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+public class EnrollFeeServiceImpl implements IEnrollFeeService{
+
+	@Autowired
+	EnrollFeeMapper mapper;
+
+	@Override
+	public int checkTuiOpen(Map<String, String> map) {
+		log.debug("서비스에서 map 체크 {}", map.toString());
+		return mapper.checkTuiOpen(map);
+	}
+	
+
+}

@@ -1,0 +1,11 @@
+package org.hdcd.service.manager.chart;
+
+import java.util.List;
+
+import org.hdcd.vo.DepartmentVO;
+
+public interface ChartService {
+
+	List<DepartmentVO> getDepartmentInfo();
+	
+}

@@ -1,0 +1,15 @@
+package org.hdcd.vo;
+
+import lombok.Data;
+
+@Data
+public class EmployCompanyVO {
+	private String ecom_code;
+	private String ecom_name;
+	private int ecom_limit;
+	private String ecom_intro;
+	private String ecom_locate;
+	private int ecom_pay;
+	private String ecom_period;
+	private String ecom_content;
+}

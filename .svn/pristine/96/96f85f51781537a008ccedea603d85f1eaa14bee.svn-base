@@ -1,0 +1,62 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+   <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">${BoardeMap.boardVO.DEP_NAME }</h4>
+								<hr>
+								 <div class = "col-md-12">
+								 	<h2>${BoardeMap.boardVO.BOARD_TITLE}</h2><br>		
+								 	 <h6 style = "float:right;">조회수 : ${BoardeMap.boardVO.BOARD_COUNT} ㅣ 교수 ㅣ 등록일 : <fmt:formatDate value="${BoardeMap.boardVO.BOARD_DATE}" pattern="yyyy-MM-dd"/></h6>
+								 </div>    																										
+								 <br><br><br><br> 
+								<div class = "comment-message" style = "white-space:pre-wrap">
+								<c:forEach items="${BoardeMap.boardFileVO}" var="boardfile">		
+									<img alt="dasdasdad" src="${boardfile.file_path}">
+									<br/>
+								</c:forEach>
+								 ${BoardeMap.boardVO.BOARD_CONTENT} 
+								 </div>
+								 <br>
+								 <br>
+								 <br>
+								 <div class = "col-md-12">
+							<c:if test="${not empty BoardeMap.boardFileVO}">
+								<blockquote>
+									<c:forEach items="${BoardeMap.boardFileVO}" var = "boardfile" varStatus = "i">
+										<b>${boardfile.file_originnm }&nbsp;&nbsp;</b>
+										<p style="display: inline-block;">${boardfile.file_type }&nbsp;&nbsp;</p>
+										<a href= <c:out value = "${boardfile.file_path }"/>
+											download="${boardfile.file_originnm }"
+											style="text-align: right;">
+											<button type="button"
+												class="btn mb-1 btn-rounded btn-warning">
+												<span class="btn-icon-left"> <i
+													class="fa fa-download color-warning"></i>
+												</span> 다운로드
+											</button>
+										</a>
+									</c:forEach>
+								</blockquote>
+							</c:if>
+						</div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+       
+</body>
+</html>

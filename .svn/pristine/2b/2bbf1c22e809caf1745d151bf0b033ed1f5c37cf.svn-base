@@ -1,0 +1,84 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<style>
+
+.custom-div-radius{
+	border-radius : 10px;
+}
+
+.bg-gray{
+	background-color : #d8e3f2;
+}
+
+.custom-font-dark {
+   color : #0a3875;
+   font-weight : bold;
+}
+
+.table-spacing {
+	border-collapse: separate;
+	border-spacing: 0 10px;
+}
+
+
+</style>
+<body>
+	<div class="container-fluid bg-white p-5 custom-div-radius">
+		<div class="container-sm" style="height:850px;">
+			<h2>학기정보</h2>
+			<div class="col-sm-12 bg-gray mb-5 p-5 custom-div-radius">
+				<div class="row">
+					<div class="col-3">
+						<label for="year"><i class="fa-sharp fa-solid fa-circle-down mr-2"></i><span class="custom-font-dark">년도</span></label><br>
+						<input class="form-control" type="text" id="year" value="2022" readonly>
+					</div>
+					<div class="col-3">
+						<label for="semester"><i class="fa-sharp fa-solid fa-circle-down mr-2"></i><span class="custom-font-dark">학기</span></label><br>
+						<input class="form-control" type="text" id="semester" value="2" readonly>
+					</div>
+				</div>
+			</div>
+			
+			<h2>현재학기성적</h2>
+			<div class="col-sm-12 bg-gray p-5 custom-div-radius">
+				<div class="row ">
+					<div class="col-12 height-500 custom-overflow-auto">
+						<table class="custom-table table-sticky" >
+							<thead>
+								<tr class="custom-font-dark">
+									<th>년도</th>
+									<th>학기</th>
+									<th>학기종류</th>
+									<th>과목</th>
+									<th>이수구분</th>
+									<th>학점</th>
+									<th>등급</th>
+									<th>평점</th>
+									<th>취득여부</th>
+									<th>학점포기</th>
+									<th>재수강</th>
+								</tr>
+							</thead>
+							<tbody id="myLecGrade">
+
+							</tbody>
+						</table>			
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+
+
+</script>
+
+
+</html>

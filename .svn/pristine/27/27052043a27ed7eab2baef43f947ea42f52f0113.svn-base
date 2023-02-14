@@ -1,0 +1,11 @@
+package org.hdcd.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+public interface CalendarMapper {
+
+	List<Map<String, Object>> getCalendarList(Map<String, Object> dataMap);
+
+	List<Map<String, Object>> getCalendarList2(Map<String, Object> dataMap);
+}

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hdcd.mapper.ScholarMapper">
+	<!-- 대문자를 소문자로 변환 ctrl+shift+y-->
+	
+	<!-- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■학생■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ -->
+	<!-- ▶[학생] 장학금 종류 전체 리스트 select -->
+	<select id="getScholarList" resultType="ScholarListVO">
+		select schl_code, schl_name, schl_price from scholar_list
+	</select>
+	
+	<!-- ▶[학생] 개별 장학금 신청 내역 출력 리스트 select  -->
+	<resultMap type="ScholarListVO" id="studentScholarApplyMap">
+		<result property="schl_code" column="schl_code"/>
+		<result property="schl_name" column="schl_name"/>
+		<result property="schl_price" column="schl_price"/>
+		<collection property="scholarApplyList" resultMap="scholarApplyMap"/>
+	</resultMap>
+	<resultMap type="ScholarApplyVO" id="scholarApplyMap">
+		<result property="scha_no" column="scha_no"/>
+		<result property="scha_date" column="scha_date"/>
+		<result property="scha_state" column="scha_state"/>
+		<result property="scha_reject" column="scha_reject"/>
+		<result property="scha_cdate" column="scha_cdate"/>
+	</resultMap>
+	<select id="getScholarApplyList" parameterType="string" resultMap="studentScholarApplyMap">
+		select a.schl_code,
+		       a.schl_name,
+		       a.schl_price,
+               b.scha_no,
+		       b.scha_date,
+		       b.scha_state,
+		       b.scha_reject,
+		       b.scha_cdate
+		from scholar_list a inner join scholar_apply b
+			 on b.schl_code = a.schl_code
+		where b.smem_no = #{userId}
+	</select>
+	
+	<!-- ▶[학생] 장학금 신청폼 insert -->
+	<insert id="insertScholarApply" parameterType="ScholarApplyVO" useGeneratedKeys="true">
+		insert into scholar_apply(scha_no, smem_no, schl_code, scha_date, scha_state)
+		values ('scha'||seq_scha_no.nextval, #{smem_no} , #{schl_code} , sysdate, 0)
+		<selectKey keyProperty="scha_no" keyColumn="scha_no" resultType="string" order="AFTER">
+			select 'scha'||seq_scha_no.currval from dual
+		</selectKey>
+	</insert>
+	
+	<!-- ▶[학생] 장학금 신청폼 insert가 성공할 경우, 폼에 딸린 장학증빙서류도 insert -->
+	<insert id="insertScholarApplyFile" parameterType="ScholarFileVO">
+		insert into scholar_file(schfile_code, file_name, file_size, file_originnm, file_path, scha_no, file_type)
+		values('schfile'||seq_schfilecode.nextval, #{file_name}, #{file_size}, #{file_originnm}, #{file_path}, #{scha_no}, #{file_type})
+	</insert>
+	
+	
+	<!-- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■관리자■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ -->
+	<resultMap type="ScholarListVO" id="scholarTotalListMap">
+		<id property="schl_code" column="schl_code"/>
+		<result property="schl_name" column="schl_name"/>
+		<result property="schl_price" column="schl_price"/>
+		<collection property="scholarApplyList" resultMap="scholarTotalApplyMap"/>
+	</resultMap>
+	<resultMap type="ScholarApplyVO" id="scholarTotalApplyMap">
+		<id property="scha_no" column="scha_no"/>
+		<result property="smem_no" column="smem_no"/>
+		<result property="scha_date" column="scha_date"/>
+		<result property="scha_state" column="scha_state"/>
+		<result property="scha_reject" column="scha_reject"/>
+		<collection property="schaFileList" resultMap="scholarTotalApplyFileMap"></collection>
+	</resultMap>
+	<resultMap type="ScholarFileVO" id="scholarTotalApplyFileMap">
+		<id property="schfile_code" column="schfile_code"/>
+		<result property="file_name" column="file_name"/>
+		<result property="file_size" column="file_size"/>
+		<result property="file_originnm" column="file_originnm"/>
+		<result property="file_path" column="file_path"/>
+		<result property="file_type" column="file_type"/>
+	</resultMap>
+	<select id="getScholarTotalList" resultMap="scholarTotalListMap">
+		select a.schl_code,
+		       a.schl_name,
+		       a.schl_price,
+		       b.scha_no,
+		       b.smem_no,
+		       b.schl_code,
+		       b.scha_date, 
+		       b.scha_state,
+		       b.scha_reject,
+		       c.schfile_code,
+		       c.file_name,
+		       c.file_size,
+		       c.file_originnm,
+		       c.file_path,
+		       c.scha_no,
+		       c.file_type
+		from scholar_list a
+		inner join scholar_apply b
+		    on b.schl_code = a.schl_code 
+		inner join scholar_file c
+		    on c.scha_no = b.scha_no
+	</select>
+	
+</mapper>
+

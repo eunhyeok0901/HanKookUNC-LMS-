@@ -1,0 +1,392 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="card">
+			<div class="card-body">
+				<div class="card-title">
+					<h4>공결 처리</h4>
+				</div>
+				<div class="table-responsive">
+					<table class="table table-hover" id="pAttendApplyListTb">
+						<thead>
+							<tr>
+								<th>번호</th>
+								<th>강의명</th>
+								<th>신청번호</th>
+								<th>공결유형</th>
+								<th>이름</th>
+								<th>학번</th>
+								<th>승인구분</th>
+								<th>상세</th>
+							</tr>
+						</thead>
+						<tbody >
+							<!-- 여기에 목록 -->
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		
+	<div id="aALcard1">
+		<div class="card" id="aALcard2" style="display:none;">
+			<div class="card-body">
+				<div class="card-title">
+					<h4>상세보기</h4>
+					<hr>
+				</div>
+				<div class="table-responsive">
+					<input type="hidden" id="aa_code">
+					<table border="1" class="table">
+						<tr>
+							<td>학번</td>
+							<td><input type="text" id="smem_no"></td>
+							<td>이름</td>
+							<td><input type="text" id="mem_name"></td>
+						</tr>
+						<tr>
+							<td>년도</td>
+							<td><input type="text" id="st_year"></td>
+							<td>학기</td>
+							<td><input type="text" id="st_semester"></td>
+						</tr>
+						<tr>
+							<td>결석일시</td>
+							<td colspan="3"><input type="text" id="aa_lectureday" style="box-sizing : border-box;  width: 100%;"></td>
+						</tr>
+						<tr>
+							<td>결석유형</td>
+							<td colspan="3"><input type="text" id="aa_reason" style="box-sizing : border-box;  width: 100%;"></td>
+						</tr>
+						<tr>
+							<td>상세사유</td>
+							<td colspan="3"><textarea rows="5" id="aa_detail" cols="" name="aa_detail"  style="box-sizing : border-box; border: none; resize: none; width: 100%;" ></textarea></td>
+						</tr>
+						<tr>
+							<td colspan="4" id="fileDownnView">
+							<!-- 여기에 다운로드 버튼이랑 미리보기 버튼 생성-->
+							</td>
+						</tr>
+					</table>
+					<div class="d-flex justify-content-end">
+						<button type="button" onclick="approveAttend()">승인</button>
+						<button type="button" onclick="rejectAttend()">반려</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="card" id="aALcard3">
+			<div class="card-body">
+				<div class="card-title">
+					<h4>유의사항</h4>
+					<hr>
+				</div>
+				<div style="border: 1;">
+					<p>가. 공결 승인 후 승인결정 번복 불가능</p>
+					<p>나. 상해나 질병으로 인한 공결은 첨부서류에 질병명 명시 확인</p>
+					<p>다. 대외활동 목록 등은 과사무실에 문의</p>
+					<p>라. 승인완료된 공결신청서 파일 출력 후 필서명</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	</div>
+</div>
+
+<!-- 반려사유 입력 모달 -->
+<div class="modal fade" id="rejectAttendModal" role="dialog">
+	<div class="modal-dialog modal-dialog-centered">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">반려</h4>
+				<button type="button" class="close updateRejectModalClose" data-dismiss="modal">×</button>
+			</div>
+			<div class="modal-body">
+				<form id="attendRejectModalForm">
+					<div class="form-group">
+						<label for="rejectAttendText" class="col-form-label">반려사유작성</label>
+						<textarea class="form-control" id="rejectAttendText"></textarea>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default attendRejectModalClose" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-default" id="rejectAttendBtn">등록</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<script>
+let header = '${_csrf.headerName}';
+let token =  '${_csrf.token}';
+
+window.onload = function() {
+	mjgetList();
+}
+
+function mjgetList(){
+	console.log("실행");
+
+	$.ajax({
+		method: "GET",
+		url: "/lad/getAttendApplyList",
+		dataType: "json",
+		success: function(result){
+			console.log("성공! : ",result);
+			aaDataTableDraw(result);
+		},
+		error: function(){
+
+		}
+	});	// ajax 끝
+}
+
+const aaDataTableDraw = data =>{
+	console.log("찍기 ",data)
+	let table = $("#pAttendApplyListTb").DataTable();
+	let cnt = 1;
+	for(let i = 0; i < data.length; i++){
+		
+		if(data[i].AA_STATE == 0){
+			table.row.add([
+				`<td>\${cnt}</td>`,
+				`<td>\${data[i].LOL_NAME}</td>`,
+				`<td>\${data[i].AA_CODE}</td>`,
+				`<td>\${data[i].AA_REASON}</td>`,
+				`<td>\${data[i].MEM_NAME}</td>`,
+				`<td>\${data[i].SMEM_NO}</td>`,
+				`<td><span class="badge badge-primary px-2">대기</span></td>`,
+				`<td><button type="button" onclick="attendApplyInfo('\${data[i].AA_CODE}','\${data[i].SMEM_NO}')">상세보기</button></td>`
+			]).draw(false);
+		}
+		if(data[i].AA_STATE == 1){
+			table.row.add([
+				`<td>\${cnt}</td>`,
+				`<td>\${data[i].LOL_NAME}</td>`,
+				`<td>\${data[i].AA_CODE}</td>`,
+				`<td>\${data[i].AA_REASON}</td>`,
+				`<td>\${data[i].MEM_NAME}</td>`,
+				`<td>\${data[i].SMEM_NO}</td>`,
+				`<td><span class="badge badge-success px-2">승인</span></td>`,
+				`<td><button type="button" onclick="attendApplyInfo('\${data[i].AA_CODE}','\${data[i].SMEM_NO}')">상세보기</button></td>`
+			]).draw(false);
+		}
+		if(data[i].AA_STATE == 2){
+			table.row.add([
+				`<td>\${cnt}</td>`,
+				`<td>\${data[i].LOL_NAME}</td>`,
+				`<td>\${data[i].AA_CODE}</td>`,
+				`<td>\${data[i].AA_REASON}</td>`,
+				`<td>\${data[i].MEM_NAME}</td>`,
+				`<td>\${data[i].SMEM_NO}</td>`,
+				`<td><span class="badge badge-danger px-2">반려</span></td>`,
+				`<td><button type="button" onclick="attendApplyInfo('\${data[i].AA_CODE}','\${data[i].SMEM_NO}')">상세보기</button></td>`
+			]).draw(false);
+		}
+		cnt++;
+	}
+}
+
+function attendApplyInfo(aaCode, smemNo){
+	console.log("aaCode : ", aaCode ," smemNo : ", smemNo);
+	
+	let aALcard1 = document.getElementById("aALcard1");
+	let aALcard2 = document.getElementById("aALcard2");
+	let aALcard3 = document.getElementById("aALcard3");
+
+	aALcard1.style.display = "flex";
+	aALcard2.style.display = "";
+	aALcard2.style.width = "50%";
+	aALcard2.style.marginRight = "1%";
+	aALcard3.style.width = "49%";
+
+	let data = {
+			aaCode : aaCode
+	}
+
+	$.ajax({
+		method: "POST",
+		url: "/lad/getAttendApplyStudent",
+		data: JSON.stringify(data),
+		contentType: "application/json; charset=UTF-8",
+		beforeSend: function(xhr){
+			xhr.setRequestHeader(header, token);
+		},
+		dataType: "json",
+		success: function(result){
+			console.log("썸원콜더닥터~~",result);
+			datailViewTemplate(result);
+		},
+		error: function(){
+
+		}
+
+	});	
+
+}
+
+const datailViewTemplate = data =>{
+	
+	let aaLectureday = "";
+	
+	if(data.ATTEND_DAY == 1){
+		aaLectureday = `\${data.LOL_NAME} : \${data.ST_DAY1}(\${data.ST_STARTTIME1}~\${data.ST_ENDTIME1})/\${data.ATTEND_WEEK}주차\${data.ATTEND_DAY}회차`;
+	}else{
+		aaLectureday = `\${data.LOL_NAME} : \${data.ST_DAY2}(\${data.ST_STARTTIME2}~\${data.ST_ENDTIME2})/\${data.ATTEND_WEEK}주차\${data.ATTEND_DAY}회차`; 
+	}
+	
+	$("#smem_no").val(data.SMEM_NO);
+	$("#mem_name").val(data.MEM_NAME);
+	$("#st_year").val(data.ST_YEAR);
+	$("#st_semester").val(data.ST_SEMESTER);
+	$("#aa_lectureday").val(aaLectureday);
+	$("#aa_reason").val(data.AA_REASON);
+	$("#aa_detail").val(data.AA_DETAIL);
+	$("#aa_code").val(data.AA_CODE);
+	
+	let filePath = data.FILE_PATH;
+	let fileOriginnm = data.FILE_ORIGINNM;
+	let apCode = data.AP_CODE;
+	
+	
+	fileDownload(filePath, fileOriginnm, apCode);
+	
+}
+
+
+function fileDownload(filePath, fileOriginnm, apCode){
+	
+	let code = "";
+	
+	code += `<a class="btn mb-1 btn-rounded btn-warning" href="\${filePath}" download >
+		 	 <span class="btn-icon-left">
+		 	<i class="fa fa-download color-warning"></i>
+		 	</span>\${fileOriginnm}</a>
+		 	<span class="badge badge-light" onclick="fileViewPopup('\${filePath}')">미리보기</span>
+	`;
+	
+	$("#fileDownnView").html(code);
+	
+}
+
+function fileViewPopup(filePath){
+	
+		let url = filePath;
+        let name = "fileviewPopup";
+        let option = "width = 900, height = 800, top = 100, left = 200, location = no"
+        window.open(url, name, option);
+
+}
+
+function approveAttend(){
+	let aaCode = document.getElementById("aa_code").value;
+
+	console.log(aaCode);
+	
+	let data = {
+			aa_code : aaCode
+	}
+
+	$.ajax({
+		method: "POST",
+		url: "/lad/updateAttendApproval",
+		data: JSON.stringify(data),
+		contentType: "application/json; charset=UTF-8",
+		beforeSend: function(xhr){
+			xhr.setRequestHeader(header, token);
+		},
+		dataType: "text",
+		success: function(result){
+			console.log("성공! ", result);
+			alert("승인완료!");
+			 $('#pAttendApplyListTb').dataTable().fnClearTable(); 
+			mjgetList();
+			
+			let aALcard1 = document.getElementById("aALcard1");
+			let aALcard2 = document.getElementById("aALcard2");
+			let aALcard3 = document.getElementById("aALcard3");
+
+			aALcard1.style.display = "";
+			aALcard2.style.display = "none";
+			aALcard2.style.width = "100%";
+			aALcard2.style.marginRight = "";
+			aALcard3.style.width = "100%";
+		},
+		error: function(){
+
+		}
+	})// ajax 끝
+	
+}
+
+function rejectAttend(){
+	
+	$("#rejectAttendModal").modal("show");
+	
+	// 모달 닫기버튼 리셋
+	let attendRejectModalClose = $(".attendRejectModalClose");
+	attendRejectModalClose.on("click",function(){
+			 $("#attendRejectModalForm")[0].reset()
+			 $('#rejectAttendModal').modal('hide');
+	})
+	
+	
+	// 모달 반려사유 등록시 ajax 실행
+	rejectAttendBtn.onclick = function(event) {
+		
+		event.preventDefault();
+			
+		let aaReject = $("#rejectAttendText").val();
+		let aaCode = $("#aa_code").val();
+		
+		console.log("aaReject : ", aaReject, "aaCode : ", aaCode);
+
+		let data = {
+				aa_code : aaCode,
+				aa_reject : aaReject
+			}
+		
+
+	    $.ajax({
+	        method : "POST",
+	        url : "/lad/updateAttentReject",
+	        data : JSON.stringify(data),
+	        contentType : "application/json;charset=utf-8",
+	        dataType : "text",
+	        beforeSend : function(xhr){
+			        xhr.setRequestHeader(header, token);
+			},
+	        success : function(result){
+	            console.log("성공!", result)
+	        	alert("반려되었습니다.");
+	            $('#pAttendApplyListTb').dataTable().fnClearTable(); 
+	            mjgetList();
+	            let aALcard1 = document.getElementById("aALcard1");
+				let aALcard2 = document.getElementById("aALcard2");
+				let aALcard3 = document.getElementById("aALcard3");
+
+				aALcard1.style.display = "";
+				aALcard2.style.display = "none";
+				aALcard2.style.width = "100%";
+				aALcard2.style.marginRight = "";
+				aALcard3.style.width = "100%";
+	        },
+	        error : function(){
+	
+	        }
+	        
+	    })
+	    
+	    $("#attendRejectModalForm")[0].reset();
+  	  	$('#rejectAttendModal').modal('hide'); 
+	}
+}
+</script>

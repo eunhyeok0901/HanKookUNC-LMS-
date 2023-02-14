@@ -1,0 +1,22 @@
+package org.hdcd.service.professor.scholar;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.hdcd.mapper.ScholarMapper;
+import org.hdcd.vo.ScholarListVO;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ManagerScholarServiceImpl implements IManagerScholarService{
+
+	@Inject
+	ScholarMapper mapper;
+	
+	@Override
+	public List<ScholarListVO> getScholarTotalList() {
+		return mapper.getScholarTotalList();
+	}
+
+}

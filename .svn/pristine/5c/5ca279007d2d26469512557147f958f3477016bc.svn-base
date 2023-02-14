@@ -1,0 +1,22 @@
+package org.hdcd.controller.manager.chart_manage;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RequestMapping("/chartManage")
+@Controller
+public class ChartController {
+
+	@GetMapping("/chartPage")
+	public String chartPage() {
+		log.debug("chartPage 입니다");
+		
+		
+		return "manager/mChartPage"; 
+	}
+	
+}

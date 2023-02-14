@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hdcd.mapper.CounselMapper">
+
+	<select id="counselApplyList" resultType="org.hdcd.vo.CounselApplyVO" parameterType="string">
+		SELECT * FROM COUNSEL_APPLY
+		 WHERE SMEM_NO = #{userId}
+	</select>
+
+	<select id="getCounselList" resultType="org.hdcd.vo.CounselVO">
+		SELECT * FROM COUNSEL
+	</select>
+	
+</mapper>

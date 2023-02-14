@@ -1,0 +1,262 @@
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
+
+
+	<div class="row">
+	
+		<div class="col-md-12" id="lecPlanListBody">
+			<div class="card">
+				<div class="card-body">
+					<div class="card-title">
+						<div class="d-flex justify-content-between">
+						<h4>수강생목록</h4>
+						<select id="pSelectLecture" onchange="pSelectLectureFn()">
+							<c:choose>
+								<c:when test="${lecture eq null }">
+									<option value="">등록된 강좌 없음</option>
+								</c:when>
+								<c:otherwise>
+									<option value="" selected="selected">강좌선택</option>
+									<c:forEach items="${lecture }" var="lecture" >
+										<option value="${lecture.LEC_CODE}">${lecture.LOL_NAME}</option>
+									</c:forEach>
+								</c:otherwise>
+								</c:choose>
+						</select>
+						
+						</div>
+					</div>
+					
+						<div class="table-responsive">
+							<table class="table table-hover">
+								<thead>
+									<tr>
+										<th>번호</th>
+										<th>단과대학</th>
+										<th>소속</th>
+										<th>학년</th>
+										<th>학번</th>
+										<th>이름</th>
+										<th></th>
+									</tr>
+								</thead>
+
+								<tbody id="pLecStudentList">
+									<!-- 리스트 출력! -->
+								</tbody>
+							</table>
+						</div>
+
+
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-5" id="lecPlanDetailBody" style="display:none;">
+			<div class="card">
+				<div class="card-body">
+					<div class="card-title">
+						<div>
+							<button type="button" class="close" onclick="sDetailClose()">×</button>
+							<h4>학생정보</h4>
+						</div>
+						<hr>
+						<div class="form-validation">
+							<form name="myLecStuForm" class="form-valide" action="#" method="post">
+								<div  class="d-flex">
+										<div style="width:170px; height:210px; margin:5%;">
+											<img id="myLecStuImg"  src="" style="position : adsolute; width : 100%; height :100%;">
+										</div>
+									<div class="flex-fill" style="margin-right: 3%;">
+									<div class="form-group row" style="margin-top: 13%;">
+										<label class="col-lg-3 col-form-label" for="myLecStuNo"> 번호 </label>
+										<div class="col-lg-8">
+											<input type="text" class="form-control" id="myLecStuNo"
+												name="myLecStuNo" readonly="readonly" value="">
+										</div>
+									</div>
+									<div class="form-group row">
+										<label class="col-lg-3 col-form-label"  for="SMEM_NO"> 학번 </label>
+										<div class="col-lg-8">
+											<input type="text" class="form-control" id="SMEM_NO"
+												name="SMEM_NO" readonly="readonly">
+										</div>
+									</div>
+									<div class="form-group row">
+										<label class="col-lg-3 col-form-label" for="MEM_NAME"> 이름</label>
+										<div class="col-lg-8">
+											<input type="text" class="form-control" id="MEM_NAME"
+												name="MEM_NAME" readonly="readonly">
+										</div>
+									</div>
+									</div>
+								</div>
+								<div class="form-group row"  style="margin-left: 3%;, margin-top: 3%;">
+									<label class="col-lg-3 col-form-label" for="COL_NAME">소속대학</label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control" id="COL_NAME"
+											name="COL_NAME" readonly="readonly">
+									</div>
+								</div>
+								<div class="form-group row" style="margin-left: 3%;">
+									<label class="col-lg-3 col-form-label" for="STU_DEP">전공</label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control" id="STU_DEP"
+											name="STU_DEP" readonly="readonly">
+									</div>
+								</div>
+								<div class="form-group row" style="margin-left: 3%;">
+									<label class="col-lg-3 col-form-label" for="stu_joinyearnstu_semester">학년/학기</label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control" id="stu_joinyearnstu_semester"
+											name="stu_joinyearnstu_semester" readonly="readonly" value="">
+									</div>
+								</div>
+								<div class="form-group row" style="margin-left: 3%;">
+									<label class="col-lg-3 col-form-label" for="MEM_TEL">전화번호</label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control" id="MEM_TEL"
+											name="MEM_TEL" readonly="readonly">
+									</div>
+								</div>
+								<div class="form-group row" style="margin-left: 3%;">
+									<label class="col-lg-3 col-form-label" for="MEM_EMAIL">이메일</label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control" id="MEM_EMAIL"
+											name="MEM_EMAIL" readonly="readonly">
+									</div>
+								</div>
+
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+	</div>
+	
+<script>
+// 시큐리티용 토큰
+let header = '${_csrf.headerName}';
+ let token =  '${_csrf.token}';
+ 
+function pSelectLectureFn(){
+	let lecCode = document.getElementById("pSelectLecture").value;
+	
+	let pLecStudentList = document.getElementById("pLecStudentList");
+	console.log("leccode" , lecCode)
+	
+	let data = {
+		lec_code : lecCode,
+	}
+
+	$.ajax({
+		method: "POST",
+		url: "/lad/myLecStudentList",
+		data : JSON.stringify(data),
+		contentType: "application/json; charset=UTF-8",
+		dataType: "json",
+		beforeSend : function(xhr){
+			xhr.setRequestHeader(header, token);
+		},
+		success: function(result){
+			console.log("찍어봅시다~!", result);
+			pLecStudentList.innerHTML = stuListTemplate(result);
+			
+		},
+		error: function(){
+
+		}
+		
+	}) // ajax 끝
+		
+}
+
+const stuListTemplate = stuList => {
+	let code = "";
+	let cnt = 1;
+	
+	for(let i = 0; i < stuList.length; i++){
+		code += `
+				<tr>
+					<td>\${cnt}</td>
+					<td>\${stuList[i].COL_NAME}</td>
+					<td>\${stuList[i].STU_DEP}</td>
+					<td>\${stuList[i].STU_SCHYEAR}</td>
+					<td>\${stuList[i].SMEM_NO}</td>
+					<td>\${stuList[i].MEM_NAME}</td>
+					<td><button type="button" class="btn btn-primary" onclick="myLecStudentInfo('\${stuList[i].SMEM_NO}', \${cnt})">보기</button></td>
+				</tr>
+		`;
+	 cnt++;
+	}
+	
+	return code;
+}
+
+function myLecStudentInfo(smemNo, no){
+	console.log("smemNo : ", smemNo);
+	console.log("cnt : ", no);
+
+	let data = {
+		smem_no : smemNo
+	}
+	
+	$.ajax({
+		method: "POST",
+		url: "/lad/getMyLecStudentInfo",
+		data : JSON.stringify(data),
+		contentType : "application/json;charset=utf-8",
+		dataType : "json",
+		beforeSend : function(xhr){
+			xhr.setRequestHeader(header, token);	
+		},
+		success : function(result){
+			console.log("학생정보result : ", result);
+			console.log("cnt : ", no);
+			$("#lecPlanListBody").attr('class', 'col-md-6')
+			$("#lecPlanDetailBody").css("display","");
+			formTemplate(result, no);
+		},
+		error : function(){
+
+		}
+
+	})
+}
+
+const formTemplate = (stuInfo, no)=>{
+	console.log("값 " , no)
+	
+	const form = document.myLecStuForm;
+	const elems = form.elements
+	
+	for(let i = 0; i < elems.length; i++){
+		elems[i].value = stuInfo[elems[i].name]
+	}
+	
+	// 번호 넣기
+	let myLecStuNo = document.getElementById("myLecStuNo");
+	myLecStuNo.value = no;
+	
+	// 프로필 사진 넣기
+	let myLecStuImg = document.getElementById("myLecStuImg");
+	myLecStuImg.src = stuInfo.MEM_PHOTONM;
+	
+	// 학년/학기 넣기
+	let code = "";
+	code = `\${stuInfo.STU_SCHYEAR}학년 / \${stuInfo.STU_SEMESTER}학기`;
+	let stuYearNSemester = document.getElementById("stu_joinyearnstu_semester");
+	stuYearNSemester.value = code;
+	
+}
+
+function sDetailClose(){
+	$("#lecPlanListBody").attr('class', 'col-md-12')
+	$("#lecPlanDetailBody").css("display","none");
+}
+
+</script>

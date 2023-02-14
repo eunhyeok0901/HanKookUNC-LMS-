@@ -1,0 +1,49 @@
+package org.hdcd.controller.student.enrollFee;
+
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import org.hdcd.service.student.enrollFee.IEnrollFeeService;
+import org.hdcd.vo.EnrollFeeVO;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+@RequestMapping("/tuition")
+public class EnrollFeeController {
+	
+	@Inject
+	IEnrollFeeService service;
+	
+	/**
+	 * [학생] 등록금 조회 페이지를 요청하는 메소드 
+	 * 
+	 * @return enrollFee.jsp
+	 */
+	@GetMapping
+	public String enrollFeeHome() {
+		log.debug("[학생] 등록금 홈 enrollFeeHome");
+		return "student/enrollFee";
+	}
+	
+	/**
+	 * [학생] 나의 등록금을 조회하는 메소드
+	 * 
+	 * @return List<EnrollFeeVO> 
+	 */
+	@ResponseBody
+	@GetMapping(value ="/list", produces = "application/json;charset=UTF-8")
+	public List<EnrollFeeVO> getEnrollFeeList(HttpServletRequest request) {
+		log.debug("[학생] 등록금 조회 getEnrollFeeList");
+		List<EnrollFeeVO> enrollFeeList = service.getEnrollFeeList(request);
+		log.debug("나의 등록금: " + enrollFeeList.toString());
+		return enrollFeeList;
+	}
+}

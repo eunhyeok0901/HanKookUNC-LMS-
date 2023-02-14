@@ -1,0 +1,14 @@
+package org.hdcd.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import org.hdcd.vo.BookVO;
+
+public interface MainPageBookMapper {
+
+	Map<String, Object> getBookRental(String userId);
+
+	List<BookVO> getBookList();
+	
+}

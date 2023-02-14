@@ -1,0 +1,22 @@
+package org.hdcd.service.common.calendar;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import org.hdcd.mapper.CalendarMapper;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ICalendarServiceImpl implements CalendarService{
+	
+	@Inject
+	CalendarMapper mapper;
+
+	@Override
+	public List<Map<String, Object>> getCalendarList(Map<String, Object> dataMap) {
+		return mapper.getCalendarList(dataMap);
+	}
+
+}

@@ -1,0 +1,54 @@
+package org.hdcd.controller.student.mypage;
+
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.hdcd.service.student.mypage.MypageService;
+import org.hdcd.vo.MyPageVO;
+import org.hdcd.vo.RecordApplyVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+@RequestMapping("/mypage")
+public class MypageController {
+	
+	@Autowired
+	private MypageService service;
+
+	@RequestMapping(value = "/main", method = RequestMethod.GET)
+	public String mypagemain() {
+		log.info("mypage");
+		return "student/studentMypage";
+	}
+	
+	
+	
+	@GetMapping(value = "/List")
+	public ModelAndView mypageList(HttpServletRequest req,MyPageVO vo, ModelAndView mav)throws Exception{
+		log.info("일단 리스트를 들어오는지 확인");
+		String smem_no = (String) req.getSession().getAttribute("userId");
+		List<MyPageVO> getList = service.MypageList(smem_no);
+		List<RecordApplyVO> getappList = service.recordhis(smem_no);
+		mav.addObject("getList",getList);
+		mav.addObject("getappList", getappList);
+		mav.setViewName("student/studentMypage");
+		log.info("이곳은 리스트 --> ", getList);
+		log.info(smem_no);
+		log.info("이런뭐냐 --> " +getList);
+		log.info("여기는 학적변동" + getappList);
+		return mav;
+	}
+	
+	
+}

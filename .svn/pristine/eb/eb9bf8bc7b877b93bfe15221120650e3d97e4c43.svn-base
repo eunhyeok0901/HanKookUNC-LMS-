@@ -1,0 +1,47 @@
+package org.hdcd.controller.student.licenseEnroll;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import org.hdcd.service.student.licenseenroll.LicenseEnrollService;
+import org.hdcd.vo.LicenseEnrollVO;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+@RequestMapping("/student")
+public class LicenseEnrollController {
+	
+	@Inject
+	LicenseEnrollService licenseEnrollService; 
+	
+	// 자격증 페이지 이동 메소드
+	@GetMapping("/licenseEnroll")
+	public String licenseEnroll() {
+		return "student/licenseEnroll";
+	}
+	
+	// 자격증 페이지에 삽입될 데이터 추출하는 메소드
+	@ResponseBody
+	@GetMapping(value = "/licenseEnrollList", produces = "application/json;charset=utf-8")
+	public List<LicenseEnrollVO> licenseEnrollList(HttpServletRequest req) {
+		String userId = (String)req.getSession().getAttribute("userId");
+		
+		log.info("licenseEnrollList 세션아이디 : {}", userId);
+		
+ 		List<LicenseEnrollVO> LicenseEnrollList = licenseEnrollService.licenseEnrollList(userId); 
+		 
+ 		log.info("LicenseEnrollList 회원의 자격증 신청내역: {}", LicenseEnrollList);
+ 		
+		return LicenseEnrollList;
+		
+	}
+}

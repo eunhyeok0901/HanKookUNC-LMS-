@@ -1,0 +1,70 @@
+package org.hdcd.controller.student.book;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import org.hdcd.service.student.book.BookService;
+import org.hdcd.vo.BookVO;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+@RequestMapping("/student")
+public class BookController {
+
+	@Inject
+	BookService bookService;
+	
+	// 도서 목록 & 내가 빌린 도서 목록
+	@GetMapping("/bookList")
+	public ModelAndView bookList(ModelAndView mav, HttpServletRequest req) {
+		
+		String userSessionId = (String)req.getSession().getAttribute("userId");
+		
+		List<BookVO> bookList = bookService.bookList();
+		
+		List<Map<String, Object>> bookRentalList = bookService.getBookrentalList(userSessionId);
+		
+		log.info("도서목록 및 내가 빌린 도서 목록 세션값 : {}", userSessionId);
+		
+		log.info("도서 : bookList : {}", bookList);
+		
+		log.info("빌린 도서 목록 : {}", bookRentalList);
+		
+		mav.addObject("bookList", bookList);
+		mav.addObject("bookRentalList", bookRentalList);
+		mav.setViewName("student/book");
+		
+		return mav;
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "/bookRental", produces = "text/plain;charset=utf-8")
+	public String bookRental(HttpServletRequest req, String book_code, String bookRental_cnt) {
+		String sessionId =  (String)req.getSession().getAttribute("userId");
+		
+		log.info("도서 대출 신청 들어온 세션값 : {}", sessionId);
+		log.info("도서 대출 신청 들어온 book_code : {}", book_code);
+		log.info("도서 대출 신청 들어온 bookRental_cnt : {}", bookRental_cnt);
+		
+		int res = bookService.bookRental(sessionId, book_code, bookRental_cnt);
+		
+		if(res > 0) {
+			return "OK";
+		}
+		
+		return "NG";
+		
+	}
+	
+}

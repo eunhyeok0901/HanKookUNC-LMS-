@@ -1,0 +1,52 @@
+package org.hdcd.service.manager.scholar;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.hdcd.mapper.ScholarMapper;
+import org.hdcd.vo.ScholarApplyVO;
+import org.hdcd.vo.ScholarListVO;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ManagerScholarServiceImpl implements IManagerScholarService{
+
+	@Inject
+	ScholarMapper mapper;
+	
+	// scholar_apply
+	@Override
+	public List<ScholarListVO> getScholarTotalList() {
+		return mapper.getScholarTotalList();
+	}
+
+	@Override
+	public int approveScholarship(ScholarApplyVO scholarApplyVO) {
+		// scholarApplyVO 상태값 변경
+		int cnt = mapper.approveScholarship(scholarApplyVO);
+		
+		String scha_no = scholarApplyVO.getScha_no(); // 장학금 신청 번호
+		int cha_state = scholarApplyVO.getScha_state();
+		
+		if(cha_state == 1) { // 승인인 경우
+			List<ScholarListVO> scholarListList = mapper.getScholarList();
+			for (ScholarListVO scholarListVO : scholarListList) {
+				// String userId = mapper.getApproveScholar(scha_no);
+			}
+		}
+		
+		return cnt;
+	}
+
+	@Override
+	public int scholarListManageRegister(ScholarListVO scholarListVO) {
+		return mapper.scholarListManageRegister(scholarListVO);
+	}
+
+	@Override
+	public List<ScholarListVO> getTotalScholarList() {
+		return mapper.getTotalScholarList();
+	}
+
+}

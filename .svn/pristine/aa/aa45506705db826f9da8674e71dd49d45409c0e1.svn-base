@@ -1,0 +1,65 @@
+package org.hdcd.controller.student.counsel;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import org.hdcd.service.student.counsel.CounselService;
+import org.hdcd.vo.CounselApplyVO;
+import org.hdcd.vo.CounselVO;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+@RequestMapping("/student")
+public class CounselController {
+	
+	@Inject
+	CounselService counselService;
+	
+	// 상담신청 내역 조회 메서드
+	@GetMapping(value = "/counselList.do")
+	public ModelAndView counselList(ModelAndView mav, HttpServletRequest res) {
+		
+		String userId = (String) res.getSession().getAttribute("userId");
+		
+		log.info("======================================================");
+		log.info("세션 아이디 : {}",res.getSession().getAttribute("userId"));
+			
+		List<CounselApplyVO> counselApplyList = counselService.counselApplyList(userId);
+		
+		log.info("길이 : {}", counselApplyList.size());
+		
+		mav.setViewName("student/counselList");
+		mav.addObject("counselApplyList", counselApplyList);
+		
+		return mav;
+	
+	}
+	
+	// 상담 신청 메서드 (상담교수 내역을 가져오는 메사드)
+	@GetMapping(value = "/counselApply.do")
+	public ModelAndView counselApply(ModelAndView mav, HttpServletRequest res) {
+		
+		List<CounselVO> counselList = counselService.getCounselList();
+		
+		mav.setViewName("student/counselApply");
+		
+		for (CounselVO counselVO : counselList) {
+			log.info("상담교수 목록 : {}", counselVO.toString());
+		}
+		
+		mav.addObject("counselList", counselList);
+		
+		return mav;
+		
+	}
+	
+}

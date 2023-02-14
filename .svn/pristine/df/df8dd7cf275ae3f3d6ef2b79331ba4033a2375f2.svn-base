@@ -1,0 +1,768 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%
+		String userId = (String)request.getSession().getAttribute("userId");
+		int userIdLength = userId.length(); 
+%>
+<link href="${pageContext.request.contextPath }/resources/css/main.css" rel="stylesheet">
+	<div class="container-fluid">
+	<!-- ■■■■■■■■■■■■■■■■■■■■■메인 이미지 시작■■■■■■■■■■■■■■■■■■-->
+	<br/><br/><br/>
+		<div class="row portlet-container">
+			<div class="snowflake"></div>
+			<div class="col-lg-12">
+				<div class="card" style="background-color:#4d7cff">
+					<div class="card-body imageContainer">
+						<div class="imagebox">
+							<img src="${pageContext.request.contextPath }/resources/images/춘배.png" width="100%" height="100%"/>
+						</div>	
+					</div>
+					<div class="profileContainer">
+						<div class="profileBox">
+							<div style="display: inline-block; width: 100%;">							
+								<i class="fa-solid fa-book-open-reader fa-3x" style="color: white;"></i>
+							</div>
+							<div style="display: inline-block; width: 100%; text-align: center; color: white;">
+								이수학점<br/>
+								118/138
+							</div>
+						</div>
+						<div class="profileBox">
+							<div style="display: inline-block; width: 100%;">
+								<i class="fa-solid fa-calculator fa-3x" style="color: white;"></i>
+							</div>
+							<div style="display: inline-block; width: 100%; text-align: center; color: white;">
+								평균 학점<br/>
+								4.1/4.5
+							</div>							
+						</div>
+						<div class="profileBox">
+							<h4 class="card-title mt-3 mb-1">이름</h4>
+							<h5 class="mt-3 mb-1">식별번호</h5>													
+							<p class="m-0">학과</p>													
+						</div>
+						<div class="profileBox">4번박스</div>
+						<div class="profileBox">
+							<button type="button" class="btn mb-1 btn-info">마이 페이지</button>
+							
+							<div class="bootstrap-modal">
+								<!-- 버튼 트리거 모달 / 버튼을 누르면, 해당 회원의 포틀릿 정보를 가져온다. -->
+								<button type="button" class="btn mb-1 btn-info openPortletModalBtn"
+									data-toggle="modal" data-target="#exampleModalpopover">포틀릿 설정</button>
+								<!-- Modal -->
+								<div class="modal fade" id="exampleModalpopover">
+									<div class="modal-dialog modal-dialog-centered" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title">포틀릿 설정</h5>
+												<button type="button" class="close" data-dismiss="modal">
+													<span>&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												<h5>나만의 설정으로 포틀릿을 조작해보세요</h5>
+												<p>왼쪽의 체크박스에서 보고 싶은 메뉴를 선택하고, 오른쪽에서 마우스 끌기로 메뉴 위치를 지정하세요.</p>
+												<div class="potletModalContainer">
+													<div class="potletModalCheck">
+													
+													
+													
+    <label>
+      <input type="checkbox" class="portletCheck" id="portletCheck0">0번 메뉴
+    </label><br/>
+    <label>
+      <input type="checkbox" class="portletCheck" id="portletCheck1">1번 메뉴
+    </label><br/>
+    <label>
+      <input type="checkbox" class="portletCheck" id="portletCheck2">2번 메뉴
+    </label><br/>
+    <label>
+      <input type="checkbox" class="portletCheck" id="portletCheck3">3번 메뉴
+    </label><br/>
+    <label>
+      <input type="checkbox" class="portletCheck" id="portletCheck4">4번 메뉴
+    </label><br/>
+    <label>
+      <input type="checkbox" class="portletCheck" id="portletCheck5">5번 메뉴
+    </label><br/>
+    <label>
+      <input type="checkbox" class="portletCheck" id="portletCheck6">6번 메뉴
+    </label><br/>
+    <label>
+      <input type="checkbox" class="portletCheck" id="portletCheck7">7번 메뉴
+    </label><br/>
+    <label>
+      <input type="checkbox" class="portletCheck" id="portletCheck8">8번 메뉴
+    </label><br/>
+    <label>
+      <input type="checkbox" class="portletCheck" id="portletCheck9">9번 메뉴
+    </label><br/>
+    <label>
+      <input type="checkbox" class="portletCheck" id="portletCheck10">10번 메뉴
+    </label><br/>
+    <label>
+      <input type="checkbox" class="portletCheck" id="portletCheck11">11번 메뉴
+    </label>
+
+
+
+												</div>
+													<div class="potletModalLayout">
+													
+													
+												
+													</div>
+												</div>
+												<p>
+													This <a href="#" role="button" data-container="body"
+														data-toggle="popover"
+														class="btn btn-secondary popover-test"
+														title="Popover title"
+														data-content="Popover body content is set in this attribute.">button</a>
+													triggers a popover on click.
+												</p>
+												<hr>
+												<h5>Tooltips in a modal</h5>
+												<p>
+													<a href="#" class="tooltip-test text-primary"
+														data-toggle="tooltip" title="Told you!">This link</a> and
+													<a href="#" class="tooltip-test text-primary"
+														data-toggle="tooltip" title="Another one!">that link</a>
+													have tooltips on hover.
+												</p>
+
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary"
+													data-dismiss="modal">닫기</button>
+												<button type="button" class="btn btn-primary">설정 정보
+													저장하기</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- -----▶▶▶▶----------- -->
+						</div>
+					</div>					
+					<br/>
+				</div>
+			</div>
+
+		<!-- ■■■■■■■■■■■■■■■■■■■■■포틀릿 배열 시작■■■■■■■■■■■■■■■■■■-->		
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true" contenteditable="false">
+				<div class="card">
+					<div class="card-body">
+						<div style="display: flex; justify-content: space-between;">
+							<div>
+								<a href='#'><i class="fa-solid fa-school"></i></a>
+								<h4 class="card-title mb-5" style="display: inline-block;">0. 나의 시간표</h4>
+							</div>
+							<div>
+								<a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+							</div>
+						</div>
+						<div> ------------내용--------------</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true" contenteditable="false">
+				<div class="card">
+					<div class="card-body">
+						<div style="display: flex; justify-content: space-between;">
+							<div>
+								<a href='#'>
+									<i class="fa-sharp fa-solid fa-bell"></i>
+								</a>
+								<h4 class="card-title mb-5" style="display: inline-block;">1. 스마트 알림</h4>
+							</div>
+							<div>
+								<a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+								
+							</div>
+						</div>
+						<div> ------------내용--------------</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true">
+				<div class="card">
+					<div class="card-body">
+						<div style="display: flex; justify-content: space-between;">
+							<div>
+								<a href='#'>
+									<i class="fa-solid fa-note-sticky"></i>
+								</a>
+								<h4 class="card-title mb-5" style="display: inline-block;">2. 공지사항</h4>
+							</div>
+							<div>
+								<a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+								
+							</div>
+						</div>
+						<div> ------------내용--------------</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true">
+            <div class="card">
+               <div class="card-body">
+                  <div style="display: flex; justify-content: space-between;">
+                     <div>
+                        <a href='#'>
+                           <i class="fa-solid fa-bowl-food"></i>
+                        </a>
+                        <h4 class="card-title mb-5" style="display: inline-block;">3. 오늘의 식단</h4>
+                     </div>
+                     <div>
+                        <a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+                     </div>
+                  </div>
+                  <div style="height: 330px; background-color: #FDF5D2;">
+                     <div class="bootstrap-carousel">
+                                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                                    <div id="divCarousel"  class="carousel-inner">
+                                        <div class="carousel-item" style="height: 300px;">
+                                           
+<!--                                           식단표 ajax  -->
+                                        
+                                        </div>
+                                    </div>
+                                    <a class="carousel-control-prev" href="#carouselExampleControls" data-slide="prev">
+                                       <span class="carousel-control-prev-icon"></span> 
+                                       <span class="sr-only">Previous</span> 
+                                    </a>
+                                    <a class="carousel-control-next" href="#carouselExampleControls" data-slide="next">
+                                       <span class="carousel-control-next-icon"></span> 
+                                       <span class="sr-only">Next</span>
+                                    </a>
+                                </div>
+                            </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true">
+				<div class="card">
+					<div class="card-body">
+						<div style="display: flex; justify-content: space-between;">
+							<div>
+								<a href='#'>
+									<i class="fa-solid fa-calendar"></i>
+								</a>
+								<h4 class="card-title mb-5" style="display: inline-block;">4. 그룹 스케줄링</h4>
+							</div>
+							<div>
+								<a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+								
+							</div>
+						</div>
+						<div> ------------내용--------------</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true">
+				<div class="card">
+					<div class="card-body">
+						<div style="display: flex; justify-content: space-between;">
+							<div>
+								<a href='#'>
+									<i class="fa-sharp fa-solid fa-comments"></i>
+								</a>
+								<h4 class="card-title mb-5" style="display: inline-block;">5. 커뮤니티</h4>
+							</div>
+							<div>
+								<a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+								
+							</div>
+						</div>
+						<div> ------------내용--------------</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true">
+				<div class="card">
+					<div class="card-body">
+						<div style="display: flex; justify-content: space-between;">
+							<div>
+								<a href='#'>
+									<i class="fa-solid fa-flower-daffodil"></i>
+								</a>
+								<h4 class="card-title mb-5" style="display: inline-block;">6. 나의 역량</h4>
+							</div>
+							<div>
+								<a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+								
+							</div>
+						</div>
+						<div> ------------내용--------------</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true">
+				<div class="card">
+					<div class="card-body">
+						<div style="display: flex; justify-content: space-between;">
+							<div>
+								<a href='#'>
+									<i class="fa-solid fa-books"></i>
+								</a>
+								<h4 class="card-title mb-5" style="display: inline-block;">7. 나의 도서관</h4>
+							</div>
+							<div>
+								<a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+							</div>
+						</div>
+						<div style="text-align: center;">
+							<div style="display: inline-block; border: 1px solid black;" id="rentBook"></div>
+							<div style="display: inline-block; border: 1px solid black;" id="overDate"></div> 
+							<div style="height:300px; overflow: scroll;">
+								<table style="margin-left: auto; margin-right: auto;" border="1" id="bookListTable">
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true">
+            <div class="card">
+               <div class="card-body">
+                  <div style="display: flex; justify-content: space-between;">
+                     <div>
+                        <a href='#' class="ti-calendar"></a>
+                        <h4 class="card-title mb-5" style="display: inline-block;">8. 나의 열람실</h4>
+                     </div>
+                     <div>
+                        <a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+                        
+                     </div>
+                  </div>
+                  <div><a href="/seat/seatReserve">열람실 퀵메뉴로 빼는 걸로 합시다 </a> </div>
+               </div>
+            </div>
+          </div>   
+			   <div class="col-md-6 col-lg-4 portlet-item" draggable="true" contenteditable="false">
+            <div class="card">
+               <div class="card-body">
+                  <div style="display: flex; justify-content: space-between;">
+                     <div>
+                        <a href='#' class="ti-calendar"></a>
+                        <h4 class="card-title mb-5" style="display: inline-block;">9. 오늘의 날씨</h4>
+                     </div>
+                     <div>
+                        <a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+                        
+                     </div>
+                  </div>
+                  <div style="color:white; background-color: #27DBB7; height: 50px; font-size: 1.5em;">
+                     <a class="ti-calendar"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span>Weather Information</span> <span>대전</span>
+                  </div>
+                  <div style=" padding: 10px; background-image:url('../resources/images/back2.JPG'); height: 350px;">
+                     <div id="weather1" style="padding-top:30px; float: left; width: 220px; text-align: center;">
+                        날씨아이콘
+                     </div>
+                     <div id="weather2" style=" float: right; padding:10px; width: 190px; height:100px; text-align: center;">
+                        <div id="weather2_1"  style=" color:white; padding-top:20px; font-size: 4.0em;">
+                        </div>
+                        <div id="weather2_2"  style=" color:white; font-size: 1.5em;">
+                        </div>
+                     </div>
+                     <div id="weather3" style="text-align:center; height: 50px; margin-top: 200px; padding: 15px; color: white;">
+                        <div id="weather3_1" style="float: left; width:190px;margin: 5px;">
+                           <span>강수량</span><br>
+                        </div>
+                        <div id="weather3_2" style="float: left; width:190px;margin: 5px;">
+                           <span>강수확률</span><br>
+                        </div>
+                        <div id="weather3_3" style="float: left; width:190px;margin: 5px;">
+                           <span>풍속</span><br>
+                        </div>
+                        <div id="weather3_4" style="float: left; width:190px;margin: 5px;">
+                           <span>파고</span><br>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <p>데이터 출처 : 기상청, 공공 데이터 포털</p>
+            </div>
+         </div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true" contenteditable="false">
+				<div class="card">
+					<div class="card-body">
+						<div style="display: flex; justify-content: space-between;">
+							<div>
+								<a href='#' class="ti-calendar"></a>
+								<h4 class="card-title mb-5" style="display: inline-block;">10. 나만의 통계</h4>
+							</div>
+							<div>
+								<a href='#' class="ti-plus"></a>&nbsp;&nbsp;
+								
+							</div>
+						</div>
+						<div> ------------내용--------------</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-lg-4 portlet-item" draggable="true" contenteditable="false">
+				<div class="card">
+					<div class="card-body" style="align-content: center;">
+						<div style="display: flex; justify-content: space-between;">
+							<div>
+								<a href='#' class="ti-calendar"></a>
+								<h4 class="card-title mb-5" style="display: inline-block;">11. 나만의 상담</h4>
+							</div>
+							<div>
+								<a href='#' class="ti-plus"></a>
+								
+							</div>
+						</div>
+						<div style="text-align: center;">
+							<div>최근 상담기록</div>
+							<div style="overflow: scroll; height: 300px;">
+								<table border="1" id="mainPageCounselapplyList" style="margin-left: auto; margin-right: auto; width: 400px;"></table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<script src="${pageContext.request.contextPath }/resources/js/main.js"></script>
+<script>
+	
+	function closeSurvey(){
+		closepopSur.close();
+	}
+
+	function survRegister(q1, q2, q3){
+		var header = $("meta[name='_csrf_header']").attr('content');
+		var token = $("meta[name='_csrf']").attr('content');
+		
+		let surv_answer1 = q1;
+		let surv_answer2 = q2;
+		let surv_answer3 = q3;
+		
+		console.log(" surv_answer1 : ", surv_answer1);
+		console.log(" surv_answer2 : ", surv_answer2);
+		console.log(" surv_answer3 : ", surv_answer3);
+		
+		$.ajax({
+			type : "post",
+			url : "/common/popupSurveySubmit",
+			data : {"surv_answer1" : surv_answer1, "surv_answer2" : surv_answer2, "surv_answer3" : surv_answer3},
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				if(res == "OK"){
+					console.log("설문조사 완료");
+				}
+			},
+			dataType : "text"
+		})	
+	}
+	
+	function pop_sur_change(num){
+		var header = $("meta[name='_csrf_header']").attr('content');
+		var token = $("meta[name='_csrf']").attr('content');
+		
+		let popNum = num;
+		
+		$.ajax({
+			type : "post",
+			url : "/common/popupSurveyChange",
+			data : {"popNum" : popNum},
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				if(res != "NG"){
+// 					alert("다시보지 않기 활성화");
+				}
+			},
+			dataType : "text"
+		})		
+	}
+	
+	window.onload = function(){
+		
+		var header = $("meta[name='_csrf_header']").attr('content');
+		var token = $("meta[name='_csrf']").attr('content');
+	
+		window.closepopSur;
+		
+		$.ajax({
+			type : "post",
+			url : "/common/popupSurveyState",
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				console.log(res);
+				
+				if(res.popup_reject != 1){
+					window.open("/common/popUp","","scrollbars=no,menubar=no,top=300px,left=400,width=500,height=600");			
+				}
+				if(res.surv_reject != 1){
+					closepopSur = window.open("/common/popSur","","scrollbars=no,menubar=no,top=300px,left=1000,width=500,height=250");			
+				}
+				
+			},
+			dataType : "json"
+		})
+		
+		// 도서 목록 & 내가 빌린 도서 목록  
+		$.ajax({
+			type : "post",
+			url : "/mainPageBook/getBookRental ",
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				console.log("도서 대출 현황 : ",res);
+				$("#rentBook").html("대출 도서 : " + res.RENT0);
+				$("#overDate").html("연체 도서 : " + res.RENT1);
+			},
+			dataType : "json"
+		})
+		
+		// 도서목록 가져오기
+		const bookListTable = $("#bookListTable");
+		$.ajax({
+			type : "post",
+			url : "/mainPageBook/getBookList",
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				console.log("도서  리스트 : ",res);
+				
+				let eHtml = `<tr>
+								<td>제목</td>
+								<td>저자</td>
+								<td>카테고리</td>
+							</tr>`;
+				
+				for(let i=0;i<res.length;i++){
+					eHtml += `<tr>
+								<td>\${res[i].book_name}</td>
+								<td>\${res[i].book_writer}</td>
+								<td>\${res[i].book_category}</td>
+							</tr>`;							
+				}
+				
+				$(bookListTable).html(eHtml);
+				
+			},
+			dataType : "json"
+		})
+		
+		// 최근 상담 내역 가져오기
+		const mainPageCounselapplyListObj = $("#mainPageCounselapplyList");
+		
+		$.ajax({
+			type : "post",
+			url : "/mainPageCounsel/mainPageCounselapplyList",
+			beforeSend : function(xhr){
+	    	    xhr.setRequestHeader(header, token);
+	     	},
+			success : function(res){
+				let userId = <%=userIdLength%>;
+				console.log("세션값이다  : " + userId);
+				console.log("상담신청내역 리스트 : ",res);
+				
+				let eHtml = ``;
+				
+				if(userId == 8){
+					eHtml += `<tr>
+								<td>교수이름</td>
+								<td>신청일</td>
+								<td>상태</td>
+							  </tr>`;	
+				}else{
+					eHtml += `<tr>
+								<td>학생이름</td>
+								<td>신청일</td>
+								<td>상태</td>
+							  </tr>`;
+				}
+				
+				for(let i=0;i<res.length;i++){
+					eHtml += `<tr>
+								<td>\${res[i].mem_name}</td>
+								<td>\${res[i].cnsla_date}</td>
+							  `;
+							  if(${res[i].cnsla_state == 0}){
+								  eHtml += `<td>대기</td>`;  
+							  }else if(${res[i].cnsla_state == 1}){
+								  eHtml += `<td>승인</td>`;
+							  }else if(${res[i].cnsla_state == 2}){
+								  eHtml += `<td>반려</td>`;
+							  }else{
+								  eHtml += `<td>완료</td>`;
+							  }
+					eHtml += `</tr>`;							
+				}
+				
+				$(mainPageCounselapplyListObj).html(eHtml);
+				
+			},
+			dataType : "json"
+		})
+		
+		
+		
+      //-------------------------------------------------------------------------------------------날씨-------------------
+      //날씨 api 로드하는 부분입니다!
+      var weather1 = $("#weather1");
+      var weather2 = $("#weather2");
+      var weather2_1 = $("#weather2_1");
+      var weather2_2 = $("#weather2_2");
+      var weather3 = $("#weather3");
+      var weather3_1 = $("#weather3_1");
+      var weather3_2 = $("#weather3_2");
+      var weather3_3 = $("#weather3_3");
+      var weather3_4 = $("#weather3_4");
+      var weather3_5 = $("#weather3_5");
+//       var weather3_6 = $("#weather3_6");
+      
+      
+      $.ajax({
+         url : "/api/weather",
+         type : "get",
+         contentType : "application/json",
+         dataType: "json",
+         success : function(data, status, xhr){
+            let dataHeader = data.result.response.header.resultCode;
+            
+            if(dataHeader == "00"){
+               console.log("success");
+               console.log(data);
+               //기온
+               var temp = data.result.response.body.items.item[0].fcstValue;
+               //하늘상태
+               var skyState = data.result.response.body.items.item[4].fcstValue;
+               //강수확률
+               var percentRain = data.result.response.body.items.item[7].fcstValue;
+               //풍속
+               var windSpeed = data.result.response.body.items.item[4].fcstValue;
+               //강수형태
+               var rainForm = data.result.response.body.items.item[6].fcstValue;
+               //강수량
+               var rainAmount = data.result.response.body.items.item[9].fcstValue;
+               //파고
+               var wave = data.result.response.body.items.item[8].fcstValue;
+               
+               var str = "";
+               
+               if(skyState <= 5){
+                  //맑음
+                  str += '<img alt="" src="../resources/images/sunny.png" width="65%">';
+                  weather2_2.html("맑음");
+               }else if(skyState >= 6 && skyState <= 8){
+                  //구름많음
+                  if(rainForm == 3){
+                     //눈
+                     str += '<img alt="" src="../resources/images/snow.png">';
+                     weather2_2.html("구름많고 눈");
+                  }else if(rainForm == 0){
+                     //흐림
+                     str += '<img alt="" src="../resources/images/littleSun.png">';
+                     weather2_2.html("구름많음");
+                  }else{
+                     str += '<img alt="" src="../resources/images/rain.png">';
+                     weather2_2.html("구름많고 비");
+                  }
+                  
+               }else{
+                  //흐림
+                  if(rainForm == 3){
+                     //눈
+                     str += '<img alt="" src="../resources/images/snow.png">';
+                     weather2_2.html("흐리고 눈");
+                  }else if(rainForm == 0){
+                     //흐림
+                     str += '<img alt="" src="../resources/images/cloud.png">';
+                     weather2_2.html("흐림");
+                  }else{
+                     str += '<img alt="" src="../resources/images/rain.png">';
+                     weather2_2.html("흐리고 비");
+                  }
+               }
+               
+               weather1.html(str); 
+               weather2_1.html(temp+" ℃");                  
+               weather3_1.append(rainAmount + " mm")                  
+               weather3_2.append(percentRain + " %")                  
+               weather3_3.append(windSpeed + " m/s")                  
+               weather3_4.append(wave + " m")                  
+                           
+            }else{     
+               console.log("fail");
+               console.log(data);
+            }
+         },
+         error : function(e, status, xhr, data){
+               console.log("error~~~~~~~~~~~~");
+               console.log(data);
+         }
+      })
+      
+      
+      
+      
+      
+      //------------------------------------------------------------------------------------식단표--------------------
+      //식단표 불러오는 ajax
+      
+      $.ajax({
+         url : "/mainPageFood/getFoodList",
+         type : "GET",
+         success : function(res){
+            console.log("식단표 result : ",res);
+            
+            var str = '';
+            var divCarousel = $("#divCarousel");
+            
+            for(var i = 0; i < res.length; i++){
+               str += '<div id="car'+i+'" class="carousel-item" style="height: 350px;">'
+               str +=      `<div id="title1" style="border: 1px solid red; font-size:2.0em; text-align: center;"> 
+                                \${res[i].food_date}
+                              </div>
+                              <div style="border: 1px solid red; font-size:1.5em; text-align: center;">
+                                 \${res[i].dayofweek}
+                              </div>
+                              <div id="content1" style="border: 1px solid red;">
+                                 <div style="padding: 12px;">
+                                    <div class="input-group">
+                                          <div class="input-group-prepend"><span class="input-group-text">조식</span>
+                                          </div>
+                                          <textarea class="form-control">\${res[i].breakfast}</textarea>
+                                      </div>
+                                      <br>
+                                    <div class="input-group">
+                                          <div class="input-group-prepend"><span class="input-group-text">중식</span>
+                                          </div>
+                                          <textarea class="form-control">\${res[i].lunch}</textarea>
+                                      </div>
+                                      <br>
+                                    <div class="input-group">
+                                          <div class="input-group-prepend"><span class="input-group-text">석식</span>
+                                          </div>
+                                          <textarea class="form-control">\${res[i].dinner}</textarea>
+                                      </div>
+                                      <br>
+                                 </div>
+                              </div>
+                           </div>`;
+            }
+            
+            divCarousel.html(str);
+            $("#car2").attr("class","carousel-item active");
+            
+         }
+      })
+		
+	}
+	
+</script>

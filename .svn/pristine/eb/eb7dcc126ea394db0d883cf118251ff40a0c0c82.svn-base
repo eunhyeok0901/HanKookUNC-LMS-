@@ -1,0 +1,97 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>  
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script type="text/javascript">
+
+	function video(aa){
+		var voll_code = {"voll_code" : aa};
+		$.ajax({
+			url : "/volunteer/showVideo",
+			type : "get",
+			data : voll_code,
+			success : function(){
+				console.log("성공");
+			}
+			
+		})
+		
+	}
+</script>
+<body>
+<h4 class="card-title">
+		<i class="fa-solid fa-graduation-cap " style="padding-left: 100px;"></i>교내 봉사
+	</h4>
+	<div class="row" >
+		<div class="col-lg-8" >
+            <div class="card" style="height: 600px; overflow: scroll; overflow-x:hidden; overflow-y:hidden;">
+                <div class="card-body">
+                    <div class="alert alert-success">
+						 전체 봉사시간&nbsp;&nbsp;  x  / 72  시간&nbsp;&nbsp;&nbsp;&nbsp;
+						 교내 봉사시간&nbsp;&nbsp;  5   / 72  시간&nbsp;&nbsp;&nbsp;&nbsp;
+					</div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>교육명</th>
+                                    <th style="width: 450px;">교육내용</th>
+                                    <th>부여시간</th>
+                                    <th>재생시간</th>
+                                    <th>참여</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <c:set value="${list }" var="volList"></c:set>
+                            <c:choose>
+                            	<c:when test="${empty volList }">
+                            		<tr>
+										<td>봉사내역이 존재하지 않습니다</td>
+									</tr>
+                            	</c:when>
+                            	<c:otherwise>
+									<c:forEach items="${volList }" var="vol" varStatus="status">
+										<tr>
+											<th>${status.index + 1 }</th>
+											<td>${vol.voll_name }</td>
+											<td>${vol.voll_content }</td>
+											<td>${vol.voll_time }시간</td>
+											<td>${vol.voll_runtime }분</td>
+											<td><span class="label label-success" onclick="video(${vol.voll_code})">참여하기</span></td>
+										</tr>
+									</c:forEach>                            	
+                            	</c:otherwise>
+                            </c:choose>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+	<div class="col" >
+        <div class="card" style="height: 600px; overflow: scroll; overflow-x:hidden; overflow-y:hidden;">
+            <div class="card-body">
+                <p>기준 : 신입생 72시간, 편입생 36시간, 유학생 4회, 유학편입생 2회, 장애학생은 제외가능
+
+					국가인증센터인 1365, VMS, 코이카 또는 국가기관에서 인증관리된 봉사를 원칙으로함
+					영리 및 종교목적, 개인적 농촌봉사 등 공익적 목적이외의 봉사활동은 제외됨
+					봉사시간은 1일 8시간까지만 인정되며, 헌혈은 1회당 5시간이 인정됨
+					봉사활동 후 기관에서 자원봉사활동확인서(인증서)를 받는 즉시 학교 하이포털 에 등록함
+					봉사기관이 동일하면 학기단위로 봉사시간을 합산하여 등록하고 증빙자료는 필히 업로드함
+					입학(편입) 후부터 졸업사정 전까지 실적을 인정하며, 위 사항에 위배될시 승인되지 않음
+					등록 및 승인신청 방법 : bongsa.hnu.kr → 사회봉사지원→ 커뮤니티→ 공지사항 참고
+				</p>
+            </div>
+        </div>
+    </div>
+	</div>
+	
+</body>
+</html>

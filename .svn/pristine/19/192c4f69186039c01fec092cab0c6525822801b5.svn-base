@@ -1,0 +1,7 @@
+package org.hdcd.service.common.seat;
+
+public interface ISeatService {
+
+	public String getName(String smem_no) throws Exception;
+
+}

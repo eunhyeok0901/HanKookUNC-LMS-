@@ -1,0 +1,44 @@
+package org.hdcd.controller.student.community;
+
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import org.hdcd.service.student.community.IMyCommunityService;
+import org.hdcd.vo.CommunityVO;
+import org.hdcd.vo.ReplyVO;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+@RequestMapping("/community/my")
+public class MyCommunityController {
+
+	@Inject
+	IMyCommunityService service;
+	
+	@GetMapping
+	public String myCommunityHome(HttpServletRequest request, Model model) {
+		String smem_no = (String) request.getSession().getAttribute("userId");
+		log.debug("내 아이디는 " + smem_no);
+		
+		List<CommunityVO> myPost = service.getMyPost(smem_no);
+		List<ReplyVO> myReply = service.getMyReply(smem_no);
+		// List<LikeVO> myLike = service.getMyLike(smem_no);
+		log.debug("나의 myPost는" + myPost.toString());
+		log.debug("나의 myReply는" + myReply.toString());
+		// log.debug("나의 myLike는" + myLike.toString());
+		
+		model.addAttribute("myPost", myPost);
+		model.addAttribute("myReply", myReply);
+		// model.addAttribute("myLike", myLike);
+		
+		return "student/myCommunity";
+	}
+}

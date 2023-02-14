@@ -1,0 +1,75 @@
+package org.hdcd.service.student.scholar;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
+
+import javax.inject.Inject;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+
+import org.hdcd.mapper.SScholarMapper;
+import org.hdcd.vo.ScholarApplyVO;
+import org.hdcd.vo.ScholarFileVO;
+import org.hdcd.vo.ScholarListVO;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
+@Service
+public class ScholarServiceImpl implements IScholarService{
+	
+	@Inject
+	SScholarMapper mapper;
+	
+	@Override
+	public List<ScholarListVO> getScholarList() {
+		return mapper.getScholarList();
+	}
+	
+
+	@Override
+	public List<ScholarApplyVO> getScholarApplyList(String userId) {
+		return mapper.getScholarApplyList(userId);
+	}
+
+	
+	@Override
+	public int insertScholarApply(String schl_code, MultipartFile scholarFiles, HttpServletRequest request) throws IllegalStateException, IOException {
+		
+		String userId = (String) request.getSession().getAttribute("userId");
+		
+		ScholarApplyVO scholarApplyVO = new ScholarApplyVO();
+		scholarApplyVO.setSmem_no(userId);
+		scholarApplyVO.setSchl_code(schl_code);
+		// 장학금 신청 INSERT
+		int applyCnt = mapper.insertScholarApply(scholarApplyVO);
+		
+		// 장학금 신청 폼이 INSERT됐을 경우 장학증빙서류도 INSERT 후 파일 생성
+		if(applyCnt > 0) {			
+			ServletContext servletContext = request.getSession().getServletContext();
+			String realPath = servletContext.getRealPath("/resources/uploads"); // 이클립스 가상 주소
+			
+			UUID uuid = UUID.randomUUID();
+			String savedFileName = uuid + "_" + scholarFiles.getOriginalFilename(); // 저장할 파일 이름
+			String filePath = servletContext.getContextPath() + "/resources/uploads/" + savedFileName;
+			ScholarFileVO scholarFileVO = new ScholarFileVO(savedFileName, scholarFiles.getSize(), scholarFiles.getOriginalFilename(),
+					filePath, scholarApplyVO.getScha_no(), scholarFiles.getContentType());
+			
+			int fileCnt = mapper.insertScholarApplyFile(scholarFileVO);
+			if(fileCnt > 0) {				
+				scholarFiles.transferTo(new File(realPath + "/" + scholarFiles.getOriginalFilename()));
+			}
+			return fileCnt;
+		}
+		return 0;
+		
+		
+	}
+
+
+
+
+}

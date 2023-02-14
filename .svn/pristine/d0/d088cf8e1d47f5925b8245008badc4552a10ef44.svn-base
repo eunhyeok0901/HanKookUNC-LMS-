@@ -1,0 +1,272 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
+<h4 class="card-title">
+	<i class="fa-solid fa-graduation-cap"></i>커뮤니티
+</h4>
+
+<div class="row">
+	<div class="col-lg-12" id="cmntListDiv">
+		<div class="card">
+			<div class="card-body">
+				<div class="card-title">
+					<div style="display: flex; justify-content: space-between;">
+						<div style="display: inline-block;">
+							<h4 class="card-title" style="display: inline-block;">커뮤니티 게시판</h4>&nbsp;&nbsp;&nbsp;
+							<a href="#"><button type="button" class="btn mb-1 btn-dark" onclick="f_OpenCmntForm()">글쓰기>></button></a>
+						</div>
+						<div style="display: inline-block;">
+							<form class="form-inline" id="cmntSearchForm">
+								<div class="form-group mx-sm-3 mb-2">
+									<select class="form-control" name ="cmnt_type">
+										<option value="title" value="title">제목</option>
+										<option value="content" value="content">내용</option>
+									</select>
+									<input type="text" class="form-control"
+										placeholder="검색어를 입력하세요" name="cmnt_keyword">
+									<input type="submit" class="btn btn-dark mb-2" value="검색">
+								</div>
+							</form>
+						</div>			
+					</div>
+				</div>
+				<div class="table-responsive" id="cmntTotalListSpace">
+					<!--
+						동적 table insert 위치
+					-->
+				</div>
+			</div>
+		</div>
+	</div>
+						
+	<div class="col-lg-4" id="cmntWriteDiv" style="height: auto; display: none;">
+		<div class="card">
+			<div class="card-body">
+				<div class="card-title">커뮤니티 새 글 작성</div>
+				<hr/>
+				<div class="form-validation">
+					<form id="cmntRegisterForm" class="form-valide" novalidate="novalidate">						
+						<div class="form-group row">
+							<div class="col-sm-4">
+								<label class="col-form-label">학번&nbsp;&nbsp;</label>
+								<label class="css-control css-control-primary css-checkbox" for="val-terms">
+	                           		<input type="checkbox" class="css-control-input" id="cmnt_anony" name="cmnt_anony" value="1"> <span class="css-control-indicator"></span>익명으로 작성
+	                            </label>
+							</div>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" value="${userId}" readonly="readonly" name="smem_no">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label">제목</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" placeholder="제목을 입력하세요" name="cmnt_title">
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<label class="col-sm-12 col-form-label">내용</label>
+						</div>
+						<div class="form-group row is-invalid">
+							<div class="col-lg-12">
+								<textarea class="form-control" name="cmnt_content"
+									name="val-suggestions" rows="5"
+									placeholder="내용을 입력하세요" style="height: 129px;"
+									aria-required="true" aria-describedby="val-suggestions-error"
+									aria-invalid="true"></textarea>
+								<div id="val-suggestions-error"
+									class="invalid-feedback animated fadeInDown"
+									style="display: block;">※ 말도 아름다운 꽃처럼 그 색깔을 지니고 있다고 합니다. 글쓰기 전에 부디 생각하십시오.</div>
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<label class="col-lg-4 col-form-label" for="val-username">첨부 파일</label>
+							<div class="col-lg-8">
+								<input type="file" accept=".pdf" multiple="multiple"
+									class="form-control" id="cmntfiles2" name="cmntfiles2" multiple="multiple">
+							</div>
+						</div>
+	
+						<div class="form-group row">
+							<div class="col-lg-8 ml-auto">
+								<input type="submit" class="btn btn-success" value="등록">
+								<input type="reset" class="btn btn-info" value="초기화">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<script type="text/javascript">
+//아작스 통신을 위한 csrf 인증 토큰
+let header = '${_csrf.headerName}';
+let token =  '${_csrf.token}';
+
+// totalList 뿌릴 자리
+const cmntTotalListSpace = document.querySelector("#cmntTotalListSpace");
+
+// 글 등록
+const cmntRegisterForm = document.querySelector("#cmntRegisterForm");
+const cmntfiles = document.querySelector("#cmntfiles2");
+
+// 상세 글 보기
+const cmntDetails = document.querySelectorAll(".cmntDetail");
+
+// 검색 폼
+const cmntSearchForm = document.querySelector("#cmntSearchForm");
+
+// 글쓰기 버튼 클릭시
+// 커뮤니티 글 작성 폼을 보여줌(두번 클릭시 닫힘)
+function f_OpenCmntForm(){
+	console.log("하이");
+	const cmntListDiv = document.querySelector("#cmntListDiv");
+	const cmntWriteDiv = document.querySelector("#cmntWriteDiv");
+	
+	if(cmntWriteDiv.style.display == "none"){
+		cmntListDiv.className = "col-lg-8";
+		cmntWriteDiv.style.display = "block";
+	}else if(cmntWriteDiv.style.display = "block"){
+		cmntListDiv.className = "col-lg-12";
+		cmntWriteDiv.style.display = "none";
+	}
+}
+
+cmntRegisterForm.addEventListener("submit", function(){
+    event.preventDefault();
+
+    let formData = new FormData(cmntRegisterForm);
+	
+    console.log("갯수체크:",cmntfiles.files.length);
+    // 파일 널값 여부 체크
+	    if(cmntfiles.files.length > 0){
+		    for(let i = 0; i < cmntfiles.files.length; i++){
+		    	console.log("loop 체킁!");
+		        formData.append("cmntfiles", cmntfiles.files[i]);
+		    };	
+	    }
+    
+    registerCmntPost(formData);
+}) 
+
+function registerCmntPost(formData){
+	let xhr = new XMLHttpRequest();
+	xhr.open("post", "/community/register", true);
+	xhr.setRequestHeader(header, token);
+	xhr.onreadystatechange = () => {
+		if(xhr.readyState == 4 && xhr.status == 200){
+			console.log(xhr.responseText);
+			alert("성공적으로 등록되었습니다.");
+			getCmntTotalList();
+		}
+	}
+	xhr.send(formData);
+}
+
+window.addEventListener("DOMContentLoaded", function(){
+	getCmntTotalList();
+})
+
+function getCmntTotalList(){
+	let xhr = new XMLHttpRequest();
+	xhr.open("get", "/community/getCmntTotalList", true);
+	xhr.setRequestHeader(header, token);
+	xhr.onreadystatechange = function(){
+		if(xhr.readyState == 4 && xhr.status == 200){
+			let data = JSON.parse(xhr.responseText);
+			cmntTotalListSpace.innerHTML = template_totalList(data);
+ 		}
+	}
+	xhr.send();
+}
+
+function template_totalList(cmnt){
+	let str = '<table class="table table-hover">';
+	str += '<thead>';
+	str += '<tr><th>No</th><th>제목</th><th>글쓴이</th><th>작성일</th><th>좋아요수</th><th>조회수</th></tr>';
+	str += '</thead>';
+	str += '<tbody>';
+	
+	if(cmnt.length == 0){
+		str += '<tr><td colspan="6" style="text-align: center;">작성된 커뮤니티 게시글이 없습니다.</td></tr>'
+	}
+
+	for(let i = 0; i < cmnt.length; i++){
+		let cmnt_no = `\${cmnt[i].cmnt_no}`;
+		cmnt_no = cmnt_no.substr(4);
+
+		str += 	`<tr>`;
+		str +=  `<td>\${cmnt_no}</td>`;
+		str +=  `<td><a href='#' onclick=getCmntDetail(this)>\${cmnt[i].cmnt_title}</a></td>`;
+		
+		let cmnt_anony = `\${cmnt[i].cmnt_anony}`;
+
+		if(cmnt_anony == 1){ // 익명 여부 체크한 경우
+			str += `<td><i class="fa-sharp fa-solid fa-user-secret"></i></i>&nbsp;익명의 학우</td>`;
+		}else{ // 체크하지 않은 경우
+			str += `<td><i class="fa-solid fa-user"></i>&nbsp;\${cmnt[i].smem_no}</td>`;
+		}
+		
+		let cmnt_date = `\${cmnt[i].cmnt_date}`;
+		cmnt_date = cmnt_date.substring(0, 10);
+		
+		str +=  `<td>\${cmnt_date}</td>`;
+		str +=  `<td><i class='fa-solid fa-heart'></i>&nbsp;\${cmnt[i].cmnt_like}</td>`;
+		str +=  `<td>\${cmnt[i].cmnt_count}</td>`;
+		str += 	`</tr>`;
+	}
+	str += '</tbody>';
+	str += '</table>';
+
+	return str;
+}
+
+/*
+cmntSearchForm.addEventListener("submit", function(){
+    event.preventDefault();
+    console.log("하이하이");
+    
+		let formData = new FormData(cmntSearchForm);
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", "/community/searchCmnt", true);
+		xhr.setRequestHeader(header, token);
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState == 4 && xhr.status == 200){
+				console.log(xhr.responseText);
+			}
+		}
+		xhr.send(formData);
+})
+*/
+
+function getCmntDetail(cthis){
+	event.preventDefault();
+	let cmnt_no = "cmnt" + cthis.parentElement.parentElement.children[0].innerHTML;
+	
+	let xhr = new XMLHttpRequest();
+	xhr.open("get", "/community/detail/" + cmnt_no, true);
+	xhr.setRequestHeader(header, token);
+	xhr.onreadystatechange = function(){
+		if(xhr.readyState == 4 && xhr.status == 200){
+			let data = JSON.parse(xhr.responseText);
+			template_cmntDetail(data);
+		}
+	}
+	xhr.send();
+}
+
+function template_cmntDetail(cmnt){
+	alert("잘 왔어요!");
+	console.log(cmnt);
+
+	const cmnt_no = cmnt.cmnt_no; // 글번호
+	
+	const grandTitle = cmntRegisterForm.parentElement.parentElement.children[0];
+	grandTitle.innerHTML = "커뮤니티 게시글 상세 보기";
+
+}
+</script>

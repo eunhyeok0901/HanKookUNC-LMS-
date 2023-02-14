@@ -1,0 +1,315 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%> 
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+    
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>회원등록페이지</title>
+</head>
+<style>
+
+#memList {
+	position : relative;
+	height : 200px;
+	overflow: auto;
+}
+
+#tableName th{
+	position: sticky; top: 0;z-index:1;
+	background:black;
+}
+
+#detailBox{
+	height:420px;
+}
+
+</style>
+<script>
+
+window.onload = function(){
+	
+	var memData = $(".memData");
+
+	// 유저등록
+	var regBtn = $("#regBtn");
+	regBtn.on("click", function(){
+		var queryString = $("#regForm").serialize(); 
+		console.log(queryString);
+		
+		$.ajax({
+			url : "/enroll/enrollReg",
+			type : "post",
+			data : queryString,
+			dataType : "text",
+			success : function(res){
+				console.log(res)
+				if(res == "success"){
+					alert("등록이 완료되었습니다.")
+				}
+				
+			},
+			error : function(xhr) {
+				console.log(xhr.status)
+			}
+			
+		})
+	})
+	
+	// 테이블 상세보기
+	$(document).on("click", ".memData", function(){
+		
+		var check = this.childNodes;
+		for(let i=0;i<check.length;i++){
+			
+		}
+	})
+	
+	
+	var uploadBtn = document.querySelector("#uploadBtn");
+	
+	uploadBtn.addEventListener("click", function(){
+		
+		var header = $("meta[name='_csrf_header']").attr('content');
+		var token = $("meta[name='_csrf']").attr('content');
+		
+		
+		var formData = new FormData();
+		var inputFile = $("#excel");
+		
+		var file = inputFile[0].files[0];
+		
+		formData.append("excel", file);
+		
+		$.ajax({
+			url : "/enroll/upload",
+			type : "post",
+			enctype : "multipart/form-data",
+			processData : false,
+			contentType : false,
+			data : formData,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader(header, token);
+			},
+			success : function(data){
+				
+				var dataBox = $("#dataBox");
+				console.log(dataBox)
+				console.log("JSON 데이터 : ",data)
+				text = "";
+				
+				// 학번 S+2022+0001
+				console.log(data[0].stu_joinyear)
+				console.log(data[0].mem_no.toString().padStart(4,"0"))
+				
+				for(let i=0; i < data.length; i++){
+					
+					var smem_no = 'S' + 2022 + data[i].mem_no.toString().padStart(4,"0");
+					var mem_name = data[i].mem_name;
+					var col_name = data[i].col_name;
+					var dep_name = data[i].dep_name;
+					var dep_code = data[i].dep_code;
+					var mem_sex = data[i].mem_sex;
+
+					var stu_joinyear = data[i].stu_joinyear;
+					var mem_tel = data[i].mem_tel;
+					var mem_email = data[i].mem_email;
+					var mem_reg1 = data[i].mem_reg1;
+					var mem_reg2 = data[i].mem_reg2;
+					var mem_addr1 = data[i].mem_addr1;
+					var mem_addr2 = data[i].mem_addr2;
+					
+					if(i == 0){
+						$("#smem_no").val(smem_no);
+						$("#mem_name").val(mem_name);
+						$("#col_name").val(col_name);
+						$("#dep_name").val(dep_name);
+						$("#dep_code").val(dep_code);
+						$("#stu_semester").val(1);
+						$("#mem_sex").val(mem_sex);
+						$("#stu_joinyear").val(stu_joinyear);
+						$("#mem_tel").val(mem_tel);
+						$("#mem_email").val(mem_email);
+						$("#mem_reg1").val(mem_reg1);
+						$("#mem_reg2").val(mem_reg2);
+						$("#mem_addr1").val(mem_addr1);
+						$("#mem_addr2").val(mem_addr2);
+						console.log("i 몇인가요? : " + i)
+					}
+					
+					text += "<tr class='memData'>"
+					text += "<td>"+smem_no+"</td>"
+					text += "<td>"+data[i].mem_name+"</td>"
+					text += "<td>"+data[i].col_name+"<input type='hidden' value='"+data[i].dep_code+"' name='dep_code'></td>"
+					text += "<td>"+data[i].dep_name+"</td>"
+					text += "<td>"+data[i].mem_sex+"</td>"
+					text += '<td><input type="checkBox"></td>'
+					text += '<input type="hidden" value="'+data[i].stu_joinyear+'"  id="stu_joinyear">'
+					text += '<input type="hidden" value="'+data[i].mem_tel+'"  id="mem_tel">'
+					text += '<input type="hidden" value="'+data[i].mem_email+'"  id="mem_email">'
+					text += '<input type="hidden" value="'+data[i].mem_reg1+'"  id="mem_reg1">'
+					text += '<input type="hidden" value="'+data[i].mem_reg2+'"  id="mem_reg2">'
+					text += '<input type="hidden" value="'+data[i].mem_addr1+'"  id="mem_addr1">'
+					text += '<input type="hidden" value="'+data[i].mem_addr2+'"  id="mem_addr2">'
+					text += "</tr>"
+				}
+				
+				console.log(text)
+				dataBox.html(text);
+			},
+			dataType:"json"
+			
+		})
+		
+	})
+		
+}
+
+	
+
+</script>
+<body>
+<div class="container-fluid">
+	<div class="container" >
+
+		<div class="row">
+			<!-- 첫번째 컨테이너 -->
+			<div class="col-lg-12">
+			
+					<div class="container">
+						<div class="row">
+							<div class="col-6">
+								<span class="btn badge badge-primary px-2">회원추가</span>
+								<span class="btn badge badge-success px-2" id="uploadBtn">엑셀파일로 회원추가</span>
+								<input type="file" id="excel">
+							</div>
+							<div class="col-6">
+								<input type="button" class="btn btn-primary offset-7 col-2" value="모두체크">
+								<input type="button" class="btn btn-primary col-2" value="일괄등록">
+							</div>
+						</div>
+					</div>
+					
+					<div class="card">
+						<div class="card-body"  >
+							<div class="table-responsive" id="memList">
+								<table class='table table-bordered table-hover' >
+									<thead id="tableName">
+										<tr>
+											<th>학번</th><th>회원명</th><th>단과대학</th><th>학과명</th><th>성별</th><th>등록체크</th>
+										</tr>
+									</thead>
+									<tbody id="dataBox">
+										
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 회원정보보기 컨테이너 -->
+	<div class="container" >
+		<div class="row">
+			<div class="col-12">
+				<form class="form-valide" id="regForm" enctype="multipart/form-data">
+					<div class="card" id="detailBox">
+						<div class="col-12 card-body" >
+							<h5 class="card-title">상세정보</h5>
+							<div class="form-group row">
+								<label class="col-lg-3 col-form-label" for="form-label">
+									<span class="text"><i class="fa fa-circle-o text-success mr-2"></i>학번</span>
+									<input type="text" class="form-control input-rounded text-center" id="smem_no"
+										name="smem_no" placeholder="학번입력" required><br>
+								
+									<span class="text"><i class="fa fa-circle-o text-success  mr-2"></i>단과명</span>
+									<input type="text" class="form-control input-rounded text-center" id="col_name"
+										name="col_name" placeholder="단과명"><br>
+									
+									<span class="text"><i class="fa fa-circle-o text-success  mr-2"></i>연락처</span>
+									<input type="text" class="form-control input-rounded text-center" id="mem_tel"
+										name="mem_tel" placeholder="연락처"><br>
+								</label>
+								
+								<label class="col-lg-3 col-form-label" for="form-label">
+									
+									<span class="text"><i class="fa fa-circle-o text-success  mr-2"></i>성명</span>
+									<input type="text" class="form-control input-rounded text-center" id="mem_name"
+										name="mem_name" placeholder="이름"><br>
+									
+									<span class="text"><i class="fa fa-circle-o text-success  mr-2"></i>학과</span>
+									<input type="text" class="form-control input-rounded text-center" id="dep_name"
+										name="dep_name" placeholder="학과"><br>
+									<input type="hidden" class="form-control input-rounded text-center" id="dep_code"
+										name="dep_code" placeholder="학과코드"><br>
+									
+									<span class="text"><i class="fa fa-circle-o text-success  mr-2"></i>주민등록번호</span>
+									<div class="row">
+										<input type="text" class="form-control input-rounded text-center col-6" id="mem_reg1"
+											name="mem_reg1" placeholder="주민등록번호 앞">
+										<input type="text" class="form-control input-rounded text-center col-6" id="mem_reg2"
+											name="mem_reg2" placeholder="주민등록번호 뒤"><br>
+									</div>
+								</label>
+								<label class="col-lg-3 col-form-label" for="form-label">
+									<span class="text"><i class="fa fa-circle-o text-success  mr-2"></i>성별</span>
+									<input type="text" class="form-control input-rounded text-center" id="mem_sex"
+										name="mem_sex" placeholder="성별"><br>
+									<span class="text"><i class="fa fa-circle-o text-success  mr-2"></i>학년</span>
+									<input type="text" class="form-control input-rounded text-center" id="stu_semester"
+										name="stu_semester" placeholder="학년"><br>
+									<span class="text"><i class="fa fa-circle-o text-success  mr-2"></i>이메일</span>
+									<input type="text" class="form-control input-rounded text-center" id="mem_email"
+										name="mem_email" placeholder="이메일"><br>
+								</label>
+								<div class="col-lg-3">
+									<div class="col-12 mt-4"> 
+										<img src="/resources/bootstrap/images/user/1.jpg" alt="" width="100%" height="200px">
+									</div>
+									<div class="col-12 text-justify">
+										<button type="button" class="btn btn-primary offset-2 col-8" style="padding:0;"><span class="text">사진 업로드</span></button>
+									</div>
+								</div>
+								<div class="col-12">
+									<div class="row">
+										<div class="col-7">
+											<span class="text"><i class="fa fa-circle-o text-success  mr-2"></i>주소</span>
+											<input type="text" class="form-control input-rounded text-center" id="mem_addr1"
+														name="mem_addr1" placeholder="주소"><br>
+										</div>
+										<div class="col-3">
+											<span class="text"><i class="fa fa-circle-o text-success  mr-2"></i>상세주소</span>
+											<input type="text" class="form-control input-rounded text-center" id="mem_addr2"
+														name="mem_addr2" placeholder="상세"><br>
+										</div>
+										<div class="col-2">
+											<input type="button" class="btn btn-primary offset-4 col-6 mt-4" value="등록" id="regBtn">
+										</div>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+					<sec:csrfInput/>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</div>		
+</body>
+</html>

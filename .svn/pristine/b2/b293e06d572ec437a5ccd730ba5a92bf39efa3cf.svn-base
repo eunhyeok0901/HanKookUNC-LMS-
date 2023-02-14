@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hdcd.mapper.CommunityMapper">
+	
+	<!-- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■학생■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ -->
+	<!-- ▶[학생] 커뮤니티 글 작성 -->
+	<insert id="registerCmntPost" parameterType="CommunityVO">
+		<selectKey keyProperty="cmnt_no" resultType="string" order="BEFORE">
+			select seq_cmnt_no.nextval from dual
+		</selectKey>
+			insert into	
+				community(cmnt_no, smem_no, cmnt_title, cmnt_content, cmnt_date, cmnt_count, cmnt_like, cmnt_anony, cmnt_report)
+			values
+				('cmnt'||#{cmnt_no}, #{smem_no}, #{cmnt_title}, #{cmnt_content}, sysdate, 0, 0, #{cmnt_anony}, #{cmnt_report})
+	</insert>
+	
+	<!-- [학생] 커뮤니티 글 작성 성공 후 첨부파일 추가 -->
+	<insert id="registerCmntPostFile" parameterType="CommunityFileVO">
+		insert into community_file(cmntf_code, cmnt_no, file_name, file_originnm, file_size, file_path, file_type)
+		values ('cmntf'||seq_cmntf_code.nextval, #{cmnt_no}, #{file_name}, #{file_originnm}, #{file_size}, #{file_path}, #{file_type})
+	</insert>
+	
+	<!-- [학생] 커뮤니티 글 전체 리스트 -->
+	<select id="getCmntTotalList" resultType="CommunityVO">
+		select cmnt_no, smem_no, cmnt_title, cmnt_content, cmnt_date, cmnt_count, cmnt_like, cmnt_anony, cmnt_report
+		from community
+		order by cmnt_date desc
+	</select>
+	
+	<!-- [학생] 개별 글 조회 -->
+	<resultMap type="CommunityVO" id="CommunityVoMap">
+		<id property="cmnt_no" column="cmnt_no"/>
+		<result property="cmnt_title" column="cmnt_title"/>
+		<result property="cmnt_content" column="cmnt_content"/>
+		<result property="cmnt_date" column="cmnt_date"/>
+		<result property="cmnt_count" column="cmnt_count"/>
+		<result property="cmnt_like" column="cmnt_like"/>
+		<result property="cmnt_anony" column="cmnt_anony"/>
+		<result property="cmnt_report" column="cmnt_report"/>
+		<collection property="cmnt_fileList" resultMap="CommunityFileVoMap"/>
+	</resultMap>
+	<resultMap type="CommunityFileVO" id="CommunityFileVoMap">
+		<id property="cmntf_code" column="cmntf_code"/>
+		<result property="file_name" column="file_name"/>
+		<result property="file_originnm" column="file_originnm"/>
+		<result property="file_size" column="file_size"/>
+		<result property="file_path" column="file_path"/>
+		<result property="file_type" column="file_type"/>
+	</resultMap>
+	<select id="getCmntDetail" parameterType="string" resultMap="CommunityVoMap">
+		select c.cmnt_no,
+			   c.smem_no,
+			   c.cmnt_title, 
+			   c.cmnt_content,
+			   c.cmnt_date, 
+			   c.cmnt_count,
+			   c.cmnt_like,
+			   c.cmnt_anony,
+			   c.cmnt_report,
+			   f.cmntf_code,
+			   f.file_name,
+			   f.file_originnm,
+			   f.file_size,
+			   f.file_path,
+			   f.file_type
+		from community c inner join community_file f
+    	  on f.cmnt_no = c.cmnt_no
+   	   where c.cmnt_no = #{cmnt_no}
+	</select>
+	<!-- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■관리자■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ -->
+	
+</mapper>
+

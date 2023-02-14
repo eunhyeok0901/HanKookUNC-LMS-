@@ -1,0 +1,25 @@
+package org.hdcd.vo;
+
+import java.sql.Date;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import lombok.Data;
+
+@Data
+public class VolunteerOutVO {
+	private String volo_code;
+	private String smem_no;
+	private Date volo_start;
+	private Date volo_end;
+	private String volo_time;
+	private String volo_company;
+	private String volo_content;
+	private List<MultipartFile> volo_file;
+	private int volo_state;
+	private String volo_reject;
+	private Date volo_date;
+	private int volo_semester;
+	private int volo_year;
+}

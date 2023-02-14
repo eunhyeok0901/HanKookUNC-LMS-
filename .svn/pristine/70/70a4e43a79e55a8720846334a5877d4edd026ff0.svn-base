@@ -1,0 +1,187 @@
+@charset "UTF-8";
+
+.partColor{
+	background-image: linear-gradient(to right, #d8e3f2 80%, white 20%);
+	z-index:2;
+}
+
+.bg-darkGreen {
+	background-color:#004130;
+}
+
+.custom-overflow-auto{
+	overflow:auto;
+}
+.custom-table-sm{
+	width:100%;
+	table-layout:fixed;
+	min-width:50px;
+}
+.custom-table-sm td{
+	width: 100px;
+	min-width : 50px;
+	height:25px;
+	min-hieght:50px;
+	overflow:hidden;
+	text-overflow: ellipsis;
+}
+
+.custom-fontColor-white{
+	color: #fff;
+}
+
+.custom-table-height-35 td{
+	height:35px;
+}
+
+.custom-table{
+	width:100%;
+	height : 800px;
+	table-layout: fixed;
+	min-width:300px;
+}
+
+.custom-table td {
+	width: 100px;
+	min-width : 50px;
+	height:50px;
+	min-hieght:50px;
+	overflow:hidden;
+	text-overflow: ellipsis;
+}
+
+/* 클릭시 파장 */
+.click-wave{
+	position:absolute;
+	width:30px;height:30px;
+	transform:translate(-50%, -50%);
+	border-radius:50%;
+	border:2px solid red;
+	z-index:100;
+	animation : circleSize 0.35s ease;
+}
+
+@keyframes circleSize {
+	0%{
+		width:0;
+		height:0;
+	}
+	100%{
+	    width:30px;
+	    height:30px;
+	}
+}
+
+
+/* div 테두리 둥글게 */
+.custom-div-radius{
+	border-radius : 30px;
+}
+
+/* 배경색 파란색연한느낌? */
+.bg-gray{
+	background-color : #d8e3f2;
+}
+
+.bg-whitegray{
+	background-color : #eeeeee;
+}
+
+/* 테이블 헤더색 회색느낌임 */
+.table-header-color {
+	background-color : #c4cad2;
+}
+
+/* center 정렬*/
+.tmp-center{
+	position:relative;
+	top:35px;
+}
+
+/* 테이블 헤더 고정 */
+.table-sticky thead tr th{
+	position: sticky;top:0;background-color : #eeeeee;
+}
+
+/* 진한 글씨색 */
+.custom-font-dark {
+   color : #0a3875;
+   font-weight : bold;
+}
+
+/* 테이블 간격요 */
+.table-spacing{
+	border-collapse: separate;
+	border-spacing: 0 10px;
+}
+
+/* border 종류 */
+.border-1px-solid {
+	border: 1px solid black;
+}
+
+/* 높이 */
+.height-40{
+	height:40px;
+}
+
+.height-100{
+	height : 100px;
+}
+.height-200{
+	height : 200px;
+}
+.height-300{
+	height : 300px;
+}
+.height-400{
+	height : 400px;
+}
+.height-500{
+	height : 500px;
+}
+.height-600{
+	height : 600px;
+}
+.height-700{
+	height : 700px;
+}
+.height-800{
+	height : 800px;
+}
+
+/* overflow-auto */
+.overflow-auto{
+	overflow:auto;
+}
+
+
+/* 숨기기 */
+
+.custom-acotianOn{
+	overflow:hidden;
+	max-height : 400px;
+	transition : all 0.35s;
+}
+
+.custom-acotianOff{
+	overflow:hidden;
+	max-height :0px;
+	transition : all 0.35s;
+}
+
+.content-fade{
+	display:none;
+}
+.content-unfade{
+	display:black;
+}
+
+/* test */
+
+
+
+
+
+
+

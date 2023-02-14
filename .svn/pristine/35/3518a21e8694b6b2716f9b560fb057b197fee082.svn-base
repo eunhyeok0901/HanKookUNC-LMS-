@@ -1,0 +1,11 @@
+package org.hdcd.mapper;
+
+import java.util.List;
+
+import org.hdcd.vo.RecordApplyVO;
+
+public interface SRecordApplyMapper {
+	public int recordapply(RecordApplyVO recordVO)throws Exception;
+	
+	public List<RecordApplyVO>selectrecordList(RecordApplyVO recordVO)throws Exception;
+}

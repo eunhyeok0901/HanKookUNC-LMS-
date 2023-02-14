@@ -1,0 +1,17 @@
+package org.hdcd.vo;
+
+import java.util.List;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+public class ScholarListVO {
+	private String schl_code;
+	private String schl_name;
+	private int schl_price;
+	private List<ScholarApplyVO> scholarApplyList;
+}

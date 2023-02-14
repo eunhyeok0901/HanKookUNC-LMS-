@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hdcd.mapper.CommunityMapper">
+	
+	<!-- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■학생■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ -->
+	<!-- ▶[학생] 커뮤니티 글 작성 -->
+	<insert id="registerCmntPost" parameterType="CommunityVO">
+		<selectKey keyProperty="cmnt_no" resultType="string" order="BEFORE">
+			select seq_cmnt_no.nextval from dual
+		</selectKey>
+			insert into	
+				community(cmnt_no, smem_no, cmnt_title, cmnt_content, cmnt_date, cmnt_count, cmnt_like, cmnt_anony, cmnt_report, cmnt_category, cmnt_feeling)
+			values
+				('CMNT'||#{cmnt_no}, #{smem_no}, #{cmnt_title}, #{cmnt_content}, sysdate, 0, 0, #{cmnt_anony}, #{cmnt_report}, #{cmnt_category}, #{cmnt_feeling})
+	</insert>
+	
+	<!-- [학생] 커뮤니티 글 작성 성공 후 첨부파일 추가 -->
+	<insert id="registerCmntPostFile" parameterType="CommunityFileVO">
+		insert into community_file(cmntf_code, cmnt_no, file_name, file_originnm, file_size, file_path, file_type)
+		values ('CMNTF'||seq_cmntf_code.nextval, #{cmnt_no}, #{file_name}, #{file_originnm}, #{file_size}, #{file_path}, #{file_type})
+	</insert>
+	
+	<!-- [학생] 커뮤니티 글 전체 리스트 -->
+	<select id="getCmntTotalList" resultType="CommunityVO" parameterType="map">
+		<!--
+		select *
+		from community
+		order by cmnt_date desc
+		 -->		 
+		select *
+		from
+		    (select ROW_NUMBER() OVER(ORDER BY community.cmnt_no desc) as num,
+		            community.*
+		       from community order by cmnt_no desc) 
+		where num between #{startNum} and #{endNum}
+	</select>
+	
+	<!-- [학생] 커뮤니티 개별 게시글별 댓글 개수 -->
+	<select id="countReply" parameterType="string" resultType="int">
+		select count(*) from reply where cmnt_no = #{cmnt_no}
+	</select>
+	
+	<!-- [학생] 커뮤니티 번호에 해당하는 파일 하나 가져오기  -->
+	<select id="getCmntFileTotalList" resultType="CommunityFileVO" parameterType="string">
+		select *
+		from community_file
+		where cmnt_no = #{cmnt_no} and rownum=1
+	</select> 
+	
+	<!-- [학생] 커뮤니티 게시글 업데이트 -->
+	<update id="updateCmnt" parameterType="CommunityVO">
+		update community set cmnt_title = #{cmnt_title}, cmnt_content = #{cmnt_content},
+		                     cmnt_date = sysdate, cmnt_category = #{cmnt_category}, cmnt_feeling = #{cmnt_category}
+		where cmnt_no = #{cmnt_no}
+	</update>
+	
+	<insert id="updateCmntPostFile" parameterType="CommunityFileVO">
+		insert into community_file(cmntf_code, cmnt_no, file_name, file_originnm, file_size, file_path, file_type)
+		values ('CMNTF'||seq_cmntf_code.nextval, #{cmnt_no}, #{file_name}, #{file_originnm}, #{file_size}, #{file_path}, #{file_type})
+	</insert>
+	
+	<!-- [학생] 개별 글 조회 -->
+	
+	<update id="plusCmntHits" parameterType="CommunityVO">
+		update community set cmnt_count = cmnt_count + 1 where cmnt_no = #{cmnt_no} and smem_no != #{smem_no} 
+	</update>
+	
+	<select id="getCmnt" parameterType="string" resultType="CommunityVO">
+		select * from community where cmnt_no = #{cmnt_no}
+	</select>
+	
+	<select id="getCmntFile" parameterType="string" resultType="CommunityFileVO">
+		select * from community_file where cmnt_no = #{cmnt_no} order by cmntf_code asc
+	</select>
+	
+	<select id="getCmntReply" parameterType="string" resultType="ReplyVO">
+		select * from reply where cmnt_no = #{cmnt_no} order by reply_no asc
+	</select>
+	
+	<!-- [학생] 현재 게시글 기준 이전 게시글 조회 -->
+	<select id="getPrePost" parameterType="string" resultType="string">
+		select cmnt_no
+		from( 
+		    select cmnt_no as cm_no, 
+		        lag(cmnt_no, 1) over (order by cmnt_no desc) as cmnt_no
+		    from community
+		    )
+		where cm_no = #{cmnt_no} 
+	</select>
+	
+	<!-- [학생] 현재 게시글 기준 다음 게시글 조회 -->
+	<select id="getNextPost" parameterType="string" resultType="string">
+		select cmnt_no
+		from( 
+		    select cmnt_no as cm_no, 
+		        lead(cmnt_no, 1) over (order by cmnt_no desc) as cmnt_no
+		    from community
+		    )
+		where cm_no = #{cmnt_no} 
+	</select>
+	
+	<!-- [학생] 댓글 등록 -->
+	<insert id="registerReply" parameterType="ReplyVO">
+		insert into reply(reply_no, smem_no, cmnt_no, reply_content, reply_anony, reply_date)
+		values('REPLY'||seq_reply_no.nextval, #{smem_no}, #{cmnt_no}, #{reply_content}, #{reply_anony}, sysdate)
+	</insert> 
+	
+	<!-- [학생] 글 삭제를 위한 단계별 삭제(커뮤니티 파일, 댓글, 커뮤니티 글 순서대로 삭제 -->
+	<delete id="deleteCmntFile" parameterType="string">
+		delete from community_file where cmnt_no = #{cmnt_no}
+	</delete>
+	
+	<delete id="deleteReply" parameterType="string">
+		delete from reply where cmnt_no = #{cmnt_no}
+	</delete>
+	
+	<delete id="deleteCmnt" parameterType="string">
+		delete from community where cmnt_no = #{cmnt_no}
+	</delete>
+	<!-- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■관리자■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ -->
+	
+</mapper>
+

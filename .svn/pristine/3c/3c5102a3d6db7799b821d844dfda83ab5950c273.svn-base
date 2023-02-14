@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hdcd.mapper.POpenLecAttendMapper">
+
+	<select id="selectMyOpenLecList" parameterType="string" resultType="map">
+		select lol.*, l.lec_code, l.assign_code, lr.room_num, 
+        	  (select d.dep_name 
+            	 from professor p, department d 
+            	where p.dep_code = d.dep_code
+              	  and p.pmem_no = #{userId}) as dep_name
+	     from lec_open_list lol, lecture l, assign_room ar, lecture_room lr
+	    where lol.lol_code = l.lol_code 
+	      and l.assign_code = ar.assign_code
+	      and ar.room_code = lr.room_code
+	      and lol.pmem_no = #{userId} 
+	      and l.lec_state = 1
+	</select>
+	
+	<select id="selectMyLecNameNCode" resultType="map">
+		select lol.lol_name, l.lec_code
+  		  from lec_open_list lol, lecture l
+  		 where lol.lol_code = l.lol_code
+   		   and l.lec_state = 1
+  		   and lol.pmem_no = #{userId}
+	</select>
+	
+	<select id="selectLecStudentList" parameterType="string" resultType="map">
+		select s.*, m.mem_name, c.col_name
+ 		  from stu_timetable st, student s, member m, department d, college c 
+		 where m.mem_no = s.smem_no
+ 		   and s.smem_no = st.smem_no
+  		   and s.dep_code = d.dep_code
+ 		   and d.col_code = c.col_code
+ 		   and st.lec_code = #{lec_code}
+	</select>	
+
+	<select id="selectLecStudentInfo" parameterType="StudentVO" resultType="map">
+		select c.col_name, s.stu_dep, s.smem_no, m.mem_name, 
+			   s.stu_schyear, m.mem_tel, m.mem_email, m.mem_photonm, s.stu_semester
+		  from college c, department d, student s, member m
+		 where c.col_code = d.col_code
+		   and d.dep_code = s.dep_code
+		   and s.smem_no = m.mem_no
+		   and s.smem_no = #{smem_no}
+	</select>
+
+</mapper>

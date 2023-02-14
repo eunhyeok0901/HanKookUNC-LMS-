@@ -1,0 +1,78 @@
+package org.hdcd.controller.common;
+
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import org.hdcd.service.common.mainPageInfo.MainPageService;
+import org.hdcd.vo.MemberVO;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+public class IndexPage {
+	
+	@Inject
+	MainPageService mainService;
+	
+	@RequestMapping(value = "/pageLogin", method = RequestMethod.GET)
+	public String pageLogin() {
+		log.debug("▶pageLogin");
+		return "common/login";
+	};
+	
+	
+	@RequestMapping(value = "/page/list", method = RequestMethod.GET)
+	public String list() {
+		log.info("▶pageLogin");
+		return "page/list";
+	};
+	
+	
+	@RequestMapping(value = "/main/home", method = RequestMethod.GET)
+	public ModelAndView main(HttpServletRequest req, ModelAndView mav) {
+		
+		String sessionId = (String)req.getSession().getAttribute("userId");
+		
+		Map<String, Object> memberInfo = mainService.getMemberInfo(sessionId);
+
+		log.info("메인페이지 memberInfo : {}", memberInfo);
+		
+		mav.addObject("memberInfo", memberInfo);
+		mav.setViewName("main/main");
+		
+		log.info("로그인한 회원 세션 아이디 : {}", sessionId);
+		
+		log.debug("▶main");
+		return mav;
+	}
+	
+	
+
+	
+	
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

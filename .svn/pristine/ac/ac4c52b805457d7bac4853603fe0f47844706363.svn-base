@@ -1,0 +1,14 @@
+package org.hdcd.service.student.counsel;
+
+import java.util.List;
+
+import org.hdcd.vo.CounselApplyVO;
+import org.hdcd.vo.CounselVO;
+
+public interface CounselService {
+
+	List<CounselApplyVO> counselApplyList(String userId);
+
+	List<CounselVO> getCounselList();
+
+}

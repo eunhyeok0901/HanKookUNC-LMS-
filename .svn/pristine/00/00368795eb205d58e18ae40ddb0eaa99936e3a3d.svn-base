@@ -1,0 +1,74 @@
+package org.hdcd.controller.common;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import org.hdcd.service.common.mainPageInfo.MainPageService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+public class IndexPage {
+	
+	@Inject
+	MainPageService service;
+	
+	@RequestMapping(value = "/pageLogin", method = RequestMethod.GET)
+	public String pageLogin() {
+		log.debug("▶pageLogin");
+		return "common/login";
+	};
+	
+	
+	@RequestMapping(value = "/page/list", method = RequestMethod.GET)
+	public String list() {
+		log.info("▶pageLogin");
+		return "page/list";
+	};
+	
+	
+	@RequestMapping(value = "/main/home", method = RequestMethod.GET)
+	public String main(HttpServletRequest request, Model model) {
+		String userId = (String) request.getSession().getAttribute("userId");
+		
+		// service.getMainAdminInfo(userId);
+		/*
+		if(userId.equals("20170003")) { // 관리자일 경우			
+			service.getMainAdminInfo(userId);
+		}else if(userId.length() == 8) { // 학생일 경우			
+			service.getMainStudentInfo(userId);
+		}else if(userId.length() == 6) { // 교수일 경우
+			service.getMainProfessorInfo(userId);			
+		}
+		*/
+		return "main/main";
+	}
+	
+	
+
+	
+	
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hdcd.mapper.MainPageInfoMapper">
+	<select id="getMemberInfo" parameterType="string" resultType="java.util.Map">
+		SELECT A.*, B.*
+		 FROM (SELECT * FROM MEMBER
+		      WHERE MEM_NO = #{sessionId}) A, STUDENT B
+		WHERE A.MEM_NO=B.SMEM_NO 
+	</select>
+	
+	<select id="getBookRental" parameterType="string" resultType="java.util.Map">
+		SELECT A.RENT0, B.RENT1
+		FROM (SELECT COUNT(*) AS RENT0 
+		        FROM BOOKRENTAL
+		       WHERE SMEM_NO = #{userId}
+		         AND RENT_STATE = 0) A, (SELECT COUNT(*) AS RENT1
+		                                   FROM BOOKRENTAL
+		                                  WHERE SMEM_NO = #{userId}
+		                                    AND RENT_STATE = 1) B
+	</select>
+	
+	<select id="getBookList" resultType="org.hdcd.vo.BookVO">
+		SELECT * FROM BOOK
+	</select>
+	
+	<select id="mainPageCounselapplyList" parameterType="string" resultType="org.hdcd.vo.CounselApplyVO">
+		
+	</select>
+	
+	
+	<select id="getAllFoodList" resultType="FoodCalendarVO">
+		select * from foodcalendar
+	</select>
+</mapper>
+	

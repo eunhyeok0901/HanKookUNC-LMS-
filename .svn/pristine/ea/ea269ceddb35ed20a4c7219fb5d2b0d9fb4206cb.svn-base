@@ -1,0 +1,14 @@
+package org.hdcd.vo;
+
+import lombok.Data;
+
+@Data
+public class BoardVO {
+	private String board_no;
+	private String pmem_no;
+	private String dep_code;
+	private String board_title;
+	private String board_content;
+	private int board_count;
+	private String board_date;
+}
